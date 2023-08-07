@@ -1,0 +1,92 @@
+{
+    "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base",
+        "plugin:regexp/all",
+        "plugin:import/recommended",
+        "plugin:promise/recommended",
+        "plugin:import/typescript",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/stylistic-type-checked",
+        "plugin:@typescript-eslint/strict-type-checked",
+        "eslint-config-prettier"
+    ],
+    "plugins": [
+        "@typescript-eslint",
+        "promise",
+        "regexp",
+        "import"
+    ],
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "alwaysTryTypes": true,
+                "project": "tsconfig.eslint.json"
+            }
+        },
+        "import/parsers": {
+            "@typescript-eslint/parser": [
+                ".ts"
+            ]
+        }
+    },
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2022": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.eslint.json",
+        "ecmaFeatures": {
+            "regexUFlag": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "ignorePatterns": [
+        "dist/*"
+    ],
+    "rules": {
+        "no-console": "error",
+        "no-restricted-syntax": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/non-nullable-type-assertion-style": "off",
+        "@typescript-eslint/consistent-type-imports": "warn",
+        "regexp/prefer-named-capture-group": "off",
+        "unicorn/prevent-abbreviations": "off",
+        "unicorn/filename-case": "off",
+        "import/prefer-default-export": "off",
+        "import/order": [
+            "error",
+            {
+                "groups": [
+                    "external",
+                    "builtin",
+                    "index",
+                    "sibling",
+                    "parent",
+                    "internal",
+                    "type"
+                ],
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": true
+                },
+                "newlines-between": "never"
+            }
+        ],
+        "@typescript-eslint/no-empty-interface": "off"
+    },
+    "overrides": [
+        {
+            "files": [
+                "!(*.ts)"
+            ],
+            "rules": {
+                "import/no-extraneous-dependencies": "off"
+            }
+        }
+    ]
+}
