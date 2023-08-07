@@ -6,7 +6,12 @@
   "repository": "ssh://git@github.com/AVor0n/middle.messenger.praktikum.yandex.git",
   "author": "Andrey Voronin <AVor0n@ya.ru>",
   "license": "MIT",
+  "scripts": {
+    "format": "prettier --check . --ignore-unknown",
+    "format:fix": "prettier --write . --ignore-unknown"
+  },
   "devDependencies": {
+    "prettier": "^3.0.1",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",
     "vite-tsconfig-paths": "^4.2.0"
