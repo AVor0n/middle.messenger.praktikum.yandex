@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="page auth-page">
+        <form class="auth-form" onsubmit="false">
+            <h2 class="auth-form__title">Регистрация</h2>
+
+            <div class="auth-form__fields">
+                {{> textbox label="Почта" type="email"}}
+                {{> textbox label="Логин" type="text"}}
+                {{> textbox label="Имя" type="text"}}
+                {{> textbox label="Фамилия" type="text"}}
+                {{> textbox label="Телефон" type="tel"}}
+                {{> textbox label="Пароль" type="password"}}
+                {{> textbox label="Пароль (ещё раз)" type="password"}}
+            </div>
+
+            <div class="auth-form__btns">
+                <a class="btn btn--primary btn--flex btn--xl" href="#/chat">Зарегистрироваться</a>
+                <a class="btn btn--ghost btn--flex btn--xl" href="#/login">Войти</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

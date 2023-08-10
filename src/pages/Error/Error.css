@@ -1,0 +1,16 @@
+.error-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.error__code {
+  font-weight: bold;
+  font-size: 70px;
+}
+
+.error__text {
+  font-size: 50px;
+}
