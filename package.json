@@ -14,6 +14,9 @@
     "format": "prettier --check . --ignore-unknown",
     "format:fix": "prettier --write . --ignore-unknown"
   },
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
     "@commitlint/config-conventional": "^17.6.7",

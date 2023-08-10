@@ -1,7 +1,4 @@
 {
-    "extends": "./tsconfig.json",
-    "include": [
-        "src/",
-        "vite.config.ts"
-    ]
+  "extends": "./tsconfig.json",
+  "include": ["src/", "vite.config.ts", "vite-plugin-handlebars-precompile.ts", "vite-plugin-typescript-paths.ts"]
 }
