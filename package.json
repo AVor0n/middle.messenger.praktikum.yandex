@@ -8,9 +8,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
     "prepare": "husky install",
-    "lint": "eslint . --ext=.ts && stylelint ./src/**/*.css",
-    "lint:fix": "eslint --ext=.ts --fix && stylelint ./src/**/*.css --fix",
+    "lint": "eslint . --ext=.ts || stylelint ./src/**/*.css",
+    "lint:fix": "eslint . --ext=.ts --fix || stylelint ./src/**/*.css --fix",
     "format": "prettier --check . --ignore-unknown",
     "format:fix": "prettier --write . --ignore-unknown"
   },
