@@ -1,3 +1,4 @@
 import './Auth.css';
+import template from './Auth.hbs';
 
-export { default as Auth } from './Auth.hbs';
+export const Auth = () => template({});

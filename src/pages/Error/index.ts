@@ -1,3 +1,4 @@
 import './Error.css';
+import template from './Error.hbs';
 
-export { default as Error } from './Error.hbs';
+export const ErrorPage = () => template({});

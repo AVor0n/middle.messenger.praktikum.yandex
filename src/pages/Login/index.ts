@@ -1,3 +1,4 @@
 import './Login.css';
+import template from './Login.hbs';
 
-export { default as Login } from './Login.hbs';
+export const Login = () => template({});

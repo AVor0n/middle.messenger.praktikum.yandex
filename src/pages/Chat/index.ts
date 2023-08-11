@@ -1,3 +1,5 @@
 import './Chat.css';
+import template from './Chat.hbs';
+import data from './dake-data.json';
 
-export { default as Chat } from './Chat.hbs';
+export const Chat = () => template(data);

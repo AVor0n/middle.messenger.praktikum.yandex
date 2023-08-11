@@ -45,6 +45,12 @@
     "spaced-comment": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
+    "@typescript-eslint/no-confusing-void-expression": [
+      "error",
+      {
+        "ignoreArrowShorthand": true
+      }
+    ],
     "@typescript-eslint/consistent-type-imports": "warn",
     "regexp/prefer-named-capture-group": "off",
     "unicorn/prevent-abbreviations": "off",
