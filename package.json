@@ -8,7 +8,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "start": "npm run build && node ./server.js",
+    "dev": "vite",
     "build": "tsc && vite build",
     "prepare": "husky install",
     "lint": "eslint . --ext=.ts || stylelint ./src/**/*.css",
@@ -17,6 +18,7 @@
     "format:fix": "prettier --write . --ignore-unknown"
   },
   "dependencies": {
+    "express": "^4.18.2",
     "handlebars": "^4.7.8"
   },
   "devDependencies": {
