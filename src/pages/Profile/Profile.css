@@ -1,0 +1,30 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  justify-content: center;
+  align-items: center;
+
+  max-inline-size: 500px;
+  margin-inline: auto;
+}
+
+.profile {
+  &__image {
+    inline-size: 120px;
+    block-size: 120px;
+    margin-block-end: 20px;
+  }
+
+  &__username {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 20px;
+
+    inline-size: 100%;
+  }
+}

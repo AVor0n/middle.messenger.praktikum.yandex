@@ -1,4 +1,4 @@
-import { Auth, Login, Chat, Error as ErrorPage } from '@pages';
+import { Auth, Login, Chat, Error as ErrorPage, Profile } from '@pages';
 import '@widgets';
 import { Router } from '@shared';
 
@@ -51,6 +51,17 @@ export const initRouter = () => {
             username: '1, 3, 4',
           },
         ],
+      });
+    })
+    .add('profile', () => {
+      goToPage(Profile, {
+        image: 'user.svg',
+        username: 'Иван',
+        name: 'Иван',
+        lastname: 'Иванов',
+        login: 'ivanivanov',
+        email: 'pochta@ya.ru',
+        tel: '+7 (909) 967 30 30',
       });
     })
     .add('', () => {
