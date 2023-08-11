@@ -1,7 +1,7 @@
 .profile-page {
   display: flex;
   flex-direction: column;
-  gap: 80px;
+  gap: 40px;
   justify-content: center;
   align-items: center;
 
@@ -21,10 +21,25 @@
     text-align: center;
   }
 
-  &__btns {
+  &__navigation {
     display: flex;
     gap: 20px;
 
     inline-size: 100%;
+    margin-block-start: 40px;
+  }
+}
+
+.profile-data {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  inline-size: 100%;
+
+  &__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }

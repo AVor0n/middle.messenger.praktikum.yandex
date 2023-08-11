@@ -14,37 +14,45 @@
       <figcaption class="profile__username">{{username}}</figcaption>
     </figure>
 
-    <div class="table-list">
-      <div class="table-list__row">
-        <span class="table-list__header">Почта</span>
-        <span class="table-list__value">{{email}}</span>
+    <div class="profile-data">
+      <div class="table-list">
+        <div class="table-list__row">
+          <span class="table-list__header">Почта</span>
+          <span class="table-list__value">{{email}}</span>
+        </div>
+        <div class="table-list__row">
+          <span class="table-list__header">Логин</span>
+          <span class="table-list__value">{{email}}</span>
+        </div>
+        <div class="table-list__row">
+          <span class="table-list__header">Имя</span>
+          <span class="table-list__value">{{name}}</span>
+        </div>
+        <div class="table-list__row">
+          <span class="table-list__header">Фамилия</span>
+          <span class="table-list__value">{{lastname}}</span>
+        </div>
+        <div class="table-list__row">
+          <span class="table-list__header">Имя в чате</span>
+          <span class="table-list__value">{{username}}</span>
+        </div>
+        <div class="table-list__row">
+          <span class="table-list__header">Телефон</span>
+          <span class="table-list__value">{{email}}</span>
+        </div>
       </div>
-      <div class="table-list__row">
-        <span class="table-list__header">Логин</span>
-        <span class="table-list__value">{{email}}</span>
-      </div>
-      <div class="table-list__row">
-        <span class="table-list__header">Имя</span>
-        <span class="table-list__value">{{name}}</span>
-      </div>
-      <div class="table-list__row">
-        <span class="table-list__header">Фамилия</span>
-        <span class="table-list__value">{{lastname}}</span>
-      </div>
-      <div class="table-list__row">
-        <span class="table-list__header">Имя в чате</span>
-        <span class="table-list__value">{{username}}</span>
-      </div>
-      <div class="table-list__row">
-        <span class="table-list__header">Телефон</span>
-        <span class="table-list__value">{{email}}</span>
+
+      <div class="profile-data__btns">
+        <button class="btn btn--ghost btn--wide btn--xl">Редактировать данные</button>
+        <button class="btn btn--ghost btn--wide btn--xl">Сменить пароль</button>
       </div>
     </div>
 
-    <div class="profile__btns">
+    <div class="profile__navigation">
       <a class="btn btn--ghost btn--wide btn--xl" href="#/chat">Назад</a>
       <a class="btn btn--ghost btn--wide btn--xl btn--danger" href="#/login">Выйти</a>
     </div>
+  </div>
   </div>
 </body>
 
