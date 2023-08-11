@@ -11,6 +11,7 @@ export const initRouter = () => {
   const router = new Router();
 
   router
+    .add('', () => goToPage(Login))
     .add('login', () => goToPage(Login))
     .add('auth', () => goToPage(Auth))
     .add('error', () => goToPage(ErrorPage))
