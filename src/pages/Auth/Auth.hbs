@@ -13,12 +13,12 @@
             <h2 class="auth-form__title">Регистрация</h2>
 
             <div class="auth-form__fields">
-                {{> textbox label="Почта" type="email"}}
-                {{> textbox label="Логин" type="text"}}
-                {{> textbox label="Имя" type="text"}}
-                {{> textbox label="Фамилия" type="text"}}
-                {{> textbox label="Телефон" type="tel"}}
-                {{> textbox label="Пароль" type="password"}}
+                {{> textbox label="Почта" type="email" name="email"}}
+                {{> textbox label="Логин" type="text" name="login"}}
+                {{> textbox label="Имя" type="text" name="first_name"}}
+                {{> textbox label="Фамилия" type="text" name="second_name"}}
+                {{> textbox label="Телефон" type="tel" name="phone"}}
+                {{> textbox label="Пароль" type="password" name="password"}}
                 {{> textbox label="Пароль (ещё раз)" type="password"}}
             </div>
 

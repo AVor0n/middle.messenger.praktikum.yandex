@@ -8,12 +8,12 @@ export function addPageHandlers() {
 
     $window.innerHTML = EditWindow({
       fields: [
-        { label: 'Почта', type: 'email', value: data.email },
-        { label: 'Логин', type: 'text', value: data.login },
-        { label: 'Имя', type: 'text', value: data.name },
-        { label: 'Фамилия', type: 'text', value: data.lastname },
-        { label: 'Имя в чате', type: 'text', value: data.username },
-        { label: 'Телефон', type: 'text', value: data.tel },
+        { label: 'Почта', type: 'email', value: data.email, name: 'email' },
+        { label: 'Логин', type: 'text', value: data.login, name: 'login' },
+        { label: 'Имя', type: 'text', value: data.name, name: 'first_name' },
+        { label: 'Фамилия', type: 'text', value: data.lastname, name: 'second_name' },
+        { label: 'Имя в чате', type: 'text', value: data.username, name: 'display_name' },
+        { label: 'Телефон', type: 'text', value: data.tel, name: 'phone' },
       ],
     });
 
@@ -31,8 +31,8 @@ export function addPageHandlers() {
 
     $window.innerHTML = EditWindow({
       fields: [
-        { label: 'Пароль', type: 'password' },
-        { label: 'Пароль (ещё раз)', type: 'password' },
+        { label: 'Пароль', type: 'password', name: 'oldPassword' },
+        { label: 'Пароль (ещё раз)', type: 'password', name: 'newPassword' },
       ],
     });
 
