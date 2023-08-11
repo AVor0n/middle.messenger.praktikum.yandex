@@ -1,0 +1,10 @@
+.errors_nav {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 50%;
+
+  display: flex;
+  gap: 20px;
+
+  transform: translate(-50%);
+}

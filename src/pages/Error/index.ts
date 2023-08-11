@@ -1,4 +1,9 @@
 import './Error.css';
 import template from './Error.hbs';
 
-export const ErrorPage = () => template({});
+interface ErrorPageProps {
+  code: number;
+  text: string;
+}
+
+export const ErrorPage = (props: ErrorPageProps) => template(props);

@@ -1,4 +1,4 @@
-import { Auth, Login, Chat, ErrorPage, Profile } from '@pages';
+import { Auth, Login, Chat, Profile } from '@pages';
 import '@widgets';
 import { $, Router } from '@shared';
 
@@ -14,7 +14,6 @@ export const initRouter = () => {
     .add('', () => goToPage(Login))
     .add('login', () => goToPage(Login))
     .add('auth', () => goToPage(Auth))
-    .add('error', () => goToPage(ErrorPage))
     .add('chat', () => goToPage(Chat))
     .add('profile', () => goToPage(Profile));
 
