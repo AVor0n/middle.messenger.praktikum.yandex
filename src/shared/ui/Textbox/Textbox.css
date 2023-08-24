@@ -1,0 +1,64 @@
+.textbox {
+  --labelDefaultPosY: 50%;
+  --labelTransformedPosY: -50%;
+  position: relative;
+
+  inline-size: 100%;
+
+  &__input:placeholder-shown + &__label {
+    visibility: hidden;
+
+    opacity: 0;
+  }
+
+  &__input:not(:placeholder-shown) + &__label,
+  &__input:focus:not(:placeholder-shown) + &__label {
+    visibility: visible;
+
+    opacity: 1;
+    transform: translate3d(0, -50%, 0) scale(0.8);
+  }
+}
+
+.textbox__input {
+  inline-size: 100%;
+  padding-block: 6px 2px;
+  padding-inline: 0;
+
+  font-size: var(--font-md);
+
+  border: none;
+  border-block-end: 1px solid var(--color-shadow);
+
+  &:focus {
+    outline: none;
+    border-block-end: 1px solid var(--color-primary);
+  }
+
+  &::placeholder {
+    color: var(--color-shadow);
+  }
+}
+
+.textbox__label {
+  position: absolute;
+  inset-block-start: -2px;
+
+  display: block;
+
+  color: var(--color-shadow);
+  font-size: var(--font-md);
+
+  transform: translate3d(0, var(--labelDefaultPosY), 0) scale(1);
+  transform-origin: 0 0;
+
+  transition: all 300ms;
+}
+
+.textbox__error {
+  position: absolute;
+  inset-block-end: -16px;
+
+  color: var(--color-error);
+  font-size: var(--font-sm);
+}

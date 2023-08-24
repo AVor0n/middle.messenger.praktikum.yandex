@@ -1,0 +1,45 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+
+  max-inline-size: 500px;
+  margin-inline: auto;
+}
+
+.profile {
+  &__image {
+    inline-size: 120px;
+    block-size: 120px;
+    margin-block-end: 20px;
+  }
+
+  &__username {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  &__navigation {
+    display: flex;
+    gap: 20px;
+
+    inline-size: 100%;
+    margin-block-start: 40px;
+  }
+}
+
+.profile-data {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  inline-size: 100%;
+
+  &__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

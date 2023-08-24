@@ -1,0 +1,37 @@
+.edit-window {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgb(0, 0, 0, 0.4);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    justify-content: space-between;
+
+    inline-size: 500px;
+    min-block-size: 300px;
+    padding: 40px;
+
+    border: 1px solid var(--color-smoke);
+    border-radius: 10px;
+
+    background-color: var(--color-white);
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 20px;
+  }
+}

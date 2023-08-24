@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="page chat-page">
+    <div class="sidebar">
+      <nav class="sidebar__tools">
+        <a class="btn btn--ghost btn--flex btn--xl" href="#/profile">Профиль</a>
+        <search>
+          <input class="searchfield" type="search" placeholder="Поиск" />
+        </search>
+      </nav>
+      <hr class="separator" />
+      <div class="chatlist">
+        {{#each chats}}
+        {{> chatPreview avatar=avatar username=username message=message time=time unread_count=unread_count}}
+        <hr class="separator" />
+        {{else}}
+        <p class="empty">Чатов пока нет</p>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="chat">
+      <div class="chat__header">
+        <img class="chat__avatar" src="user.svg">
+        <div class="chat__username">Github</div>
+        <button class="chat__menu-btn btn btn--ghost btn--circle btn--l"></button>
+      </div>
+      <hr class="separator" />
+      <div class="chat__viewer">
+
+      </div>
+      <hr class="separator" />
+      <form class="chat__editor">
+        <button class="chat__attach-btn btn btn--ghost btn--circle btn--l"></button>
+        <input class="chat__input" type="text" placeholder="Сообщение" name="message" />
+        <button class="chat__send-btn btn btn--primary btn--circle btn--l"></button>
+        </fo>
+    </div>
+  </div>
+</body>
+
+</html>

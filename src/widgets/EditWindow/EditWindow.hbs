@@ -1,0 +1,17 @@
+<form class="edit-window">
+  <div class="edit-window__content">
+    <div class="edit-window__fields">
+      {{#each fields}}
+      {{> textbox label=label type=type}}
+      {{/each}}
+    </div>
+
+    <div class="edit-window__btns">
+      {{!--
+      TODO: избавиться от handebars,переписать все компоненты в виде функций, чтоб передавать обработчик параметром
+      --}}
+      <button id="editWindowCancel" class="btn btn--ghost btn--wide btn--l">Отмена</button>
+      <button id="editWindowSave" class="btn btn--primary btn--wide btn--l">Сохранить</button>
+    </div>
+  </div>
+</form>
