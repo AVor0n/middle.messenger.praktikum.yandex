@@ -41,25 +41,11 @@ export class EventBus<Events extends EventMap = Record<string, never>> implement
   }
 
   /**
-   * Одноразовая подписка на событие
-   * @param event название события
-   * @param handler обработчик события
-   */
-  public once<Key extends keyof Events>(event: Key, handler: Events[Key]) {
-    const handleOnce = (payload: Parameters<typeof handler>) => {
-      handler(payload);
-      this.off(event, handleOnce as typeof handler);
-    };
-
-    this.on(event, handleOnce as typeof handler);
-  }
-
-  /**
    * Вызвать всех обработчиков определенного события
    * @param key название события
    * @param args параметры для передачи в обработчики события
    */
   public emit<Key extends keyof Events>(key: Key, ...args: Parameters<Events[Key]>) {
-    this.listeners[key]?.forEach(fn => fn(args));
+    this.listeners[key]?.forEach(fn => fn(...args));
   }
 }
