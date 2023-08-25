@@ -15,7 +15,9 @@
     "lint": "eslint . --ext=.ts || stylelint ./src/**/*.css",
     "lint:fix": "eslint . --ext=.ts --fix || stylelint ./src/**/*.css --fix",
     "format": "prettier --check . --ignore-unknown",
-    "format:fix": "prettier --write . --ignore-unknown"
+    "format:fix": "prettier --write . --ignore-unknown",
+    "test": "vitest",
+    "coverage": "vitest --ui --coverage"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
@@ -27,6 +29,8 @@
     "@commitlint/config-conventional": "^17.6.7",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
+    "@vitest/coverage-v8": "^0.34.3",
+    "@vitest/ui": "^0.34.3",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.46.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -53,6 +57,7 @@
     "stylelint-use-logical-spec": "^5.0.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",
-    "vite-tsconfig-paths": "^4.2.0"
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.34.3"
   }
 }
