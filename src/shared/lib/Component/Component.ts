@@ -109,7 +109,7 @@ export abstract class Component<P extends Props = any> {
 
   protected abstract render(): DocumentFragment;
 
-  protected compile(template: HandlebarsTemplateDelegate<unknown>, context: TemplateContext) {
+  protected compile(template: HandlebarsTemplateDelegate<unknown>, context: Partial<TemplateContext>) {
     const contextAndStubs = { ...context, __refs: this.refs };
     const html = template(contextAndStubs);
     const temp = document.createElement('template');
