@@ -1,4 +1,4 @@
-export { Router } from './router';
-export { $, $$ } from './domHelpers';
+export * from './utils';
 export * from './EventBus';
 export * from './Component';
+export * from './Router';
