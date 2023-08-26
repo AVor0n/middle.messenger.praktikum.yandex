@@ -1,5 +1,16 @@
-import './Chat.css';
 import template from './Chat.hbs';
-import data from './dake-data.json';
+import { chats } from './dake-data.json';
+import { Component } from '@shared';
+import './Chat.css';
 
-export const Chat = () => template(data);
+export class Chat extends Component {
+  constructor() {
+    super({
+      chats,
+    });
+  }
+
+  protected render() {
+    return this.compile(template, this.props);
+  }
+}

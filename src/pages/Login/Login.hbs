@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class='page login-page'>
+  <form class='login-form'>
+    <h2 class='login-form__title'>Вход</h2>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    <div class="page login-page">
-        <form class="login-form">
-            <h2 class="login-form__title">Вход</h2>
-
-            <div class="login-form__fields">
-                {{> textbox label="Логин" type="text" name="login"}}
-                {{> textbox label="Пароль" type="password" name="password"}}
-            </div>
-
-            <div class="login-form__btns">
-                <a class="btn btn--primary btn--flex btn--xl" href="#/chat">Войти</a>
-                <a class="btn btn--ghost btn--flex btn--xl" href="#/auth">Нет аккаунта?</a>
-            </div>
-        </form>
+    <div class='login-form__fields'>
+      {{{Textbox label='Логин' type='text' name='login'}}}
+      {{{Textbox label='Пароль' type='password' name='password'}}}
     </div>
-</body>
 
-</html>
+    <div class='login-form__btns'>
+      <a class='btn btn--primary btn--flex btn--xl' href='#/chat'>Войти</a>
+      <a class='btn btn--ghost btn--flex btn--xl' href='#/auth'>Нет аккаунта?</a>
+    </div>
+  </form>
+</div>

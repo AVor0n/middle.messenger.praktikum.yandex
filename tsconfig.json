@@ -19,7 +19,8 @@
       "@features": ["features"],
       "@widgets": ["widgets"],
       "@pages": ["pages"],
-      "@shared": ["shared"]
+      "@shared": ["shared/lib"],
+      "@uikit": ["shared/ui"]
     },
     /* Linting */
     "strict": true,

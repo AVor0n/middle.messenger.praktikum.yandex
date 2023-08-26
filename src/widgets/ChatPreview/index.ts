@@ -1,5 +1,23 @@
-import Handlebars from 'handlebars';
-import chatPreview from './ChatPreview.hbs';
+import template from './ChatPreview.hbs';
+import { Component } from '@shared';
 import './ChatPreview.css';
 
-Handlebars.registerPartial('chatPreview', chatPreview);
+interface ChatPreviewProps {
+  username: string;
+  avatar: string;
+  message: string;
+  time: string;
+  unread_count?: number;
+}
+
+export class ChatPreview extends Component {
+  constructor(props: ChatPreviewProps) {
+    super({
+      ...props,
+    });
+  }
+
+  protected render() {
+    return this.compile(template, this.props);
+  }
+}

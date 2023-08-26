@@ -11,7 +11,8 @@ export interface Props {
   events: Record<string, () => void>;
 }
 
-export type ComponentConstructor = new (...args: unknown[]) => Component;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ComponentConstructor<T extends unknown[] = any> = new (...args: T) => Component;
 
 export interface TemplateContext {
   [key: string]: unknown;

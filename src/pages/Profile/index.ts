@@ -1,9 +1,16 @@
-import './Profile.css';
 import data from './fake-data.json';
-import { addPageHandlers } from './Profile';
 import template from './Profile.hbs';
+import { Component } from '@shared';
+import './Profile.css';
 
-export const Profile = () => {
-  setTimeout(addPageHandlers);
-  return template(data);
-};
+export class Profile extends Component {
+  constructor() {
+    super({
+      ...data,
+    });
+  }
+
+  protected render() {
+    return this.compile(template, this.props);
+  }
+}

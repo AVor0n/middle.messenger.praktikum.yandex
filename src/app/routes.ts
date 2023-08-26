@@ -1,23 +1,29 @@
-import { Auth, Login, Chat, Profile, ErrorPage } from '@pages';
+import { Auth, Chat, ErrorPage, Login, Profile } from '@pages';
 import '@widgets';
-import { $, Router } from '@shared';
+import { $, Router, type Component } from '@shared';
 
-function goToPage(initPage: () => string) {
-  const $app = $('#app');
-  $app.innerHTML = initPage();
+function goToPage(page: Component) {
+  const root = $('#app');
+  root.innerHTML = '';
+  const pageContent = page.getContent();
+  if (pageContent) {
+    root.append(pageContent);
+  }
+
+  page.dispatchComponentDidMount();
 }
 
 export const initRouter = () => {
   const router = new Router();
 
   router
-    .add('', () => goToPage(Login))
-    .add('login', () => goToPage(Login))
-    .add('auth', () => goToPage(Auth))
-    .add('chat', () => goToPage(Chat))
-    .add('profile', () => goToPage(Profile))
-    .add('error404', () => goToPage(() => ErrorPage(404)))
-    .add('error500', () => goToPage(() => ErrorPage(500)));
+    .add('', () => goToPage(new Login()))
+    .add('login', () => goToPage(new Login()))
+    .add('auth', () => goToPage(new Auth()))
+    .add('chat', () => goToPage(new Chat()))
+    .add('profile', () => goToPage(new Profile()))
+    .add('error404', () => goToPage(new ErrorPage(404)))
+    .add('error500', () => goToPage(new ErrorPage(500)));
 
   router.go(window.location.hash);
 };
