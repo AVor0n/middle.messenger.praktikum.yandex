@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars/runtime';
+import Handlebars from 'handlebars';
 import editWindow from './EditWindow.hbs';
 import './EditWindow.css';
 

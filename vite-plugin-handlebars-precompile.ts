@@ -10,7 +10,7 @@ export default function handlebars() {
 
       return {
         code: /*ts*/ `
-          import Handlebars from 'handlebars/runtime';
+          import Handlebars from 'handlebars';
 
           export default Handlebars.template(${String(Handlebars.precompile(src))});
           `,
