@@ -43,7 +43,9 @@
     "no-console": "error",
     "no-restricted-syntax": "off",
     "spaced-comment": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "@typescript-eslint/no-confusing-void-expression": [
       "error",
