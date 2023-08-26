@@ -1,12 +1,17 @@
-export type Props = Record<string, unknown>;
-export type Tag = keyof HTMLElementTagNameMap;
+import type { Component } from './Component';
 
-export interface IComponent<P extends Props> {
-  init(): void;
-  componentDidMount(oldProps: P): void;
-  dispatchComponentDidMount(): void;
-  componentDidUpdate(oldProps: P, newProps: P): boolean;
-  render(props: P): void;
-  show(): void;
-  hide(): void;
+export interface Child {
+  component: Component;
+  embed: (fragment: DocumentFragment) => void;
+}
+
+export interface Props {
+  [key: string]: unknown;
+  events: Record<string, () => void>;
+}
+
+export interface TemplateContext {
+  [key: string]: unknown;
+  __children?: Child[];
+  __refs: Record<string, Component>;
 }

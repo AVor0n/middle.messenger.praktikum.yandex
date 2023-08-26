@@ -1,76 +1,94 @@
 import { EventBus } from '../EventBus';
-import type { IComponent, Props, Tag } from './types';
+import { generateId } from '../utils';
+import type { TemplateContext, Props } from './types';
 
-export abstract class Component<T extends Tag = 'div', P extends Props = Props> implements IComponent<P> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class Component<P extends Props = any> {
+  public id = generateId();
+
   private eventBus: EventBus<{
     init: () => void;
     'flow:component-did-mount': () => void;
-    'flow:component-did-update': (oldProps: P, newProps: P) => void;
+    'flow:component-did-update': (oldProps: Record<string, unknown>, newProps: Record<string, unknown>) => void;
     'flow:render': () => void;
   }>;
 
-  private element!: HTMLElementTagNameMap[T];
+  private _element: HTMLElement | undefined;
 
-  private meta: {
-    tagName: T;
-    props: P;
-  };
+  protected props: Record<string, unknown>;
 
-  public props: P;
+  public children: Record<string, Component> = {};
 
-  constructor(tagName: T, props: P) {
-    this.meta = {
-      tagName,
-      props,
-    };
+  protected refs: Record<string, Component> = {};
 
-    this.props = this.makePropsProxy(props);
+  constructor(propsWithChildren: P) {
     this.eventBus = new EventBus();
+    const { props, children } = this._getChildrenAndProps(propsWithChildren);
+
+    this.children = children;
+    this.props = this.makePropsProxy(props);
 
     this.registerEvents();
     this.eventBus.emit('init');
   }
 
+  private _getChildrenAndProps(childrenAndProps: Record<string, unknown>) {
+    const props: Record<string, unknown> = {};
+    const children: Record<string, Component> = {};
+
+    Object.entries(childrenAndProps).forEach(([key, value]) => {
+      if (value instanceof Component) {
+        children[key] = value;
+      } else {
+        props[key] = value;
+      }
+    });
+    return { props, children };
+  }
+
+  private _addEvents() {
+    const { events = {} } = this.props as { events: Record<string, () => void> };
+    Object.keys(events).forEach(eventName => {
+      this.element?.addEventListener(eventName, events[eventName]);
+    });
+  }
+
   private registerEvents() {
-    this.eventBus.on('init', this.init.bind(this));
+    this.eventBus.on('init', this._init.bind(this));
     this.eventBus.on('flow:component-did-mount', this._componentDidMount.bind(this));
     this.eventBus.on('flow:component-did-update', this._componentDidUpdate.bind(this));
     this.eventBus.on('flow:render', this._render.bind(this));
   }
 
-  private createResources() {
-    const { tagName } = this.meta;
-    this.element = document.createElement(tagName);
-  }
-
-  public init() {
-    this.createResources();
+  private _init() {
+    this.init();
     this.eventBus.emit('flow:render');
   }
 
+  protected init() {}
+
   private _componentDidMount() {
-    this.componentDidMount(this.props);
+    this.componentDidMount();
   }
 
-  public componentDidMount(_oldProps: P): void {}
+  protected componentDidMount(): void {}
 
   public dispatchComponentDidMount() {
     this.eventBus.emit('flow:component-did-mount');
+    Object.values(this.children).forEach(child => child.dispatchComponentDidMount());
   }
 
-  private _componentDidUpdate(oldProps: P, newProps: P) {
-    const response = this.componentDidUpdate(oldProps, newProps);
-    if (!response) {
-      return;
+  private _componentDidUpdate(oldProps: Record<string, unknown>, newProps: Record<string, unknown>) {
+    if (this.componentDidUpdate(oldProps, newProps)) {
+      this.eventBus.emit('flow:render');
     }
-    this._render();
   }
 
-  public componentDidUpdate(_oldProps: P, _newProps: P) {
+  protected componentDidUpdate(_oldProps: Record<string, unknown>, _newProps: Record<string, unknown>) {
     return true;
   }
 
-  public setProps = (nextProps?: Partial<P>) => {
+  protected setProps = (nextProps?: Partial<P>) => {
     if (!nextProps) {
       return;
     }
@@ -79,27 +97,47 @@ export abstract class Component<T extends Tag = 'div', P extends Props = Props> 
   };
 
   private _render() {
-    const block = this.render(this.props);
-    // TODO: Нужно компилировать не в строку (или делать это правильно),
-    // либо сразу превращать в DOM-элементы и возвращать из compile DOM-ноду
-    this.element.innerHTML = block;
+    const fragment = this.render();
+    const newElement = fragment.firstElementChild as HTMLElement;
+
+    if (this._element) {
+      this._element.replaceWith(newElement);
+    }
+    this._element = newElement;
+    this._addEvents();
   }
 
-  public abstract render(_props: P): string;
+  protected abstract render(): DocumentFragment;
+
+  protected compile(template: HandlebarsTemplateDelegate<unknown>, context: TemplateContext) {
+    const contextAndStubs = { ...context, __refs: this.refs };
+    const html = template(contextAndStubs);
+    const temp = document.createElement('template');
+    temp.innerHTML = html;
+
+    contextAndStubs.__children?.forEach(({ embed }) => {
+      embed(temp.content);
+    });
+
+    return temp.content;
+  }
+
+  public get element() {
+    return this._element;
+  }
 
   public getContent() {
     return this.element;
   }
 
-  private makePropsProxy(props: P) {
+  private makePropsProxy(props: Record<string, unknown>) {
     return new Proxy(props, {
       get: (target, prop) => {
-        const value = target[prop as keyof P];
-        return (typeof value === 'function' ? value.bind(target) : value) as (typeof target)[keyof P];
+        const value = target[String(prop)];
+        return (typeof value === 'function' ? value.bind(target) : value) as typeof target.prop;
       },
       set: (target, prop, value) => {
-        // eslint-disable-next-line no-param-reassign
-        target[prop as keyof P] = value as P[keyof P];
+        target[String(prop)] = value;
 
         this.eventBus.emit('flow:component-did-update', { ...target }, target);
         return true;
@@ -108,13 +146,5 @@ export abstract class Component<T extends Tag = 'div', P extends Props = Props> 
         throw new Error('Нет доступа');
       },
     });
-  }
-
-  public show() {
-    this.getContent().style.display = 'block';
-  }
-
-  public hide() {
-    this.getContent().style.display = 'none';
   }
 }
