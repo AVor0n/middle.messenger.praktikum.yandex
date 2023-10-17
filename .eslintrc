@@ -54,6 +54,7 @@
         "ignoreArrowShorthand": true
       }
     ],
+    "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/consistent-type-imports": "warn",
     "regexp/prefer-named-capture-group": "off",
     "unicorn/prevent-abbreviations": "off",

@@ -8,6 +8,9 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  esbuild: {
+    jsxInject: `import { createVNode } from '@shared';`,
+  },
   test: {
     globals: true,
     environment: 'jsdom',
