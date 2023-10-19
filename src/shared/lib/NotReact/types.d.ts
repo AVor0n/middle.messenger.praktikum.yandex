@@ -13,6 +13,7 @@ interface NodeWithVNode extends ChildNode {
 type JSXIntrinsicElements = {
   [tag in keyof HTMLElementTagNameMap]: Omit<Partial<HTMLElementTagNameMap[tag]>, 'children'> & {
     children?: VElement[];
+    key?: string;
   };
 };
 
