@@ -1,6 +1,7 @@
-import { initRouter } from './routes';
+import { App } from './App';
 import { addErrorLinks } from '@features';
+import { $, mount } from '@shared';
 import './styles/index.css';
 
-initRouter();
 addErrorLinks();
+mount(App, $('#app'));

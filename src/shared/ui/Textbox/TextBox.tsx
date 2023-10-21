@@ -1,6 +1,8 @@
+import { Component } from '@shared';
+import type { Props } from '@shared';
 import './Textbox.css';
 
-export interface TextBoxProps {
+export interface TextBoxProps extends Props {
   value?: string;
   name?: string;
   label: string;
@@ -8,12 +10,20 @@ export interface TextBoxProps {
   type: HTMLInputElement['type'];
 }
 
-export const TextBox: VComponent<TextBoxProps> = ({ label, error, type, name, value }) => (
-  <div className="textbox">
-    <label>
-      <input type={type} className="textbox__input" placeholder={label} value={value} name={name} />
-      <div className="textbox__label">{label}</div>
-    </label>
-    <div className="textbox__error">{error}</div>
-  </div>
-);
+export class TextBox extends Component<TextBoxProps> {
+  constructor(props: TextBoxProps) {
+    super({}, props);
+  }
+
+  public render({ type, label, error, name, value }: TextBoxProps) {
+    return (
+      <div className="textbox">
+        <label>
+          <input type={type} className="textbox__input" placeholder={label} value={value} name={name} />
+          <div className="textbox__label">{label}</div>
+        </label>
+        <div className="textbox__error">{error}</div>
+      </div>
+    );
+  }
+}
