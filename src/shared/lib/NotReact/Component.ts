@@ -1,26 +1,22 @@
 import { patchNode } from './vDom';
 import { EventBus } from '../EventBus';
-import { generateId } from '../utils';
 import type { DOMNode, Props, State, VElement } from './types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ComponentConstructor<T extends unknown[] = any> = new (...args: T) => Component;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export abstract class Component<P extends Props = any, S extends State = any> {
-  public id = generateId();
-
+export abstract class Component<P extends Props = Props, S extends State = State> {
   private eventBus: EventBus<{
     //создание state, props
     init: () => void;
     // вычисление vdom
-    'flow:render': (oldProps: Record<string, unknown>, newProps: Record<string, unknown>) => void;
+    'flow:render': (oldProps: P, newProps: P) => void;
     //завершение монтирования vdom в dom
     'flow:component-did-mount': (node: DOMNode) => void;
     // получение новых пропсов
-    'flow:component-update': (oldProps: Record<string, unknown>, newProps: Record<string, unknown>) => void;
+    'flow:component-update': (oldProps: P, newProps: P) => void;
     //завершение обновления dom
-    'flow:component-did-update': (oldProps: Record<string, unknown>, newProps: Record<string, unknown>) => void;
+    'flow:component-did-update': (oldProps: P, newProps: P) => void;
     //завершение удаления компонента из dom
     'flow:component-did-unmount': () => void;
   }>;
@@ -29,18 +25,20 @@ export abstract class Component<P extends Props = any, S extends State = any> {
 
   private _vDom: VElement | undefined;
 
-  /** Ссылка на DOM-узел */
+  /** Ссылка на DOM-узел, который представляет компонент */
   public get ref() {
     return this._ref;
   }
 
-  /** VDOM представление последнего рендера */
+  /** VDOM-представление компонента */
   public get vDom() {
     return this._vDom;
   }
 
+  /** Внутреннее состояние компонента, при изменении происходит автоматический ререндер */
   protected state: S;
 
+  /** Данные получаемые из родительского компонента */
   protected readonly props: P;
 
   constructor(state: S, props: P) {
@@ -72,7 +70,7 @@ export abstract class Component<P extends Props = any, S extends State = any> {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         target[prop as keyof S] = value;
 
-        this.eventBus.emit('flow:render', { ...target }, target);
+        this.eventBus.emit('flow:render', this.props, this.props);
         return true;
       },
       deleteProperty() {
@@ -83,10 +81,10 @@ export abstract class Component<P extends Props = any, S extends State = any> {
 
   private _init() {
     setTimeout(() => this.init());
-    this.eventBus.emit('flow:render', {}, this.props);
+    this.eventBus.emit('flow:render', {} as P, this.props);
   }
 
-  private _render(oldProps: Record<string, unknown>, newProps: Record<string, unknown>) {
+  private _render(oldProps: P, newProps: P) {
     const oldVDom = this._vDom;
     this._vDom = this.render(this.props);
     if (this._ref) {
@@ -97,43 +95,43 @@ export abstract class Component<P extends Props = any, S extends State = any> {
 
   private _componentDidMount(node: DOMNode) {
     this._ref = node;
-    this.componentDidMount?.(node);
+    this.componentDidMount(node);
   }
 
   private _componentDidUnmount() {
-    this.componentDidUnmount?.();
+    this.componentDidUnmount();
   }
 
-  private _componentUpdate(oldProps: Record<string, unknown>, newProps: Record<string, unknown>) {
-    this.componentUpdate?.(oldProps, newProps);
+  private _componentUpdate(oldProps: P, newProps: P) {
+    this.componentUpdate(oldProps, newProps);
     if (this.shouldComponentUpdate(oldProps, newProps)) {
       this.eventBus.emit('flow:render', oldProps, newProps);
     }
   }
 
-  private _componentDidUpdate(oldProps: Record<string, unknown>, newProps: Record<string, unknown>) {
-    this.componentDidUpdate?.(oldProps, newProps);
+  private _componentDidUpdate(oldProps: P, newProps: P) {
+    this.componentDidUpdate(oldProps, newProps);
   }
 
   /** Срабатывает после инициализации компонента */
   protected init() {}
 
   /** Срабатывает после монтирования компонента в DOM дерево */
-  protected componentDidMount?: (node: DOMNode) => void;
+  protected componentDidMount(_node: DOMNode) {}
 
   /** Срабатывает при получении новых пропсов */
-  protected componentUpdate?: (oldProps: Record<string, unknown>, newProps: Record<string, unknown>) => void;
+  protected componentUpdate(_oldProps: P, _newProps: P) {}
 
   /** Срабатывает при изменении пропсов, позволяет отменить ререндер  */
-  protected shouldComponentUpdate(_oldProps: Record<string, unknown>, _newProps: Record<string, unknown>) {
+  protected shouldComponentUpdate(_oldProps: P, _newProps: P) {
     return true;
   }
 
   /** Срабатывает после ререндера компонента */
-  protected componentDidUpdate?: (oldProps: Record<string, unknown>, newProps: Record<string, unknown>) => void;
+  protected componentDidUpdate(_oldProps: P, _newProps: P) {}
 
   /** Срабатывает при удалении компонента из DOM дерева */
-  protected componentDidUnmount?: () => void;
+  protected componentDidUnmount() {}
 
   public abstract render(props: P): JSX.Element;
 
@@ -141,7 +139,7 @@ export abstract class Component<P extends Props = any, S extends State = any> {
     this.eventBus.emit('flow:component-did-mount', node);
   }
 
-  public dispatchComponentUpdate(oldProps: Record<string, unknown>, newProps: Record<string, unknown>) {
+  public dispatchComponentUpdate(oldProps: P, newProps: P) {
     this.eventBus.emit('flow:component-update', oldProps, newProps);
   }
 
