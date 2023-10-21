@@ -82,7 +82,7 @@ export abstract class Component<P extends Props = any, S extends State = any> {
   }
 
   private _init() {
-    this.init?.();
+    setTimeout(() => this.init());
     this.eventBus.emit('flow:render', {}, this.props);
   }
 
@@ -116,7 +116,7 @@ export abstract class Component<P extends Props = any, S extends State = any> {
   }
 
   /** Срабатывает после инициализации компонента */
-  protected init?: () => void;
+  protected init() {}
 
   /** Срабатывает после монтирования компонента в DOM дерево */
   protected componentDidMount?: (node: DOMNode) => void;

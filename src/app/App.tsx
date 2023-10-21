@@ -17,11 +17,11 @@ interface AppState extends State {
 }
 
 export class App extends Component<Props, AppState> {
-  private router: Router;
+  router = new Router();
 
-  private navigate = (page: Pages) => {
+  private navigate(page: Pages) {
     this.state.page = page;
-  };
+  }
 
   constructor() {
     super(
@@ -30,8 +30,10 @@ export class App extends Component<Props, AppState> {
       },
       {},
     );
+  }
 
-    this.router = new Router()
+  protected init() {
+    this.router
       .add('', () => this.navigate(Pages.Login))
       .add('login', () => this.navigate(Pages.Login))
       .add('auth', () => this.navigate(Pages.Auth))
