@@ -1,28 +1,8 @@
 {
-  "name": "middle.messenger.praktikum.yandex",
-  "version": "0.0.1",
-  "main": "src/index.ts",
-  "private": true,
-  "repository": "ssh://git@github.com/AVor0n/middle.messenger.praktikum.yandex.git",
   "author": "Andrey Voronin <AVor0n@ya.ru>",
-  "license": "MIT",
-  "type": "module",
-  "scripts": {
-    "start": "npm run build && node ./server.js",
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "prepare": "husky install",
-    "lint": "eslint . --ext=.ts || stylelint ./src/**/*.css",
-    "lint:fix": "eslint . --ext=.ts --fix || stylelint ./src/**/*.css --fix",
-    "format": "prettier --check . --ignore-unknown",
-    "format:fix": "prettier --write . --ignore-unknown",
-    "test": "vitest",
-    "coverage": "vitest --ui --coverage"
-  },
   "dependencies": {
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "handlebars": "^4.7.8"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
@@ -62,5 +42,24 @@
     "vite": "^4.4.9",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.34.3"
-  }
+  },
+  "license": "MIT",
+  "main": "src/index.ts",
+  "name": "middle.messenger.praktikum.yandex",
+  "private": true,
+  "repository": "ssh://git@github.com/AVor0n/middle.messenger.praktikum.yandex.git",
+  "scripts": {
+    "build": "tsc && vite build",
+    "coverage": "vitest --ui --coverage",
+    "dev": "vite",
+    "format": "prettier --check . --ignore-unknown",
+    "format:fix": "prettier --write . --ignore-unknown",
+    "lint": "eslint . --ext=.ts || stylelint ./src/**/*.css",
+    "lint:fix": "eslint . --ext=.ts --fix || stylelint ./src/**/*.css --fix",
+    "prepare": "husky install",
+    "start": "npm run build && node ./server.js",
+    "test": "vitest"
+  },
+  "type": "module",
+  "version": "0.0.1"
 }
