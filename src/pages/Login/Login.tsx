@@ -1,4 +1,4 @@
-import { Component, validate, type Props, type State, required, login, password } from '@shared';
+import { Component, validate, type Props, type State, required, login, password, removeProxy } from '@shared';
 import { TextBox } from '@uikit';
 import './Login.css';
 
@@ -21,7 +21,7 @@ export class Login extends Component<Props, LoginState> {
   private onEnterClick = (e: Event) => {
     e.preventDefault();
     // eslint-disable-next-line no-console
-    console.log(this.state.formData);
+    console.log(removeProxy(this.state));
     Object.assign(document.createElement('a'), { href: '#/chat' }).click();
   };
 

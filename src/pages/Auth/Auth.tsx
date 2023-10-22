@@ -11,6 +11,7 @@ import {
   type State,
   type Props,
   repeatPassword,
+  removeProxy,
 } from '@shared';
 import { TextBox } from '@uikit';
 import './Auth.css';
@@ -44,11 +45,12 @@ export class Auth extends Component<Props, AuthState> {
   private onEnterClick = (e: Event) => {
     e.preventDefault();
     // eslint-disable-next-line no-console
-    console.log(this.state.formData);
+    console.log(removeProxy(this.state));
     Object.assign(document.createElement('a'), { href: '#/chat' }).click();
   };
 
   public render() {
+    //TODO вынести в ValidateModel
     const emailValidate = validate(this.state.email, required, email);
     const loginValidate = validate(this.state.login, required, login);
     const firstNameValidate = validate(this.state.firstName, required, onlyLetters, firstUpperLetter);
