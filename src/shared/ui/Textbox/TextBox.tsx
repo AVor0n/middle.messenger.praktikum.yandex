@@ -1,25 +1,44 @@
 import { Component } from '@shared';
-import type { Props } from '@shared';
+import type { Props, State } from '@shared';
 import './Textbox.css';
 
-export interface TextBoxProps extends Props {
-  value?: string;
-  name?: string;
-  label: string;
-  error?: string;
-  type: HTMLInputElement['type'];
+interface TextBoxState extends State {
+  visited: boolean;
 }
 
-export class TextBox extends Component<TextBoxProps> {
+export interface TextBoxProps extends Props, Partial<HTMLInputElement> {
+  label: string;
+  error?: string;
+  onChange?: (value: string) => void;
+  onBlur?: () => void;
+}
+
+export class TextBox extends Component<TextBoxProps, TextBoxState> {
   constructor(props: TextBoxProps) {
-    super({}, props);
+    super(
+      {
+        visited: false,
+      },
+      props,
+    );
   }
 
   public render({ type, label, error, name, value }: TextBoxProps) {
     return (
       <div className="textbox">
         <label>
-          <input type={type} className="textbox__input" placeholder={label} value={value} name={name} />
+          <input
+            type={type}
+            className="textbox__input"
+            placeholder={label}
+            value={value}
+            name={name}
+            $input={e => this.props.onChange?.((e.target as HTMLInputElement).value)}
+            $blur={() => {
+              this.state.visited = true;
+              this.props.onBlur?.();
+            }}
+          />
           <div className="textbox__label">{label}</div>
         </label>
         <div className="textbox__error">{error}</div>

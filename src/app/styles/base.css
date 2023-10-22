@@ -79,6 +79,12 @@
     &:active {
       background-color: color-mod(var(--color-primary) lightness(-20%));
     }
+
+    &:disabled {
+      background-color: color-mod(var(--color-smoke) lightness(-20%));
+
+      cursor: auto;
+    }
   }
 
   &--ghost {
