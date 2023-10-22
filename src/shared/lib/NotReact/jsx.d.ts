@@ -1,4 +1,4 @@
-import type { Component } from './Component';
+import type { ComponentConstructor } from './Component';
 
 type ReplaceOnPrefix<T> = {
   [K in keyof T as K extends `on${infer Event}` ? `$${Event}` : K]: T[K];
@@ -16,7 +16,7 @@ declare global {
     interface IntrinsicElements extends JSXIntrinsicElements {}
 
     interface Element {
-      tagName: string | Component;
+      tagName: string | ComponentConstructor;
       props: Props;
       children: VNode[];
     }

@@ -46,7 +46,7 @@ describe('Создание VDom', () => {
       props: null,
       children: [
         {
-          tagName: expect.any(Button),
+          tagName: Button,
           props: { id: 'btn', onClick },
           children: [
             'Hello',
@@ -58,7 +58,7 @@ describe('Создание VDom', () => {
           ],
         },
         {
-          tagName: expect.any(Button),
+          tagName: Button,
           props: { id: 'secondBtn' },
           children: [],
         },
@@ -68,17 +68,17 @@ describe('Создание VDom', () => {
 });
 
 describe('Создание DOM из vDOM', () => {
-  test('string', () => {
-    expect(createDOMNode('test')).toMatchInlineSnapshot('test');
+  test('string', async () => {
+    expect(await createDOMNode('test')).toMatchInlineSnapshot('test');
   });
 
-  test('number', () => {
-    expect(createDOMNode(42)).toMatchInlineSnapshot('42');
+  test('number', async () => {
+    expect(await createDOMNode(42)).toMatchInlineSnapshot('42');
   });
 
-  test('HTMLElement', () => {
+  test('HTMLElement', async () => {
     expect(
-      createDOMNode({
+      await createDOMNode({
         tagName: 'div',
         props: null,
         children: [],
@@ -86,16 +86,20 @@ describe('Создание DOM из vDOM', () => {
     ).toMatchInlineSnapshot('<div />');
   });
 
-  test('component', () => {
+  test('component', async () => {
     class Test extends Component {
-      public render(): JSX.Element {
+      constructor() {
+        super({}, {});
+      }
+
+      public render() {
         return <div>test</div>;
       }
     }
 
     expect(
-      createDOMNode({
-        tagName: new Test({}, {}),
+      await createDOMNode({
+        tagName: Test,
         props: null,
         children: ['test'],
       }),
@@ -106,9 +110,9 @@ describe('Создание DOM из vDOM', () => {
     `);
   });
 
-  test('HTMLElement с пропсами', () => {
+  test('HTMLElement с пропсами', async () => {
     expect(
-      createDOMNode({
+      await createDOMNode({
         tagName: 'div',
         props: { className: 'testClass', id: 'testId' },
         children: [],
@@ -121,13 +125,13 @@ describe('Создание DOM из vDOM', () => {
     `);
   });
 
-  test('HTMLElement с обработчиком', () => {
+  test('HTMLElement с обработчиком', async () => {
     const onClick = vitest.fn();
-    const button = createDOMNode({
+    const button = (await createDOMNode({
       tagName: 'button',
       props: { $click: onClick },
       children: [],
-    }) as HTMLButtonElement;
+    })) as HTMLButtonElement;
 
     expect(button).toMatchInlineSnapshot('<button />');
 
@@ -138,7 +142,7 @@ describe('Создание DOM из vDOM', () => {
 });
 
 describe('Обновление DOM', () => {
-  test('Создание элементов', () => {
+  test('Создание элементов', async () => {
     const container = document.createElement('div');
     const vNode1 = {
       tagName: 'div',
@@ -157,9 +161,9 @@ describe('Обновление DOM', () => {
         },
       ],
     };
-    const node = createDOMNode(<div id="testId">test</div>);
+    const node = await createDOMNode(<div id="testId">test</div>);
     container.append(node);
-    patchNode(node, vNode1, vNode2);
+    await patchNode(node, vNode1, vNode2);
     expect(container.firstElementChild).toMatchInlineSnapshot(`
       <div
         id="testId"
@@ -171,7 +175,7 @@ describe('Обновление DOM', () => {
       </div>
     `);
   });
-  test('Удаление элементов', () => {
+  test('Удаление элементов', async () => {
     const container = document.createElement('div');
     const vNode1 = {
       tagName: 'div',
@@ -192,7 +196,7 @@ describe('Обновление DOM', () => {
       props: { id: 'testId' },
       children: ['test', 42],
     };
-    const node = createDOMNode(
+    const node = await createDOMNode(
       <div id="testId">
         test
         <button id="btn">13</button>
@@ -200,7 +204,7 @@ describe('Обновление DOM', () => {
       </div>,
     );
     container.append(node);
-    patchNode(node, vNode1, vNode2);
+    await patchNode(node, vNode1, vNode2);
     expect(container.firstElementChild).toMatchInlineSnapshot(`
       <div
         id="testId"
@@ -210,7 +214,7 @@ describe('Обновление DOM', () => {
       </div>
     `);
   });
-  test('Обновление пропсов', () => {
+  test('Обновление пропсов', async () => {
     const container = document.createElement('div');
     const vNode1 = {
       tagName: 'div',
@@ -222,9 +226,9 @@ describe('Обновление DOM', () => {
       props: { className: 'test test2 test3', title: 'div', hidden: false },
       children: [],
     };
-    const node = createDOMNode(<div id="testId" className="test2" hidden />);
+    const node = await createDOMNode(<div id="testId" className="test2" hidden />);
     container.append(node);
-    patchNode(node, vNode1, vNode2);
+    await patchNode(node, vNode1, vNode2);
     expect(container.firstElementChild).toMatchInlineSnapshot(`
       <div
         class="test test2 test3"
@@ -232,7 +236,7 @@ describe('Обновление DOM', () => {
       />
     `);
   });
-  test('Изменение обработчиков', () => {
+  test('Изменение обработчиков', async () => {
     const container = document.createElement('div');
     const onClick1 = vitest.fn();
     const onClick2 = vitest.fn();
@@ -247,7 +251,9 @@ describe('Обновление DOM', () => {
       new MouseEvent('blur'),
     ];
 
-    const node = createDOMNode(<div $click={onClick1} $dblclick={onDblClick} $focus={onFocus} />) as HTMLDivElement;
+    const node = (await createDOMNode(
+      <div $click={onClick1} $dblclick={onDblClick} $focus={onFocus} />,
+    )) as HTMLDivElement;
     container.append(node);
 
     const vNode1 = {
@@ -269,7 +275,7 @@ describe('Обновление DOM', () => {
     expect(onBlur).toBeCalledTimes(0);
     vitest.clearAllMocks();
 
-    patchNode(node, vNode1, vNode2);
+    await patchNode(node, vNode1, vNode2);
     expect(container.firstElementChild).toMatchInlineSnapshot('<div />');
     events.forEach(event => node.dispatchEvent(event));
     expect(onClick1).toBeCalledTimes(0);

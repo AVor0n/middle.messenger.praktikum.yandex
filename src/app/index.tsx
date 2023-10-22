@@ -4,4 +4,4 @@ import { $, mount } from '@shared';
 import './styles/index.css';
 
 addErrorLinks();
-mount(App, $('#app'));
+await mount(<App />, $('#app'));
