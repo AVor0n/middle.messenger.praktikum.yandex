@@ -5,12 +5,17 @@ import type { DOMNode, Props, State, VElement, VNode } from './types';
 /* eslint-disable new-cap */
 export const componentsToDOM = new Map<string, HTMLElement>();
 
-export function createVNode(tagName: string | ComponentConstructor, props: State = {}, ...children: VNode[]): VElement {
+export function createVNode(
+  tagName: string | ComponentConstructor,
+  props: State = {},
+  ...childElements: VNode[]
+): VElement {
+  const children = childElements.flat().filter(Boolean);
   try {
     return {
-      tagName: typeof tagName === 'function' ? new tagName(props) : tagName,
+      tagName: typeof tagName === 'function' ? new tagName({ ...props, children }) : tagName,
       props,
-      children: typeof tagName === 'function' ? [] : children.flat().filter(Boolean),
+      children,
     };
   } catch {
     throw new Error(`При построении vDom встретился объект отличный от Component или JSX.Element`);
