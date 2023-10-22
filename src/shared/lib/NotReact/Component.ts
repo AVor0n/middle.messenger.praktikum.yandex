@@ -10,7 +10,7 @@ export abstract class Component<P extends Props = Props, S extends State = State
     //создание state, props
     init: () => void;
     // вычисление vdom
-    'flow:render': (oldProps: P, newProps: P) => Promise<void>;
+    'flow:render': (props: P) => Promise<void>;
     //завершение монтирования vdom в dom
     'flow:component-did-mount': (node: DOMNode) => void;
     // получение новых пропсов
@@ -41,7 +41,7 @@ export abstract class Component<P extends Props = Props, S extends State = State
   protected state: S;
 
   /** Данные получаемые из родительского компонента */
-  protected readonly props: P;
+  protected props: P;
 
   constructor(state: S, props: P) {
     this.eventBus = new EventBus();
@@ -77,7 +77,7 @@ export abstract class Component<P extends Props = Props, S extends State = State
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         target[prop as keyof S] = value;
 
-        this.eventBus.emit('flow:render', this.props, this.props);
+        this.eventBus.emit('flow:render', this.props);
         return true;
       },
       deleteProperty() {
@@ -88,12 +88,14 @@ export abstract class Component<P extends Props = Props, S extends State = State
 
   private _init() {
     this.init();
-    this.eventBus.emit('flow:render', {} as P, this.props);
+    this.eventBus.emit('flow:render', this.props);
   }
 
-  private async _render(oldProps: P, newProps: P) {
+  private async _render(newProps: P) {
     const oldVDom = this._vDom;
-    this._vDom = this.render(this.props);
+    const oldProps = this.props;
+    this.props = newProps;
+    this._vDom = this.render(newProps);
     if (this._ref) {
       this._ref = await patchNode(this._ref, oldVDom, this._vDom);
     }
@@ -112,7 +114,7 @@ export abstract class Component<P extends Props = Props, S extends State = State
   private _componentWillUpdate(oldProps: P, newProps: P) {
     this.componentWillUpdate(oldProps, newProps);
     if (this.shouldComponentUpdate(oldProps, newProps)) {
-      this.eventBus.emit('flow:render', oldProps, newProps);
+      this.eventBus.emit('flow:render', newProps);
     }
   }
 
