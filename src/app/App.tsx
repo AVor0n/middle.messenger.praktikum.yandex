@@ -46,21 +46,15 @@ export class App extends Component<Props, AppState> {
   }
 
   public render() {
-    switch (this.state.page) {
-      case Pages.Auth:
-        return <AuthPage />;
-      case Pages.Login:
-        return <LoginPage />;
-      case Pages.Chat:
-        return <ChatPage />;
-      case Pages.Profile:
-        return <ProfilePage {...userInfo} />;
-      case Pages.NotFound:
-        return <ErrorPage code={404} />;
-      case Pages.Error:
-        return <ErrorPage code={500} />;
-      default:
-        return <ErrorPage code={404} />;
-    }
+    return (
+      <div>
+        {this.state.page === Pages.Auth && <AuthPage />}
+        {this.state.page === Pages.Login && <LoginPage />}
+        {this.state.page === Pages.Chat && <ChatPage />}
+        {this.state.page === Pages.Profile && <ProfilePage {...userInfo} />}
+        {this.state.page === Pages.NotFound && <ErrorPage code={404} />}
+        {this.state.page === Pages.Error && <ErrorPage code={500} />}
+      </div>
+    );
   }
 }
