@@ -47,6 +47,7 @@
     "no-underscore-dangle": "off",
     "no-param-reassign": "warn",
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-floating-promises": "warn",
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "@typescript-eslint/no-confusing-void-expression": [
       "error",

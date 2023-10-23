@@ -13,8 +13,8 @@
     "dev": "vite",
     "format": "prettier --check . --ignore-unknown",
     "format:fix": "prettier --write . --ignore-unknown",
-    "lint": "tsc --noEmit && eslint . --ext=.ts && stylelint ./src/**/*.css",
-    "lint:fix": "eslint . --ext=.ts --fix && stylelint ./src/**/*.css --fix",
+    "lint": "tsc --noEmit && eslint . --ext=.ts,.tsx --quiet && stylelint ./src/**/*.css --quiet",
+    "lint:fix": "eslint . --ext=.ts,.tsx --fix && stylelint ./src/**/*.css --fix",
     "prepare": "husky install",
     "start": "npm run build && node ./server.js",
     "test": "vitest"
