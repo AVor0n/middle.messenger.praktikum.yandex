@@ -42,6 +42,22 @@ export class Auth extends Component<Props, AuthState> {
     );
   }
 
+  get validateForm() {
+    const validateResult = {
+      email: validate(this.state.email, required, email),
+      login: validate(this.state.login, required, login),
+      firstName: validate(this.state.firstName, required, onlyLetters, firstUpperLetter),
+      secondName: validate(this.state.secondName, required, onlyLetters, firstUpperLetter),
+      phone: validate(this.state.phone, required, phone),
+      password: validate(this.state.password, required, password),
+      repeatPassword: validate(this.state.repeatPassword, repeatPassword(this.state.password)),
+    };
+    return {
+      ...validateResult,
+      isValid: Object.values(validateResult).every(field => field.isValid),
+    };
+  }
+
   private onEnterClick = (e: Event) => {
     e.preventDefault();
     // eslint-disable-next-line no-console
@@ -50,24 +66,6 @@ export class Auth extends Component<Props, AuthState> {
   };
 
   public render() {
-    //TODO вынести в ValidateModel
-    const emailValidate = validate(this.state.email, required, email);
-    const loginValidate = validate(this.state.login, required, login);
-    const firstNameValidate = validate(this.state.firstName, required, onlyLetters, firstUpperLetter);
-    const secondNameValidate = validate(this.state.secondName, required, onlyLetters, firstUpperLetter);
-    const phoneValidate = validate(this.state.phone, required, phone);
-    const passwordValidate = validate(this.state.password, required, password);
-    const repeatPasswordValidate = validate(this.state.repeatPassword, repeatPassword(this.state.password));
-    const isDisabledEnterBtn = [
-      emailValidate,
-      loginValidate,
-      firstNameValidate,
-      secondNameValidate,
-      phoneValidate,
-      passwordValidate,
-      repeatPasswordValidate,
-    ].some(result => !result.isValid);
-
     return (
       <div className="page auth-page">
         <form className="auth-form" onsubmit="false">
@@ -81,7 +79,7 @@ export class Auth extends Component<Props, AuthState> {
               onChange={value => {
                 this.state.email = value;
               }}
-              error={emailValidate.error}
+              error={this.validateForm.email.error}
             />
             <TextBox
               label="Логин"
@@ -90,7 +88,7 @@ export class Auth extends Component<Props, AuthState> {
               onChange={value => {
                 this.state.login = value;
               }}
-              error={loginValidate.error}
+              error={this.validateForm.login.error}
             />
             <TextBox
               label="Имя"
@@ -99,7 +97,7 @@ export class Auth extends Component<Props, AuthState> {
               onChange={value => {
                 this.state.firstName = value;
               }}
-              error={firstNameValidate.error}
+              error={this.validateForm.firstName.error}
             />
             <TextBox
               label="Фамилия"
@@ -108,7 +106,7 @@ export class Auth extends Component<Props, AuthState> {
               onChange={value => {
                 this.state.secondName = value;
               }}
-              error={secondNameValidate.error}
+              error={this.validateForm.secondName.error}
             />
             <TextBox
               label="Телефон"
@@ -117,7 +115,7 @@ export class Auth extends Component<Props, AuthState> {
               onChange={value => {
                 this.state.phone = value;
               }}
-              error={phoneValidate.error}
+              error={this.validateForm.phone.error}
             />
             <TextBox
               label="Пароль"
@@ -126,7 +124,7 @@ export class Auth extends Component<Props, AuthState> {
               onChange={value => {
                 this.state.password = value;
               }}
-              error={passwordValidate.error}
+              error={this.validateForm.password.error}
             />
             <TextBox
               label="Пароль (ещё раз)"
@@ -134,7 +132,7 @@ export class Auth extends Component<Props, AuthState> {
               onChange={value => {
                 this.state.repeatPassword = value;
               }}
-              error={repeatPasswordValidate.error}
+              error={this.validateForm.repeatPassword.error}
             />
           </div>
 
@@ -142,7 +140,7 @@ export class Auth extends Component<Props, AuthState> {
             <button
               className="btn btn--primary btn--flex btn--xl"
               $click={e => this.onEnterClick(e)}
-              disabled={isDisabledEnterBtn}
+              disabled={!this.validateForm.isValid}
             >
               Зарегистрироваться
             </button>

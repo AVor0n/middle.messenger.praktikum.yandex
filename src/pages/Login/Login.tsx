@@ -18,6 +18,17 @@ export class Login extends Component<Props, LoginState> {
     );
   }
 
+  get validateForm() {
+    const validateResult = {
+      login: validate(this.state.login, required, login),
+      password: validate(this.state.password, required, password),
+    };
+    return {
+      ...validateResult,
+      isValid: Object.values(validateResult).every(field => field.isValid),
+    };
+  }
+
   private onEnterClick = (e: Event) => {
     e.preventDefault();
     // eslint-disable-next-line no-console
@@ -26,10 +37,6 @@ export class Login extends Component<Props, LoginState> {
   };
 
   public render() {
-    const loginValidate = validate(this.state.login, required, login);
-    const passwordValidate = validate(this.state.password, required, password);
-    const isDisabledEnterBtn = !loginValidate.isValid || !passwordValidate.isValid;
-
     return (
       <div className="page login-page">
         <form className="login-form">
@@ -44,7 +51,7 @@ export class Login extends Component<Props, LoginState> {
               onChange={value => {
                 this.state.login = value;
               }}
-              error={loginValidate.error}
+              error={this.validateForm.login.error}
             />
             <TextBox
               label="Пароль"
@@ -54,7 +61,7 @@ export class Login extends Component<Props, LoginState> {
               onChange={value => {
                 this.state.password = value;
               }}
-              error={passwordValidate.error}
+              error={this.validateForm.password.error}
             />
           </div>
 
@@ -62,7 +69,7 @@ export class Login extends Component<Props, LoginState> {
             <button
               type="button"
               className="btn btn--primary btn--flex btn--xl"
-              disabled={isDisabledEnterBtn}
+              disabled={!this.validateForm.isValid}
               $click={e => this.onEnterClick(e)}
             >
               Войти
