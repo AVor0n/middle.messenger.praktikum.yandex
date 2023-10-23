@@ -96,7 +96,10 @@ export async function patchNode(node: DOMNode, vNode?: VNode, nextVNode?: VNode)
   }
 
   if (typeof vNode.tagName === 'function' && typeof nextVNode.tagName === 'function') {
-    node.v?.dispatchComponentUpdate(vNode.props, nextVNode.props);
+    node.v?.dispatchComponentUpdate(
+      { ...vNode.props, children: vNode.children },
+      { ...nextVNode.props, children: nextVNode.children },
+    );
     return node;
   }
 
