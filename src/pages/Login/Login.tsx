@@ -48,6 +48,7 @@ export class Login extends Component<Props, LoginState> {
               type="text"
               name="login"
               value={this.state.login}
+              autocomplete="username"
               onChange={value => {
                 this.state.login = value;
               }}
@@ -57,6 +58,7 @@ export class Login extends Component<Props, LoginState> {
               label="Пароль"
               type="password"
               name="password"
+              autocomplete="current-password"
               value={this.state.password}
               onChange={value => {
                 this.state.password = value;

@@ -6,7 +6,7 @@ interface TextBoxState extends State {
   visited: boolean;
 }
 
-export interface TextBoxProps extends Props, Partial<HTMLInputElement> {
+export interface TextBoxProps extends Props, Partial<Omit<HTMLInputElement, 'children'>> {
   label: string;
   error?: string;
   onChange?: (value: string) => void;
@@ -23,7 +23,7 @@ export class TextBox extends Component<TextBoxProps, TextBoxState> {
     );
   }
 
-  public render({ type, label, error, name, value }: TextBoxProps) {
+  public render({ type, label, error, name, value, onChange, onBlur, ...props }: TextBoxProps) {
     return (
       <div className="textbox">
         <label>
@@ -33,11 +33,12 @@ export class TextBox extends Component<TextBoxProps, TextBoxState> {
             placeholder={label}
             value={value}
             name={name}
-            $input={e => this.props.onChange?.((e.target as HTMLInputElement).value)}
+            $input={e => onChange?.((e.target as HTMLInputElement).value)}
             $blur={() => {
               this.state.visited = true;
-              this.props.onBlur?.();
+              onBlur?.();
             }}
+            {...props}
           />
           <div className="textbox__label">{label}</div>
         </label>

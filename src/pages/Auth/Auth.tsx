@@ -76,6 +76,7 @@ export class Auth extends Component<Props, AuthState> {
               label="Почта"
               type="email"
               name="email"
+              autocomplete="email"
               onChange={value => {
                 this.state.email = value;
               }}
@@ -94,6 +95,7 @@ export class Auth extends Component<Props, AuthState> {
               label="Имя"
               type="text"
               name="first_name"
+              autocomplete="name"
               onChange={value => {
                 this.state.firstName = value;
               }}
@@ -103,6 +105,7 @@ export class Auth extends Component<Props, AuthState> {
               label="Фамилия"
               type="text"
               name="second_name"
+              autocomplete="family-name"
               onChange={value => {
                 this.state.secondName = value;
               }}
@@ -112,6 +115,7 @@ export class Auth extends Component<Props, AuthState> {
               label="Телефон"
               type="tel"
               name="phone"
+              autocomplete="tel"
               onChange={value => {
                 this.state.phone = value;
               }}
@@ -121,6 +125,7 @@ export class Auth extends Component<Props, AuthState> {
               label="Пароль"
               type="password"
               name="password"
+              autocomplete="new-password"
               onChange={value => {
                 this.state.password = value;
               }}
@@ -129,6 +134,7 @@ export class Auth extends Component<Props, AuthState> {
             <TextBox
               label="Пароль (ещё раз)"
               type="password"
+              autocomplete="new-password"
               onChange={value => {
                 this.state.repeatPassword = value;
               }}
