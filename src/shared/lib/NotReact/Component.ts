@@ -2,8 +2,7 @@ import { patchNode } from './vDom';
 import { EventBus } from '../EventBus';
 import type { DOMNode, Props, State, VElement } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ComponentConstructor<T extends unknown[] = any> = new (...args: T) => Component;
+export type ComponentConstructor<T extends unknown[] = unknown[]> = new (...args: T) => Component;
 
 export abstract class Component<P extends Props = Props, S extends State = State> {
   private eventBus: EventBus<{

@@ -58,28 +58,28 @@ export class EditProfileWindow extends Component<EditProfileWindowProps, EditPro
   };
 
   public render() {
+    const fields: { label: string; name: keyof ProfileInfo; type?: HTMLInputElement['type'] }[] = [
+      { label: 'Почта', name: 'email', type: 'email' },
+      { label: 'Логин', name: 'login' },
+      { label: 'Имя', name: 'first_name' },
+      { label: 'Фамилия', name: 'second_name' },
+      { label: 'Имя в чате', name: 'display_name' },
+      { label: 'Телефон', name: 'phone' },
+    ];
+
     return (
       <div>
         <EditWindow saveAvailable={this.validateForm.isValid} onSave={this.onSave} onClose={this.onClose}>
-          {[
-            { label: 'Почта', name: 'email', type: 'email' },
-            { label: 'Логин', name: 'login' },
-            { label: 'Имя', name: 'first_name' },
-            { label: 'Фамилия', name: 'second_name' },
-            { label: 'Имя в чате', name: 'display_name' },
-            { label: 'Телефон', name: 'phone' },
-          ].map(field => (
+          {fields.map(field => (
             <TextBox
               key={field.name}
               label={field.label}
               type={field.type ?? 'text'}
               name={field.name}
-              value={this.state[field.name] as string}
+              value={this.state[field.name]}
               onChange={value => {
                 this.state[field.name] = value;
               }}
-              //@ts-expect-error позже поправлю TODO
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
               error={this.validateForm[field.name].error}
             />
           ))}
