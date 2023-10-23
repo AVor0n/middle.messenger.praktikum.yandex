@@ -37,6 +37,13 @@ export abstract class Component<P extends Props = Props, S extends State = State
     return this._vDom;
   }
 
+  public setState(newState?: Partial<S>) {
+    if (!newState) {
+      return;
+    }
+    Object.assign(this.state, newState);
+  }
+
   /** Внутреннее состояние компонента, при изменении происходит автоматический ререндер */
   protected state: S;
 
