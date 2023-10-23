@@ -1,11 +1,21 @@
 import { chats } from './fake-data';
 import { Component } from '@shared';
 import { ChatPreview } from '@widgets';
+import type { Props, State } from '@shared';
 import './Chat.css';
 
-export class Chat extends Component {
+interface ChatState extends State {
+  message: string;
+}
+
+export class Chat extends Component<Props, ChatState> {
   constructor() {
-    super({}, {});
+    super(
+      {
+        message: '',
+      },
+      {},
+    );
   }
 
   public render() {
@@ -43,8 +53,19 @@ export class Chat extends Component {
           <hr className="separator" />
           <form className="chat__editor">
             <button className="chat__attach-btn btn btn--ghost btn--circle btn--l" />
-            <input className="chat__input" type="text" placeholder="Сообщение" name="message" />
-            <button className="chat__send-btn btn btn--primary btn--circle btn--l" />
+            <input
+              className="chat__input"
+              type="text"
+              placeholder="Сообщение"
+              name="message"
+              value={this.state.message}
+              $input={e => {
+                this.state.message = (e.target as HTMLInputElement).value;
+              }}
+            />
+            <button className="chat__send-btn btn btn--primary btn--circle btn--l" disabled={!this.state.message}>
+              🡒
+            </button>
           </form>
         </div>
       </div>
