@@ -80,7 +80,7 @@ describe('Создание DOM из vDOM', () => {
     expect(
       await createDOMNode({
         tagName: 'div',
-        props: null,
+        props: {},
         children: [],
       }),
     ).toMatchInlineSnapshot('<div />');
@@ -100,7 +100,7 @@ describe('Создание DOM из vDOM', () => {
     expect(
       await createDOMNode({
         tagName: Test,
-        props: null,
+        props: {},
         children: ['test'],
       }),
     ).toMatchInlineSnapshot(`
