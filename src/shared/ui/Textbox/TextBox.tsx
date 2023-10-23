@@ -41,7 +41,7 @@ export class TextBox extends Component<TextBoxProps, TextBoxState> {
           />
           <div className="textbox__label">{label}</div>
         </label>
-        {this.state.visited && <div className="textbox__error">{this.props.error}</div>}
+        {this.state.visited && <div className="textbox__error">{error}</div>}
       </div>
     );
   }

@@ -80,6 +80,6 @@ export const repeatPassword: (pass: string) => Validator = pass => (value: strin
 });
 
 export const phone: Validator = (value: string) => ({
-  isValid: /^\+\d\{9, 14\}$|^\d\{10, 15\}$/u.test(value),
+  isValid: /^\+?\d{10,15}$/u.test(value),
   error: 'Некорректный номер',
 });
