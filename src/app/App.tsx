@@ -1,4 +1,3 @@
-import { userInfo } from './fake-data';
 import { Auth as AuthPage, Login as LoginPage, Chat as ChatPage, Profile as ProfilePage, ErrorPage } from '@pages';
 import { Component, Router } from '@shared';
 import type { Props, State } from '@shared';
@@ -51,7 +50,7 @@ export class App extends Component<Props, AppState> {
         {this.state.page === Pages.Auth && <AuthPage />}
         {this.state.page === Pages.Login && <LoginPage />}
         {this.state.page === Pages.Chat && <ChatPage />}
-        {this.state.page === Pages.Profile && <ProfilePage {...userInfo} />}
+        {this.state.page === Pages.Profile && <ProfilePage />}
         {this.state.page === Pages.NotFound && <ErrorPage code={404} />}
         {this.state.page === Pages.Error && <ErrorPage code={500} />}
       </div>

@@ -5,5 +5,5 @@ export const userInfo = {
   lastname: 'Иванов',
   login: 'ivanivanov',
   email: 'pochta@ya.ru',
-  tel: '+7 (909) 967 30 30',
+  phone: '+79099673030',
 };
