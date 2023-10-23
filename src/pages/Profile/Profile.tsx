@@ -1,4 +1,5 @@
-import { Component, type Props } from '@shared';
+import { EditPasswordWindow } from './components';
+import { Component, type State, type Props } from '@shared';
 import './Profile.css';
 
 interface ProfileProps extends Props {
@@ -9,9 +10,18 @@ interface ProfileProps extends Props {
   lastname: string;
 }
 
-export class Profile extends Component<ProfileProps> {
+interface ProfileState extends State {
+  editPasswordVisible: boolean;
+}
+
+export class Profile extends Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
-    super({}, props);
+    super(
+      {
+        editPasswordVisible: false,
+      },
+      props,
+    );
   }
 
   public render({ imageSrc, name, username, email, lastname }: ProfileProps) {
@@ -54,7 +64,13 @@ export class Profile extends Component<ProfileProps> {
             <button className="btn btn--ghost btn--wide btn--xl" id="editDataBtn">
               Редактировать данные
             </button>
-            <button className="btn btn--ghost btn--wide btn--xl" id="editPasswordBtn">
+            <button
+              className="btn btn--ghost btn--wide btn--xl"
+              id="editPasswordBtn"
+              $click={() => {
+                this.state.editPasswordVisible = true;
+              }}
+            >
               Сменить пароль
             </button>
           </div>
@@ -68,7 +84,13 @@ export class Profile extends Component<ProfileProps> {
             Выйти
           </a>
         </div>
-        <div id="window" className="window"></div>
+        {this.state.editPasswordVisible && (
+          <EditPasswordWindow
+            onClose={() => {
+              this.state.editPasswordVisible = false;
+            }}
+          />
+        )}
       </div>
     );
   }
