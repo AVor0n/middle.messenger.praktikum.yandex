@@ -29,7 +29,7 @@ export async function createDOMNode(vNode: VNode): Promise<DOMNode> {
   }
 
   if (typeof vNode.tagName === 'function') {
-    const component = new vNode.tagName(vNode.props);
+    const component = new vNode.tagName({ ...vNode.props, children: vNode.children });
     await component.isReady;
     if (!component.vDom) {
       throw new Error('У компонента нет vDOM. Возможно не вызван render');
