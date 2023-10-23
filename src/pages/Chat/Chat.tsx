@@ -1,6 +1,6 @@
+import { ChatPreview } from './components';
 import { chats } from './fake-data';
 import { Component } from '@shared';
-import { ChatPreview } from '@widgets';
 import type { Props, State } from '@shared';
 import './Chat.css';
 
