@@ -21,7 +21,8 @@
       "@widgets": ["widgets"],
       "@pages": ["pages"],
       "@shared": ["shared/lib"],
-      "@uikit": ["shared/ui"]
+      "@uikit": ["shared/ui"],
+      "@api": ["shared/api"]
     },
     "strict": true,
     "noImplicitAny": true,

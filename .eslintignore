@@ -3,3 +3,4 @@ dist
 postcss.config.cjs
 commitlint.config.js
 server.js
+scripts
