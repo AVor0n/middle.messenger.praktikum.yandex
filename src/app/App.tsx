@@ -1,5 +1,5 @@
 import { Component, type Props, type State } from '@shared/NotReact';
-import { Router } from '@shared/Router';
+import { router } from '@shared/Router';
 import { Auth as AuthPage, Login as LoginPage, Chat as ChatPage, Profile as ProfilePage, ErrorPage } from '@pages';
 
 const enum Pages {
@@ -16,8 +16,6 @@ interface AppState extends State {
 }
 
 export class App extends Component<Props, AppState> {
-  router = new Router();
-
   private navigate(page: Pages) {
     this.state.page = page;
   }
@@ -32,16 +30,14 @@ export class App extends Component<Props, AppState> {
   }
 
   protected init() {
-    this.router
-      .add('', () => this.navigate(Pages.Login))
-      .add('login', () => this.navigate(Pages.Login))
-      .add('auth', () => this.navigate(Pages.Auth))
-      .add('chat', () => this.navigate(Pages.Chat))
-      .add('profile', () => this.navigate(Pages.Profile))
-      .add('error404', () => this.navigate(Pages.NotFound))
-      .add('error500', () => this.navigate(Pages.Error));
-
-    this.router.go(this.state.page);
+    router
+      .addRoute('/', () => this.navigate(Pages.Login))
+      .addRoute('/login', () => this.navigate(Pages.Login))
+      .addRoute('/auth', () => this.navigate(Pages.Auth))
+      .addRoute('/chat', () => this.navigate(Pages.Chat))
+      .addRoute('/profile', () => this.navigate(Pages.Profile))
+      .setNotFound(() => this.navigate(Pages.NotFound))
+      .resolve();
   }
 
   public render() {

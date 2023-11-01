@@ -1,52 +1,41 @@
-interface Route {
-  path: string;
-  cb: () => void;
-}
+class Router {
+  private routes: Record<string, (() => void) | undefined> = {};
 
-export class Router {
-  routes: Set<Route>;
+  private notFoundCallback?: () => void;
 
   constructor() {
-    this.routes = new Set();
-
-    window.addEventListener('popstate', () => {
-      this.go(document.location.hash.replace('#/', ''));
-    });
+    this.listen();
   }
 
-  private static normalize(path: string) {
-    return path.replaceAll(/^\/|#\/|\/$/gu, '');
+  private listen() {
+    window.addEventListener('popstate', this.resolve.bind(this));
   }
 
-  add = (href: string, cb: () => void) => {
-    const path = Router.normalize(href);
-    this.routes.add({ path, cb });
+  public addRoute(path: string, cb: () => void) {
+    this.routes[path] = cb;
     return this;
-  };
+  }
 
-  remove = (href: string) => {
-    const path = Router.normalize(href);
+  public setNotFound(cb: () => void) {
+    this.notFoundCallback = cb;
+    return this;
+  }
 
-    for (const route of this.routes) {
-      if (route.path === path) {
-        this.routes.delete(route);
-      }
+  public navigate(href: string) {
+    window.history.pushState({}, '', href);
+    this.resolve();
+    return this;
+  }
+
+  public resolve() {
+    const path = window.location.pathname;
+    const targetRoute = this.routes[path];
+    if (targetRoute) {
+      targetRoute();
+    } else {
+      this.notFoundCallback?.();
     }
-    return this;
-  };
-
-  flush = () => {
-    this.routes.clear();
-    return this;
-  };
-
-  go = (href: string) => {
-    const path = Router.normalize(href);
-
-    for (const route of this.routes) {
-      if (route.path === path) {
-        route.cb();
-      }
-    }
-  };
+  }
 }
+
+export const router = new Router();
