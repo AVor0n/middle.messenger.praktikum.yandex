@@ -1,5 +1,4 @@
-import { Component } from '@shared';
-import type { PropsWithChildren } from '@shared';
+import { Component, type PropsWithChildren } from '@shared/NotReact';
 import './EditWindow.css';
 
 type EditWindowProps = PropsWithChildren<{

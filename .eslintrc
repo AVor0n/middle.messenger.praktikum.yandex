@@ -45,13 +45,13 @@
     "no-console": "error",
     "@typescript-eslint/no-empty-interface": "off", // бесполезно, применяю только если нужно
     "@typescript-eslint/no-floating-promises": "warn",
-    "@typescript-eslint/consistent-type-imports": "warn",
+    "@typescript-eslint/consistent-type-imports": ["warn", { "fixStyle": "inline-type-imports" }],
     "@typescript-eslint/no-use-before-define": ["error", { "functions": false }],
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-confusing-void-expression": ["error", { "ignoreArrowShorthand": true }],
     "regexp/no-obscure-range": "off", // ругается на а-я, как на неочевидный диапазон
     "import/prefer-default-export": "off",
-    "import/no-duplicates": "error",
+    "import/no-duplicates": ["error", { "prefer-inline": true }],
     "import/order": [
       "error",
       {
@@ -60,6 +60,13 @@
           "order": "asc",
           "caseInsensitive": true
         },
+        "pathGroups": [
+          {
+            "pattern": "@shared/*",
+            "group": "external",
+            "position": "after"
+          }
+        ],
         "newlines-between": "never"
       }
     ]

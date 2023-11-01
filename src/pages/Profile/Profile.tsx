@@ -1,6 +1,6 @@
+import { Component, type Props, type State } from '@shared/NotReact';
 import { EditPasswordWindow, EditProfileWindow } from './components';
 import { userInfo } from './fake-data';
-import { Component, type State, type Props } from '@shared';
 import './Profile.css';
 
 interface ProfileState extends State {

@@ -1,5 +1,4 @@
-import { Component } from '@shared';
-import type { Props, State } from '@shared';
+import { Component, type Props, type State } from '@shared/NotReact';
 import './Textbox.css';
 
 interface TextBoxState extends State {

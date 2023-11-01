@@ -1,6 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import { Component, mount } from '..';
-import type { Props } from '..';
+
+import { Component } from '../Component';
+import { type Props } from '../types';
+import { mount } from '../vDom';
 
 interface FieldProps extends Props {
   label: string;

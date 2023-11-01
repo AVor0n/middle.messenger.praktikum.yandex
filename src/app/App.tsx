@@ -1,6 +1,6 @@
+import { Component, type Props, type State } from '@shared/NotReact';
+import { Router } from '@shared/Router';
 import { Auth as AuthPage, Login as LoginPage, Chat as ChatPage, Profile as ProfilePage, ErrorPage } from '@pages';
-import { Component, Router } from '@shared';
-import type { Props, State } from '@shared';
 
 const enum Pages {
   Login = 'login',

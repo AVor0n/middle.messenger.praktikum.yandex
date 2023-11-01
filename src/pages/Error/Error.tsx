@@ -1,5 +1,5 @@
+import { Component, type Props } from '@shared/NotReact';
 import { errorCodeToText } from './constants';
-import { Component, type Props } from '@shared';
 import './Error.css';
 
 interface ErrorPageProps extends Props {

@@ -1,7 +1,6 @@
+import { Component, type Props, type State } from '@shared/NotReact';
 import { ChatPreview } from './components';
 import { chats } from './fake-data';
-import { Component } from '@shared';
-import type { Props, State } from '@shared';
 import './Chat.css';
 
 interface ChatState extends State {

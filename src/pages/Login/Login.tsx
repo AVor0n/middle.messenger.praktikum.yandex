@@ -1,4 +1,6 @@
-import { Component, validate, type Props, type State, required, login, password, removeProxy } from '@shared';
+import { Component, type Props, type State } from '@shared/NotReact';
+import { removeProxy } from '@shared/utils';
+import { login, password, required, validate } from '@shared/Validator';
 import { TextBox } from '@uikit';
 import './Login.css';
 

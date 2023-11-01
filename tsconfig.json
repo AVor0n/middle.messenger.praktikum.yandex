@@ -20,7 +20,7 @@
       "@features": ["features"],
       "@widgets": ["widgets"],
       "@pages": ["pages"],
-      "@shared": ["shared/lib"],
+      "@shared/*": ["shared/lib/*"],
       "@uikit": ["shared/ui"],
       "@api": ["shared/api"]
     },

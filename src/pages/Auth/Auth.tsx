@@ -1,18 +1,16 @@
+import { Component, type Props, type State } from '@shared/NotReact';
+import { removeProxy } from '@shared/utils';
 import {
-  Component,
-  validate,
   email,
-  required,
-  login,
-  phone,
-  password,
-  onlyLetters,
   firstUpperLetter,
-  type State,
-  type Props,
+  login,
+  onlyLetters,
+  password,
+  phone,
   repeatPassword,
-  removeProxy,
-} from '@shared';
+  required,
+  validate,
+} from '@shared/Validator';
 import { TextBox } from '@uikit';
 import './Auth.css';
 

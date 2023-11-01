@@ -1,5 +1,4 @@
-import { Component } from '@shared';
-import type { Props } from '@shared';
+import { Component, type Props } from '@shared/NotReact';
 import './ChatPreview.css';
 
 interface ChatPreviewProps extends Props {

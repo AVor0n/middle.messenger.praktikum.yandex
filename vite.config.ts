@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
   },
   esbuild: {
-    jsxInject: `import { createVNode } from '@shared';`,
+    jsxInject: `import { createVNode } from '@shared/NotReact';`,
   },
   test: {
     globals: true,
