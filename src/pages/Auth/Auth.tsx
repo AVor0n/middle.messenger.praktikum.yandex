@@ -1,4 +1,6 @@
 import { Component, type Props, type State } from '@shared/NotReact';
+import { Link } from '@shared/NotReactRouter';
+import { router } from '@shared/Router';
 import { removeProxy } from '@shared/utils';
 import {
   email,
@@ -12,6 +14,7 @@ import {
   validate,
 } from '@shared/Validator';
 import { TextBox } from '@uikit';
+import { PAGES } from 'app/constants';
 import './Auth.css';
 
 interface AuthState extends State {
@@ -60,7 +63,7 @@ export class Auth extends Component<Props, AuthState> {
     e.preventDefault();
     // eslint-disable-next-line no-console
     console.log(removeProxy(this.state));
-    Object.assign(document.createElement('a'), { href: '#/chat' }).click();
+    router.navigate(PAGES.CHAT);
   };
 
   public render() {
@@ -148,9 +151,9 @@ export class Auth extends Component<Props, AuthState> {
             >
               Зарегистрироваться
             </button>
-            <a className="btn btn--ghost btn--flex btn--xl" href="#/login">
+            <Link href={PAGES.LOGIN} className="btn btn--ghost btn--flex btn--xl">
               Войти
-            </a>
+            </Link>
           </div>
         </form>
       </div>

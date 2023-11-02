@@ -1,6 +1,8 @@
 import { Component, type Props, type State } from '@shared/NotReact';
+import { Link } from '@shared/NotReactRouter';
 import { EditPasswordWindow, EditProfileWindow } from './components';
 import { userInfo } from './fake-data';
+import { PAGES } from 'app/constants';
 import './Profile.css';
 
 interface ProfileState extends State {
@@ -86,12 +88,12 @@ export class Profile extends Component<Props, ProfileState> {
         </div>
 
         <div className="profile__navigation">
-          <a className="btn btn--ghost btn--wide btn--xl" href="#/chat">
+          <Link className="btn btn--ghost btn--wide btn--xl" href={PAGES.CHAT}>
             Назад
-          </a>
-          <a className="btn btn--ghost btn--wide btn--xl btn--danger" href="#/login">
+          </Link>
+          <Link className="btn btn--ghost btn--wide btn--xl btn--danger" href={PAGES.LOGIN}>
             Выйти
-          </a>
+          </Link>
         </div>
         {this.state.editPasswordVisible && (
           <EditPasswordWindow

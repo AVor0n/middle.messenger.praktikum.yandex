@@ -1,6 +1,8 @@
 import { Component, type Props, type State } from '@shared/NotReact';
+import { Link } from '@shared/NotReactRouter';
 import { ChatPreview } from './components';
 import { chats } from './fake-data';
+import { PAGES } from 'app/constants';
 import './Chat.css';
 
 interface ChatState extends State {
@@ -22,9 +24,9 @@ export class Chat extends Component<Props, ChatState> {
       <div className="page chat-page">
         <div className="sidebar">
           <nav className="sidebar__tools">
-            <a className="btn btn--ghost btn--flex btn--xl" href="#/profile">
+            <Link href={PAGES.PROFILE} className="btn btn--ghost btn--flex btn--xl">
               Профиль
-            </a>
+            </Link>
             <search>
               <input className="searchfield" type="search" placeholder="Поиск" />
             </search>
