@@ -1,6 +1,6 @@
 export const enum PAGES {
-  LOGIN = '/login',
-  AUTH = '/auth',
-  CHAT = '/chat',
-  PROFILE = '/profile',
+  LOGIN = '/',
+  AUTH = '/sign-up',
+  CHAT = '/messenger',
+  PROFILE = '/settings',
 }

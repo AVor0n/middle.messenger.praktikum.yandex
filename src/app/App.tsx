@@ -18,7 +18,6 @@ export class App extends Component<Props, AppState> {
 
   protected init() {
     router
-      .addRoute('/', () => this.navigate(<LoginPage />))
       .addRoute(PAGES.LOGIN, () => this.navigate(<LoginPage />))
       .addRoute(PAGES.AUTH, () => this.navigate(<AuthPage />))
       .addRoute(PAGES.CHAT, () => this.navigate(<ChatPage />))
