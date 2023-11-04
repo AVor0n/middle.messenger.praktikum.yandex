@@ -242,7 +242,7 @@ export interface ChatMessage {
    */
   time: string;
   /** Message type */
-  type: 'message' | 'file';
+  type: ChatMessageTypeEnum;
   /** Message content (message text for messages and resourceId for files) */
   content: string;
   /** File */
@@ -264,12 +264,12 @@ export interface ChatUserResponse {
   /** Avatar */
   avatar: string;
   /** User role */
-  role: 'admin' | 'regular';
+  role: ChatUserResponseRoleEnum;
 }
 
 export interface StaticChartRequest {
   /** Number of points in chart (10 / 100 / 1000) */
-  chartSize: 'small' | 'medium' | 'large';
+  chartSize: StaticChartRequestChartSizeEnum;
 }
 
 export interface LiveChartRequest {
@@ -363,4 +363,86 @@ export interface StickerPacksResponse {
 export interface StickersResponse {
   /** Stickers */
   data?: Sticker[];
+}
+
+/** Message type */
+export enum ChatMessageTypeEnum {
+  Message = 'message',
+  File = 'file',
+}
+
+/** User role */
+export enum ChatUserResponseRoleEnum {
+  Admin = 'admin',
+  Regular = 'regular',
+}
+
+/** Number of points in chart (10 / 100 / 1000) */
+export enum StaticChartRequestChartSizeEnum {
+  Small = 'small',
+  Medium = 'medium',
+  Large = 'large',
+}
+
+export interface ChatsListParams {
+  /** The number of items to skip before starting to collect the result set */
+  offset?: number;
+  /** The numbers of items to return */
+  limit?: number;
+  /** Chat's title to filter by */
+  title?: string;
+}
+
+export interface ArchiveListParams {
+  /** The number of items to skip before starting to collect the result set */
+  offset?: number;
+  /** The numbers of items to return */
+  limit?: number;
+  /** Chat's title to filter by */
+  title?: string;
+}
+
+export interface UsersDetailParams {
+  /** The number of items to skip before starting to collect the result set */
+  offset?: number;
+  /** The numbers of items to return */
+  limit?: number;
+  /** User's '{first_name} {second_name}' to filter */
+  name?: string;
+  /** User's email to filter */
+  email?: string;
+  /** Numeric chat id */
+  id: number;
+}
+
+export interface YandexServiceIdListParams {
+  /** Redirect uri that you are using for oauth */
+  redirect_uri?: string;
+}
+
+export interface StickersListParams {
+  /** The number of items to skip before starting to collect the result set */
+  offset?: number;
+  /** The numbers of items to return */
+  limit?: number;
+  /** Sticker's title to filter by */
+  title?: string;
+}
+
+export interface StickersDetailParams {
+  /** The number of items to skip before starting to collect the result set */
+  offset?: number;
+  /** The numbers of items to return */
+  limit?: number;
+  /** Numeric sticker pack id */
+  id: number;
+}
+
+export interface FavoriteListParams {
+  /** The number of items to skip before starting to collect the result set */
+  offset?: number;
+  /** The numbers of items to return */
+  limit?: number;
+  /** Sticker pack title to filter by */
+  title?: string;
 }

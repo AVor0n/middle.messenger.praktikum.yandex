@@ -9,10 +9,10 @@
  * ---------------------------------------------------------------
  */
 
-import { Resource } from './data-contracts';
-import { ContentType, HttpClient, RequestParams } from './http-client';
+import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import { type Resource } from './data-contracts';
 
-export class ResourcesApi<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
+export class ResourcesApi extends HttpService {
   /**
    * No description
    *
@@ -20,6 +20,10 @@ export class ResourcesApi<SecurityDataType = unknown> extends HttpClient<Securit
    * @name ResourcesCreate
    * @summary Upload resource(file) to server
    * @request POST:/resources
+   * @response `200` `Resource` Ok
+   * @response `400` `void` Bad request
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   resourcesCreate = (
     data: {
@@ -30,12 +34,13 @@ export class ResourcesApi<SecurityDataType = unknown> extends HttpClient<Securit
   ) =>
     this.request<Resource, void>({
       path: `/resources`,
-      method: 'POST',
+      method: Method.Post,
       body: data,
       type: ContentType.FormData,
       format: 'formData',
       ...params,
     });
+
   /**
    * No description
    *
@@ -43,11 +48,15 @@ export class ResourcesApi<SecurityDataType = unknown> extends HttpClient<Securit
    * @name ResourcesDetail
    * @summary Serving static files
    * @request GET:/resources/{path}
+   * @response `200` `void` Ok
+   * @response `400` `void` Bad Request
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   resourcesDetail = (path: string, params: RequestParams = {}) =>
     this.request<void, void>({
       path: `/resources/${path}`,
-      method: 'GET',
+      method: Method.Get,
       ...params,
     });
 }

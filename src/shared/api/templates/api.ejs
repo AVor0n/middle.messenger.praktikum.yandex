@@ -6,23 +6,14 @@ const routes = route.routes;
 const dataContracts = _.map(modelTypes, "name");
 %>
 
-<% if (config.httpClientType === config.constants.HTTP_CLIENT.AXIOS) { %> import type { AxiosRequestConfig, AxiosResponse } from "axios"; <% } %>
-
-import { HttpClient, RequestParams, ContentType, HttpResponse } from "./<%~ config.fileNames.httpClient %>";
+import { ContentType, HttpService, type RequestParams, Method } from '@shared/HttpService';
 <% if (dataContracts.length) { %>
-import { <%~ dataContracts.join(", ") %> } from "./<%~ config.fileNames.dataContracts %>"
+import { <%~ dataContracts.map(name => `type ${name}`).join(", ") %> } from "./<%~ config.fileNames.dataContracts %>"
 <% } %>
 
-export class <%= apiClassName %>Api<SecurityDataType=unknown><% if (!config.singleHttpClient) { %> extends HttpClient<SecurityDataType> <% } %> {
-    <% if(config.singleHttpClient) { %>
-    http: HttpClient<SecurityDataType>;
+export class <%= apiClassName %>Api extends HttpService {
+  <% for (const route of routes) { %>
+      <%~ includeFile('./procedure-call.ejs', { ...it, route }) %>
 
-      constructor (http: HttpClient<SecurityDataType>) {
-        this.http = http;
-        }
-        <% } %>
-
-        <% for (const route of routes) { %>
-        <%~ includeFile('./procedure-call.ejs', { ...it, route }) %>
-        <% } %>
-        }
+  <% } %>
+}

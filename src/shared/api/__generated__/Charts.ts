@@ -9,37 +9,50 @@
  * ---------------------------------------------------------------
  */
 
-import { LiveChartRequest, LiveChartResponse, StaticChartRequest, StaticChartResponse } from './data-contracts';
-import { ContentType, HttpClient, RequestParams } from './http-client';
+import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import {
+  type LiveChartRequest,
+  type LiveChartResponse,
+  type StaticChartRequest,
+  type StaticChartResponse,
+} from './data-contracts';
 
-export class ChartsApi<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
+export class ChartsApi extends HttpService {
   /**
    * No description
    *
    * @tags Charts
    * @name StaticCreate
    * @request POST:/charts/static
+   * @response `200` `StaticChartResponse` Ok
+   * @response `400` `void` Bad request (wrong body parameters)
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   staticCreate = (chartSize: StaticChartRequest, params: RequestParams = {}) =>
     this.request<StaticChartResponse, void>({
       path: `/charts/static`,
-      method: 'POST',
+      method: Method.Post,
       body: chartSize,
       type: ContentType.Json,
       format: 'json',
       ...params,
     });
+
   /**
    * No description
    *
    * @tags Charts
    * @name LiveCreate
    * @request POST:/charts/live
+   * @response `200` `LiveChartResponse` Ok
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   liveCreate = (next: LiveChartRequest, params: RequestParams = {}) =>
     this.request<LiveChartResponse, void>({
       path: `/charts/live`,
-      method: 'POST',
+      method: Method.Post,
       body: next,
       type: ContentType.Json,
       format: 'json',

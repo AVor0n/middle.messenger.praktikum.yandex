@@ -1,63 +1,78 @@
-import { METHOD } from './constants';
-import type { Options, RequestParams } from './types';
+import { ContentType, Method } from './constants';
+import { type FullRequestParams, type RequestParams } from './types';
+import { contentFormatters, toQueryString } from './utils';
 
-export const httpService = {
-  request<Res>(
-    url: string,
-    options: Options = {
-      method: METHOD.GET,
-    },
-  ): Promise<Res> {
+export class HttpService {
+  public baseUrl = 'https://ya-praktikum.tech/api/v2';
+
+  private baseApiParams: RequestParams = {
+    credentials: 'include',
+    mode: 'cors',
+    headers: {},
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  };
+
+  public request = async <T = unknown, E = unknown>({
+    body,
+    path,
+    type,
+    query,
+    format,
+    method = Method.Get,
+    ...params
+  }: FullRequestParams): Promise<T> => {
+    const queryString = query ? `?${toQueryString(query)}` : '';
+
+    const url = `${this.baseUrl}${path}${queryString}`;
+
+    const requestBody = body !== undefined ? contentFormatters[type ?? ContentType.Json](body) : undefined;
+
+    const requestParams = {
+      ...this.baseApiParams,
+      ...params,
+      headers: {
+        ...(this.baseApiParams.headers ?? {}),
+        ...(params.headers ?? {}),
+        'Content-Type': type,
+      },
+    };
+
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      if (options.method === METHOD.GET) {
-        const queryString = Object.entries(options.params ?? {})
-          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-          .join('&');
-        xhr.open('GET', url + (queryString ? `?${queryString}` : ''));
-      } else {
-        xhr.open(options.method, url);
-      }
+      xhr.withCredentials = true;
+      xhr.open(method, url);
 
-      if (options.method !== METHOD.GET && options.data) {
-        xhr.setRequestHeader('Content-Type', 'application/json');
-      }
+      Object.entries(requestParams.headers).forEach(([headerName, headerValue]) => {
+        xhr.setRequestHeader(headerName, String(headerValue));
+      });
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(xhr.response as Res);
+          if (format === 'json') {
+            resolve(JSON.parse(String(xhr.response)) as T);
+          } else {
+            resolve(xhr.response as T);
+          }
         } else {
-          reject(new Error(`Request failed with status ${xhr.status}`));
+          try {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject(JSON.parse(String(xhr.response)) as E);
+          } catch {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject(xhr.response as E);
+          }
         }
       };
 
       const handleError = (err: unknown) => {
-        // eslint-disable-next-line no-console
-        console.error(err);
-        reject(new Error(`Request failed`));
+        reject(new Error(`Request failed`, { cause: err }));
       };
 
       xhr.onabort = handleError;
       xhr.onerror = handleError;
       xhr.ontimeout = handleError;
-
-      if (options.method === METHOD.GET || !options.data) {
-        xhr.send();
-      } else {
-        xhr.send(JSON.stringify(options.data));
-      }
+      xhr.send(requestBody);
     });
-  },
-  get<Res>(url: string, params: RequestParams = {}): Promise<Res> {
-    return this.request(url, { method: METHOD.GET, params });
-  },
-  post<Res>(url: string, data: Record<string, unknown> = {}): Promise<Res> {
-    return this.request(url, { method: METHOD.POST, data });
-  },
-  put<Res>(url: string, data: Record<string, unknown> = {}): Promise<Res> {
-    return this.request(url, { method: METHOD.PUT, data });
-  },
-  delete<Res>(url: string): Promise<Res> {
-    return this.request(url, { method: METHOD.DELETE });
-  },
-};
+  };
+}

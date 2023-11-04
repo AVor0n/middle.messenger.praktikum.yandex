@@ -9,10 +9,10 @@
  * ---------------------------------------------------------------
  */
 
-import { HttpErrorBody, LeaderboardNewLeaderRequest, LeaderboardRequest } from './data-contracts';
-import { ContentType, HttpClient, RequestParams } from './http-client';
+import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import { type HttpErrorBody, type LeaderboardNewLeaderRequest, type LeaderboardRequest } from './data-contracts';
 
-export class LeaderboardApi<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
+export class LeaderboardApi extends HttpService {
   /**
    * No description
    *
@@ -20,15 +20,20 @@ export class LeaderboardApi<SecurityDataType = unknown> extends HttpClient<Secur
    * @name LeaderboardCreate
    * @summary Add user to leaderboard
    * @request POST:/leaderboard
+   * @response `200` `void` Ok
+   * @response `400` `HttpErrorBody` Bad Request
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   leaderboardCreate = (leaderboardNewLeaderRequest: LeaderboardNewLeaderRequest, params: RequestParams = {}) =>
     this.request<void, HttpErrorBody | void>({
       path: `/leaderboard`,
-      method: 'POST',
+      method: Method.Post,
       body: leaderboardNewLeaderRequest,
       type: ContentType.Json,
       ...params,
     });
+
   /**
    * No description
    *
@@ -36,15 +41,20 @@ export class LeaderboardApi<SecurityDataType = unknown> extends HttpClient<Secur
    * @name PostLeaderboard
    * @summary Get all leaderboard
    * @request POST:/leaderboard/all
+   * @response `200` `void` Ok
+   * @response `400` `void` Bad Request
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   postLeaderboard = (leaderboardRequest: LeaderboardRequest, params: RequestParams = {}) =>
     this.request<void, void>({
       path: `/leaderboard/all`,
-      method: 'POST',
+      method: Method.Post,
       body: leaderboardRequest,
       type: ContentType.Json,
       ...params,
     });
+
   /**
    * No description
    *
@@ -54,11 +64,15 @@ export class LeaderboardApi<SecurityDataType = unknown> extends HttpClient<Secur
    * @request POST:/leaderboard/{teamName}
    * @originalName leaderboardCreate
    * @duplicate
+   * @response `200` `void` Ok
+   * @response `400` `void` Bad Request
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   leaderboardCreate2 = (teamName: string, leaderboardRequest: LeaderboardRequest, params: RequestParams = {}) =>
     this.request<void, void>({
       path: `/leaderboard/${teamName}`,
-      method: 'POST',
+      method: Method.Post,
       body: leaderboardRequest,
       type: ContentType.Json,
       ...params,

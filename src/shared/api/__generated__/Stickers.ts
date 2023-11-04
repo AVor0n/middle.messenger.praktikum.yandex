@@ -9,10 +9,17 @@
  * ---------------------------------------------------------------
  */
 
-import { HttpErrorBody, StickerPacksResponse, StickersResponse } from './data-contracts';
-import { ContentType, HttpClient, RequestParams } from './http-client';
+import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import {
+  type FavoriteListParams,
+  type HttpErrorBody,
+  type StickerPacksResponse,
+  type StickersDetailParams,
+  type StickersListParams,
+  type StickersResponse,
+} from './data-contracts';
 
-export class StickersApi<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
+export class StickersApi extends HttpService {
   /**
    * No description
    *
@@ -20,25 +27,19 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
    * @name StickersList
    * @summary Get sticker packs
    * @request GET:/stickers
+   * @response `200` `(StickerPacksResponse)[]` Ok
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
-  stickersList = (
-    query?: {
-      /** The number of items to skip before starting to collect the result set */
-      offset?: number;
-      /** The numbers of items to return */
-      limit?: number;
-      /** Sticker's title to filter by */
-      title?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  stickersList = (query: StickersListParams, params: RequestParams = {}) =>
     this.request<StickerPacksResponse[], void>({
       path: `/stickers`,
-      method: 'GET',
+      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
     });
+
   /**
    * No description
    *
@@ -46,6 +47,10 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
    * @name StickersCreate
    * @summary Create sticker pack
    * @request POST:/stickers
+   * @response `201` `void` Created
+   * @response `400` `HttpErrorBody` Bad Request
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   stickersCreate = (
     data: {
@@ -61,11 +66,12 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
   ) =>
     this.request<void, HttpErrorBody | void>({
       path: `/stickers`,
-      method: 'POST',
+      method: Method.Post,
       body: data,
       type: ContentType.FormData,
       ...params,
     });
+
   /**
    * No description
    *
@@ -73,24 +79,19 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
    * @name StickersDetail
    * @summary Get stickers from pack
    * @request GET:/stickers/{id}/
+   * @response `200` `(StickersResponse)[]` Ok
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
-  stickersDetail = (
-    id: number,
-    query?: {
-      /** The number of items to skip before starting to collect the result set */
-      offset?: number;
-      /** The numbers of items to return */
-      limit?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  stickersDetail = ({ id, ...query }: StickersDetailParams, params: RequestParams = {}) =>
     this.request<StickersResponse[], void>({
       path: `/stickers/${id}/`,
-      method: 'GET',
+      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
     });
+
   /**
    * No description
    *
@@ -100,6 +101,10 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
    * @request POST:/stickers/{id}/
    * @originalName stickersCreate
    * @duplicate
+   * @response `200` `void` Ok
+   * @response `400` `HttpErrorBody` Bad Request
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   stickersCreate2 = (
     id: number,
@@ -111,11 +116,12 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
   ) =>
     this.request<void, HttpErrorBody | void>({
       path: `/stickers/${id}/`,
-      method: 'POST',
+      method: Method.Post,
       body: data,
       type: ContentType.FormData,
       ...params,
     });
+
   /**
    * No description
    *
@@ -123,25 +129,19 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
    * @name FavoriteList
    * @summary Get user's favorite sticker packs
    * @request GET:/stickers/favorite
+   * @response `200` `StickerPacksResponse` Ok
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
-  favoriteList = (
-    query?: {
-      /** The number of items to skip before starting to collect the result set */
-      offset?: number;
-      /** The numbers of items to return */
-      limit?: number;
-      /** Sticker pack title to filter by */
-      title?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  favoriteList = (query: FavoriteListParams, params: RequestParams = {}) =>
     this.request<StickerPacksResponse, void>({
       path: `/stickers/favorite`,
-      method: 'GET',
+      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
     });
+
   /**
    * No description
    *
@@ -149,13 +149,17 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
    * @name FavoriteCreate
    * @summary Add pack to favorites
    * @request POST:/stickers/{id}/favorite
+   * @response `200` `void` Ok
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   favoriteCreate = (id: number, params: RequestParams = {}) =>
     this.request<void, void>({
       path: `/stickers/${id}/favorite`,
-      method: 'POST',
+      method: Method.Post,
       ...params,
     });
+
   /**
    * No description
    *
@@ -163,11 +167,14 @@ export class StickersApi<SecurityDataType = unknown> extends HttpClient<Security
    * @name FavoriteDelete
    * @summary Remove pack from favorites
    * @request DELETE:/stickers/{id}/favorite
+   * @response `200` `void` Ok
+   * @response `401` `void` Unauthorized
+   * @response `500` `void` Unexpected error
    */
   favoriteDelete = (id: number, params: RequestParams = {}) =>
     this.request<void, void>({
       path: `/stickers/${id}/favorite`,
-      method: 'DELETE',
+      method: Method.Delete,
       ...params,
     });
 }
