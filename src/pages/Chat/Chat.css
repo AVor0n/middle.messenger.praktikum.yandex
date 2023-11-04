@@ -80,12 +80,6 @@
   background-position: center;
 }
 
-.chat__send-btn {
-  background-image: url('/arrow.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 .searchfield {
   display: block;
 

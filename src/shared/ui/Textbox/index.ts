@@ -1,5 +1,1 @@
-import Handlebars from 'handlebars/runtime';
-import textbox from './Textbox.hbs';
-import './Textbox.css';
-
-Handlebars.registerPartial('textbox', textbox);
+export { TextBox, type TextBoxProps } from './TextBox';

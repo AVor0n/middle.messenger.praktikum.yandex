@@ -27,7 +27,7 @@
   &__fields {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
   }
 
   &__btns {

@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "createVNode",
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "types": ["vite/client"],
-    /* Bundler mode */
+    "types": ["vite/client", "vitest/globals"],
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -19,12 +20,15 @@
       "@features": ["features"],
       "@widgets": ["widgets"],
       "@pages": ["pages"],
-      "@shared": ["shared"]
+      "@shared": ["shared/lib"],
+      "@uikit": ["shared/ui"]
     },
-    /* Linting */
     "strict": true,
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]

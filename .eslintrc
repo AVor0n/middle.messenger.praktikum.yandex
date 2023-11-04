@@ -43,7 +43,10 @@
     "no-console": "error",
     "no-restricted-syntax": "off",
     "spaced-comment": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+    "no-param-reassign": "warn",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "@typescript-eslint/no-confusing-void-expression": [
       "error",
@@ -51,8 +54,10 @@
         "ignoreArrowShorthand": true
       }
     ],
+    "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/consistent-type-imports": "warn",
     "regexp/prefer-named-capture-group": "off",
+    "regexp/no-obscure-range": "off",
     "unicorn/prevent-abbreviations": "off",
     "unicorn/filename-case": "off",
     "import/prefer-default-export": "off",
