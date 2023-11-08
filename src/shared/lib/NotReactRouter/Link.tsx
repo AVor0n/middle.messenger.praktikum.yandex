@@ -1,8 +1,7 @@
-import { Component } from '../NotReact';
-import { router } from '../Router';
-import { type JSXIntrinsicElements } from '@shared/NotReact/jsx';
+import { Component } from '@shared/NotReact';
+import { router } from '@shared/Router';
 
-type LinkProps = JSXIntrinsicElements['a'] & {
+type LinkProps = JSX.IntrinsicElements['a'] & {
   href: string;
   disabled?: boolean;
 };

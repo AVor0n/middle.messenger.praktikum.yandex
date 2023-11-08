@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { createDOMNode, patchNode } from '..';
 import { Component } from '../Component';
+import { createDOMNode, patchNode } from '../vDom';
 import type { PropsWithChildren } from '../types';
 
 describe('Создание VDom', () => {

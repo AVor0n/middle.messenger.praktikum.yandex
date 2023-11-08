@@ -17,7 +17,7 @@ import { TextBox } from '@uikit';
 import { PAGES } from 'app/constants';
 import './Auth.css';
 
-interface AuthState extends State {
+interface AuthPageState extends State {
   email: string;
   login: string;
   firstName: string;
@@ -27,7 +27,7 @@ interface AuthState extends State {
   repeatPassword: string;
 }
 
-export class Auth extends Component<Props, AuthState> {
+export class AuthPage extends Component<Props, AuthPageState> {
   constructor() {
     super(
       {

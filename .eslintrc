@@ -50,6 +50,8 @@
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-confusing-void-expression": ["error", { "ignoreArrowShorthand": true }],
     "regexp/no-obscure-range": "off", // ругается на а-я, как на неочевидный диапазон
+    "promise/always-return": ["error", { "ignoreLastCallback": true }],
+    "promise/catch-or-return": ["error", { "allowFinally": true }],
     "import/prefer-default-export": "off",
     "import/no-duplicates": ["error", { "prefer-inline": true }],
     "import/order": [

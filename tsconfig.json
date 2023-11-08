@@ -24,6 +24,7 @@
       "@uikit": ["shared/ui"],
       "@api": ["shared/api"]
     },
+    "useUnknownInCatchVariables": true,
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
