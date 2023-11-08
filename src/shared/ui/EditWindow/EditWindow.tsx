@@ -1,11 +1,12 @@
 import { Component, type PropsWithChildren } from '@shared/NotReact';
 import './EditWindow.css';
 
-type EditWindowProps = PropsWithChildren<{
+export type EditWindowProps = PropsWithChildren<{
   saveAvailable: boolean;
   onSave: (e: Event) => void;
   onClose: (e: Event) => void;
 }>;
+
 export class EditWindow extends Component<EditWindowProps> {
   constructor(props: EditWindowProps) {
     super({}, props);

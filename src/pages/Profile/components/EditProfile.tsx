@@ -1,8 +1,7 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { removeProxy } from '@shared/utils';
 import { email, firstUpperLetter, login, onlyLetters, phone, required, validate } from '@shared/Validator';
-import { TextBox } from '@uikit';
-import { EditWindow } from '@widgets';
+import { EditWindow, TextBox } from '@uikit';
 import type { ProfileInfo } from '../type';
 
 interface EditProfileWindowProps extends Props {
