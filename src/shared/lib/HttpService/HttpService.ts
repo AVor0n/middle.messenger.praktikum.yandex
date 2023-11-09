@@ -3,9 +3,9 @@ import { type FullRequestParams, type RequestParams } from './types';
 import { contentFormatters, toQueryString } from './utils';
 
 export class HttpService {
-  public baseUrl = 'https://ya-praktikum.tech/api/v2';
+  protected baseUrl = 'https://ya-praktikum.tech/api/v2';
 
-  private baseApiParams: RequestParams = {
+  protected baseApiParams: RequestParams = {
     credentials: 'include',
     mode: 'cors',
     headers: {},
@@ -13,7 +13,7 @@ export class HttpService {
     referrerPolicy: 'no-referrer',
   };
 
-  public request = async <T = unknown, E = unknown>({
+  protected request = async <T = unknown, E = unknown>({
     body,
     path,
     type,
