@@ -23,13 +23,13 @@ class AuthService {
   public login = async (data: SignInRequest) => {
     await this.authApi.signinCreate(data);
     await this.getUserInfo();
-    router.navigate(PAGES.CHAT);
+    router.resolve();
   };
 
   public logout = async () => {
     await this.authApi.logoutCreate();
     this._userInfo = undefined;
-    router.navigate(PAGES.AUTH);
+    router.navigate(PAGES.LOGIN);
   };
 
   public getUserInfo = async () => {

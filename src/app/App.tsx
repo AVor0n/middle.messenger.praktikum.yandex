@@ -28,7 +28,7 @@ export class App extends Component<Props, AppState> {
           .addRoute(PAGES.CHAT, () => this.navigate(<ChatPage />, { needAuth: true }))
           .addRoute(PAGES.PROFILE, () => this.navigate(<ProfilePage />, { needAuth: true }))
           .setNotFound(() => this.navigate(<ErrorPage code={404} />))
-          .navigate(window.location.pathname);
+          .resolve();
       });
   }
 
