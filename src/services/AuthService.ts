@@ -1,28 +1,41 @@
 import { router } from '@shared/Router';
-import { AuthApi, type SignUpRequest, type SignInRequest } from '@api';
+import { AuthApi, type SignUpRequest, type SignInRequest, type UserResponse } from '@api';
 import { PAGES } from 'app/constants';
 
 class AuthService {
   private authApi = new AuthApi();
 
-  async auth(data: SignUpRequest) {
+  private _userInfo?: UserResponse;
+
+  public get userInfo() {
+    return this._userInfo;
+  }
+
+  public get isAuthorized() {
+    return !!this._userInfo;
+  }
+
+  public auth = async (data: SignUpRequest) => {
     await this.authApi.signupCreate(data);
     router.navigate(PAGES.CHAT);
-  }
+  };
 
-  async login(data: SignInRequest) {
+  public login = async (data: SignInRequest) => {
     await this.authApi.signinCreate(data);
+    await this.getUserInfo();
     router.navigate(PAGES.CHAT);
-  }
+  };
 
-  async logout() {
+  public logout = async () => {
     await this.authApi.logoutCreate();
+    this._userInfo = undefined;
     router.navigate(PAGES.AUTH);
-  }
+  };
 
-  async getUserInfo() {
-    return this.authApi.userList();
-  }
+  public getUserInfo = async () => {
+    this._userInfo = await this.authApi.userList();
+    return this.getUserInfo;
+  };
 }
 
 export const authService = new AuthService();
