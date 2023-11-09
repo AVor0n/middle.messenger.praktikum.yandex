@@ -14,7 +14,7 @@ getSwaggerSpec()
       generateRouteTypes: false,
       generateResponses: true,
       extractRequestParams: true,
-      extractRequestBody: false,
+      extractRequestBody: true,
       extractEnums: true,
       defaultResponseType: 'void',
       singleHttpClient: false,

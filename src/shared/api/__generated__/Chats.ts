@@ -12,6 +12,7 @@
 import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
 import {
   type ArchiveListParams,
+  type AvatarUpdatePayload,
   type ChatArchiveRequest,
   type ChatArchiveResponse,
   type ChatDeleteRequest,
@@ -250,18 +251,7 @@ export class ChatsApi extends HttpService {
    * @response `401` `void` Unauthorized
    * @response `500` `void` Unexpected error
    */
-  avatarUpdate = (
-    data: {
-      /** Chat id */
-      chatId: number;
-      /**
-       * Avatar
-       * @format binary
-       */
-      avatar: File;
-    },
-    params: RequestParams = {},
-  ) =>
+  avatarUpdate = (data: AvatarUpdatePayload, params: RequestParams = {}) =>
     this.request<ChatsResponse, HttpErrorBody | void>({
       path: `/chats/avatar`,
       method: Method.Put,

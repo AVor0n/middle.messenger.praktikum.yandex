@@ -14,6 +14,8 @@ import {
   type FavoriteListParams,
   type HttpErrorBody,
   type StickerPacksResponse,
+  type StickersCreate2Payload,
+  type StickersCreatePayload,
   type StickersDetailParams,
   type StickersListParams,
   type StickersResponse,
@@ -52,18 +54,7 @@ export class StickersApi extends HttpService {
    * @response `401` `void` Unauthorized
    * @response `500` `void` Unexpected error
    */
-  stickersCreate = (
-    data: {
-      /** Sticker pack title */
-      title: string;
-      /**
-       * Sticker image (can be multiple images, just attach multiple files)
-       * @format binary
-       */
-      resource: File;
-    },
-    params: RequestParams = {},
-  ) =>
+  stickersCreate = (data: StickersCreatePayload, params: RequestParams = {}) =>
     this.request<void, HttpErrorBody | void>({
       path: `/stickers`,
       method: Method.Post,
@@ -106,14 +97,7 @@ export class StickersApi extends HttpService {
    * @response `401` `void` Unauthorized
    * @response `500` `void` Unexpected error
    */
-  stickersCreate2 = (
-    id: number,
-    data: {
-      /** Sticker image (can be multiple images, just attach multiple files) */
-      resource: File;
-    },
-    params: RequestParams = {},
-  ) =>
+  stickersCreate2 = (id: number, data: StickersCreate2Payload, params: RequestParams = {}) =>
     this.request<void, HttpErrorBody | void>({
       path: `/stickers/${id}/`,
       method: Method.Post,

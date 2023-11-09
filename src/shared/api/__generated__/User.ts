@@ -14,6 +14,7 @@ import {
   type ChangePasswordRequest,
   type FindUserRequest,
   type HttpErrorBody,
+  type ProfileAvatarUpdatePayload,
   type UserResponse,
   type UserUpdateRequest,
 } from './data-contracts';
@@ -53,16 +54,7 @@ export class UserApi extends HttpService {
    * @response `401` `void` Unauthorized
    * @response `500` `void` Unexpected error
    */
-  profileAvatarUpdate = (
-    data: {
-      /**
-       * Avatar
-       * @format binary
-       */
-      avatar: File;
-    },
-    params: RequestParams = {},
-  ) =>
+  profileAvatarUpdate = (data: ProfileAvatarUpdatePayload, params: RequestParams = {}) =>
     this.request<UserResponse, HttpErrorBody | void>({
       path: `/user/profile/avatar`,
       method: Method.Put,

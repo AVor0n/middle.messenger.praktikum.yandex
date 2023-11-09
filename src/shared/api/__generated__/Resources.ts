@@ -10,7 +10,7 @@
  */
 
 import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
-import { type Resource } from './data-contracts';
+import { type Resource, type ResourcesCreatePayload } from './data-contracts';
 
 export class ResourcesApi extends HttpService {
   /**
@@ -25,13 +25,7 @@ export class ResourcesApi extends HttpService {
    * @response `401` `void` Unauthorized
    * @response `500` `void` Unexpected error
    */
-  resourcesCreate = (
-    data: {
-      /** @format binary */
-      resource: File;
-    },
-    params: RequestParams = {},
-  ) =>
+  resourcesCreate = (data: ResourcesCreatePayload, params: RequestParams = {}) =>
     this.request<Resource, void>({
       path: `/resources`,
       method: Method.Post,

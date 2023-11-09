@@ -415,9 +415,32 @@ export interface UsersDetailParams {
   id: number;
 }
 
+export interface AvatarUpdatePayload {
+  /** Chat id */
+  chatId: number;
+  /**
+   * Avatar
+   * @format binary
+   */
+  avatar: File;
+}
+
 export interface YandexServiceIdListParams {
   /** Redirect uri that you are using for oauth */
   redirect_uri?: string;
+}
+
+export interface ProfileAvatarUpdatePayload {
+  /**
+   * Avatar
+   * @format binary
+   */
+  avatar: File;
+}
+
+export interface ResourcesCreatePayload {
+  /** @format binary */
+  resource: File;
 }
 
 export interface StickersListParams {
@@ -429,6 +452,16 @@ export interface StickersListParams {
   title?: string;
 }
 
+export interface StickersCreatePayload {
+  /** Sticker pack title */
+  title: string;
+  /**
+   * Sticker image (can be multiple images, just attach multiple files)
+   * @format binary
+   */
+  resource: File;
+}
+
 export interface StickersDetailParams {
   /** The number of items to skip before starting to collect the result set */
   offset?: number;
@@ -436,6 +469,11 @@ export interface StickersDetailParams {
   limit?: number;
   /** Numeric sticker pack id */
   id: number;
+}
+
+export interface StickersCreate2Payload {
+  /** Sticker image (can be multiple images, just attach multiple files) */
+  resource: File;
 }
 
 export interface FavoriteListParams {
