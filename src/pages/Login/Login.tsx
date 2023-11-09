@@ -70,6 +70,7 @@ export class LoginPage extends Component<Props, LoginPageState> {
             <Button
               text="Войти"
               size="xl"
+              type="submit"
               $click={this.onEnterClick}
               disabled={!this.validateForm.isValid}
               showLoader={this.state.isLoading}
@@ -77,7 +78,7 @@ export class LoginPage extends Component<Props, LoginPageState> {
             <Button
               text="Нет аккаунта?"
               size="xl"
-              type="ghost"
+              buttonType="ghost"
               $click={(e: MouseEvent) => {
                 e.preventDefault();
                 router.navigate(PAGES.AUTH);

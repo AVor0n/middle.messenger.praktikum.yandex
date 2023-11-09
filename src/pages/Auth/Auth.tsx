@@ -105,6 +105,7 @@ export class AuthPage extends Component<Props, AuthPageState> {
             <Button
               text="Зарегистрироваться"
               size="xl"
+              type="submit"
               $click={this.onEnterClick}
               disabled={!this.validateForm.isValid}
               showLoader={this.state.isLoading}
@@ -112,7 +113,7 @@ export class AuthPage extends Component<Props, AuthPageState> {
             <Button
               text="Уже есть аккаунт?"
               size="xl"
-              type="ghost"
+              buttonType="ghost"
               $click={(e: MouseEvent) => {
                 e.preventDefault();
                 router.navigate(PAGES.LOGIN);
