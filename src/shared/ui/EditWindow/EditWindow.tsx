@@ -1,9 +1,10 @@
 import { Component, type PropsWithChildren } from '@shared/NotReact';
 import './EditWindow.css';
+import { Button } from '../Button';
 
 export type EditWindowProps = PropsWithChildren<{
   saveAvailable: boolean;
-  onSave: (e: Event) => void;
+  onSave: (e: Event) => Promise<void> | void;
   onClose: (e: Event) => void;
 }>;
 
@@ -19,18 +20,16 @@ export class EditWindow extends Component<EditWindowProps> {
           <div className="edit-window__fields">{this.props.children}</div>
 
           <div className="edit-window__btns">
-            <button id="editWindowCancel" className="btn btn--ghost btn--wide btn--l" $click={onClose}>
-              Отмена
-            </button>
-
-            <button
+            <Button id="editWindowCancel" text="Отмена" buttonType="ghost" flex size="l" $click={onClose} />
+            <Button
               id="editWindowSave"
-              className="btn btn--primary btn--wide btn--l"
+              text="Сохранить"
+              buttonType="primary"
+              flex
+              size="l"
               $click={onSave}
               disabled={!saveAvailable}
-            >
-              Сохранить
-            </button>
+            />
           </div>
         </div>
       </form>

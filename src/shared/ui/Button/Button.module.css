@@ -46,10 +46,6 @@
   }
 }
 
-.danger {
-  color: var(--color-error);
-}
-
 .disabled {
   background-color: color-mod(var(--color-smoke) lightness(-20%));
 

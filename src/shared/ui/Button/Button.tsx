@@ -6,7 +6,7 @@ export interface ButtonProps extends Props, Partial<Omit<HTMLButtonElement, 'chi
   text: string;
   size: 's' | 'm' | 'l' | 'xl';
   flex?: boolean;
-  buttonType?: 'primary' | 'ghost' | 'danger';
+  buttonType?: 'primary' | 'ghost';
   circle?: boolean;
   showLoader?: boolean;
 }
@@ -20,17 +20,18 @@ export class Button extends Component<ButtonProps> {
     text,
     showLoader = false,
     size,
-    buttonType: type = 'primary',
+    buttonType = 'primary',
     circle,
     flex,
     disabled,
+    className,
     ...props
   }: ButtonProps) {
-    const className = clsx(
-      props.className,
+    const classNames = clsx(
+      className,
       styles.button,
       styles[size],
-      styles[type],
+      styles[buttonType],
       flex && styles.wide,
       circle && styles.circle,
       (disabled ?? showLoader) && styles.disabled,
@@ -38,7 +39,7 @@ export class Button extends Component<ButtonProps> {
     );
 
     return (
-      <button type="button" className={className} disabled={showLoader || disabled} {...props}>
+      <button type="button" className={classNames} disabled={showLoader || disabled} {...props}>
         {showLoader ? '' : text}
       </button>
     );
