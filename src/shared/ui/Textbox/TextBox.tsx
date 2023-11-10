@@ -32,9 +32,9 @@ export class TextBox extends Component<TextBoxProps, TextBoxState> {
             value={value}
             name={name}
             $input={e => onChange?.((e.target as HTMLInputElement).value)}
-            $focus={(e: FocusEvent) => {
+            $blur={(e: FocusEvent) => {
               this.state.visited = true;
-              props.$focus?.call(window, e);
+              props.$blur?.call(window, e);
             }}
             {...props}
           />
