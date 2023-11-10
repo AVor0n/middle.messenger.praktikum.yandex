@@ -1,6 +1,6 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { router } from '@shared/Router';
-import { EditPasswordWindow, EditProfileWindow } from './components';
+import { EditPasswordWindow, EditProfileWindow, EditableAvatar } from './components';
 import * as styles from './Profile.module.css';
 import { type UserUpdateRequest } from '@api';
 import { Button } from '@uikit';
@@ -54,10 +54,7 @@ export class Profile extends Component<Props, ProfileState> {
 
     return (
       <div className={styles.page}>
-        {/* <figure>
-          <img className="profile__image" src={this.state.formData.imageSrc} alt={this.state.name} />
-          <figcaption className="profile__username">{this.state.username}</figcaption>
-        </figure> */}
+        <EditableAvatar />
 
         <div className={styles.table}>
           <div className="table-list">

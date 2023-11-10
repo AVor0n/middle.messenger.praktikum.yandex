@@ -11,7 +11,7 @@ import {
 } from '@api';
 import { PAGES } from 'app/constants';
 
-class AuthService extends EventBus<{ updateUserInfo: (userInfo: UserResponse) => void }> {
+class AuthService extends EventBus<{ updateUserInfo: (userInfo?: UserResponse) => void }> {
   private authApi = new AuthApi();
 
   private userApi = new UserApi();
@@ -56,6 +56,11 @@ class AuthService extends EventBus<{ updateUserInfo: (userInfo: UserResponse) =>
 
   public updatePassword = async (data: ChangePasswordRequest) => {
     await this.userApi.passwordUpdate(data);
+  };
+
+  public updateAvatar = async (avatar: File) => {
+    this._userInfo = await this.userApi.profileAvatarUpdate({ avatar });
+    return this.getUserInfo;
   };
 }
 

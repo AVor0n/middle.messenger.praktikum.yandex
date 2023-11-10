@@ -1,0 +1,17 @@
+.avatar {
+  inline-size: 120px;
+  block-size: 120px;
+  margin-block-end: 20px;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.username {
+  font-weight: bold;
+  text-align: center;
+}

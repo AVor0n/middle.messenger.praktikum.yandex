@@ -3,7 +3,7 @@ import { type FullRequestParams, type RequestParams } from './types';
 import { contentFormatters, toQueryString } from './utils';
 
 export class HttpService {
-  protected baseUrl = 'https://ya-praktikum.tech/api/v2';
+  readonly baseUrl = 'https://ya-praktikum.tech/api/v2';
 
   protected baseApiParams: RequestParams = {
     credentials: 'include',
@@ -34,7 +34,7 @@ export class HttpService {
       headers: {
         ...(this.baseApiParams.headers ?? {}),
         ...(params.headers ?? {}),
-        'Content-Type': type,
+        ...(type !== ContentType.FormData ? { 'Content-Type': type } : {}),
       },
     };
 
