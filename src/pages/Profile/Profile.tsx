@@ -15,19 +15,17 @@ interface ProfileState extends State {
 
 export class Profile extends Component<Props, ProfileState> {
   constructor(props: Props) {
-    super(
-      {
-        editPasswordVisible: false,
-        editProfileVisible: false,
-      },
-      props,
-    );
+    super({ editPasswordVisible: false, editProfileVisible: false }, props);
   }
 
   protected init(): void {
     if (authService.userInfo) {
       this.setState({ formData: authService.userInfo });
     }
+
+    authService.on('updateUserInfo', value => {
+      this.setState({ formData: value });
+    });
   }
 
   openEditPasswordWindow = () => {

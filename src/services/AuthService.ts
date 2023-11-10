@@ -1,3 +1,4 @@
+import { EventBus, onChangeEvent } from '@shared/EventBus';
 import { router } from '@shared/Router';
 import {
   AuthApi,
@@ -10,12 +11,13 @@ import {
 } from '@api';
 import { PAGES } from 'app/constants';
 
-class AuthService {
+class AuthService extends EventBus<{ updateUserInfo: (userInfo: UserResponse) => void }> {
   private authApi = new AuthApi();
 
   private userApi = new UserApi();
 
-  private _userInfo?: UserResponse;
+  @onChangeEvent('updateUserInfo')
+  private accessor _userInfo: UserResponse | undefined;
 
   public get userInfo() {
     return this._userInfo;
