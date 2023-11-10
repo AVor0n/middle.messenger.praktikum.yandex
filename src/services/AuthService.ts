@@ -1,9 +1,19 @@
 import { router } from '@shared/Router';
-import { AuthApi, type SignUpRequest, type SignInRequest, type UserResponse } from '@api';
+import {
+  AuthApi,
+  type SignUpRequest,
+  type SignInRequest,
+  type UserResponse,
+  UserApi,
+  type ChangePasswordRequest,
+  type UserUpdateRequest,
+} from '@api';
 import { PAGES } from 'app/constants';
 
 class AuthService {
   private authApi = new AuthApi();
+
+  private userApi = new UserApi();
 
   private _userInfo?: UserResponse;
 
@@ -35,6 +45,15 @@ class AuthService {
   public getUserInfo = async () => {
     this._userInfo = await this.authApi.userList();
     return this.getUserInfo;
+  };
+
+  public updateProfile = async (data: UserUpdateRequest) => {
+    this._userInfo = await this.userApi.profileUpdate(data);
+    return this.getUserInfo;
+  };
+
+  public updatePassword = async (data: ChangePasswordRequest) => {
+    await this.userApi.passwordUpdate(data);
   };
 }
 

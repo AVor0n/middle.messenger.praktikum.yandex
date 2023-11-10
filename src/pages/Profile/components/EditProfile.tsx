@@ -1,20 +1,33 @@
 import { Component, type Props, type State } from '@shared/NotReact';
-import { removeProxy } from '@shared/utils';
 import { email, firstUpperLetter, login, onlyLetters, phone, required, validate } from '@shared/Validator';
+import * as styles from '../Profile.module.css';
+import { stringifyApiError, type UserUpdateRequest } from '@api';
 import { EditWindow, TextBox } from '@uikit';
-import type { ProfileInfo } from '../type';
+import { authService } from 'services';
 
 interface EditProfileWindowProps extends Props {
-  data: ProfileInfo;
-  onSave: (data: ProfileInfo) => void;
+  data: UserUpdateRequest;
   onClose: () => void;
 }
 
-interface EditProfileWindowState extends State, ProfileInfo {}
+interface EditProfileWindowState extends State, Required<UserUpdateRequest> {
+  isLoading?: boolean;
+  responseError?: string;
+}
 
 export class EditProfileWindow extends Component<EditProfileWindowProps, EditProfileWindowState> {
   constructor(props: EditProfileWindowProps) {
-    super({ ...props.data }, props);
+    super(
+      {
+        email: props.data.email ?? '',
+        login: props.data.login ?? '',
+        display_name: props.data.display_name ?? '',
+        first_name: props.data.first_name ?? '',
+        second_name: props.data.second_name ?? '',
+        phone: props.data.phone ?? '',
+      },
+      props,
+    );
   }
 
   get validateForm() {
@@ -32,22 +45,23 @@ export class EditProfileWindow extends Component<EditProfileWindowProps, EditPro
     };
   }
 
-  private onSave = (e: Event) => {
-    e.preventDefault();
-    const newProfileInfo = removeProxy(this.state);
-    // eslint-disable-next-line no-console
-    console.log(newProfileInfo);
-    this.props.onSave(newProfileInfo);
-    this.props.onClose();
+  private onSave = async () => {
+    this.state.isLoading = true;
+    try {
+      await authService.updateProfile(this.state);
+      this.props.onClose();
+    } catch (error) {
+      this.state.responseError = stringifyApiError(error);
+    }
+    this.state.isLoading = true;
   };
 
-  private onClose = (e: Event) => {
-    e.preventDefault();
+  private onClose = () => {
     this.props.onClose();
   };
 
   public render() {
-    const fields: { label: string; name: keyof ProfileInfo; type?: HTMLInputElement['type'] }[] = [
+    const fields: { label: string; name: keyof UserUpdateRequest; type?: HTMLInputElement['type'] }[] = [
       { label: 'Почта', name: 'email', type: 'email' },
       { label: 'Логин', name: 'login' },
       { label: 'Имя', name: 'first_name' },
@@ -57,7 +71,7 @@ export class EditProfileWindow extends Component<EditProfileWindowProps, EditPro
     ];
 
     return (
-      <div>
+      <div className={styles.window}>
         <EditWindow saveAvailable={this.validateForm.isValid} onSave={this.onSave} onClose={this.onClose}>
           {fields.map(field => (
             <TextBox
@@ -73,6 +87,7 @@ export class EditProfileWindow extends Component<EditProfileWindowProps, EditPro
             />
           ))}
         </EditWindow>
+        {this.state.responseError && <div className={styles.responseError}>{this.state.responseError}</div>}
       </div>
     );
   }
