@@ -2,7 +2,7 @@ import { Component, type Props } from '@shared/NotReact';
 import { clsx } from '@shared/utils';
 import * as styles from './Button.module.css';
 
-export interface ButtonProps extends Props, Partial<Omit<HTMLButtonElement, 'children'>> {
+export interface ButtonProps extends Props, Partial<Omit<JSX.IntrinsicElements['button'], 'children'>> {
   text: string;
   size: 's' | 'm' | 'l' | 'xl';
   flex?: boolean;
