@@ -1,0 +1,9 @@
+.separator {
+  block-size: 1px;
+  margin-block: 2px;
+  margin-inline: 10px;
+
+  border: none;
+
+  background-color: var(--color-smoke);
+}
