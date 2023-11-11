@@ -54,7 +54,7 @@ export class Profile extends Component<Props, ProfileState> {
 
     return (
       <div className={styles.page}>
-        <Avatar src={userInfo.avatar} $change={this.onChangeAvatar} />
+        <Avatar src={userInfo.avatar} $change={this.onChangeAvatar} containerCls={styles.avatar} />
 
         <div className={styles.table}>
           <div className="table-list">

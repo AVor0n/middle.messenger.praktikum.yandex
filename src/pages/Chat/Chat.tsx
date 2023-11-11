@@ -1,6 +1,6 @@
 import { Component } from '@shared/NotReact';
 import { router } from '@shared/Router';
-import { ChatList } from './components';
+import { ChatHeader, ChatList } from './components';
 import './Chat.css';
 import { Button } from '@uikit';
 import { PAGES } from 'app/constants';
@@ -25,11 +25,7 @@ export class Chat extends Component {
         </div>
 
         <div className="chat">
-          {/* <div className="chat__header">
-            <img className="chat__avatar" src="user.svg" />
-            <div className="chat__username">Github</div>
-            <button className="chat__menu-btn btn btn--ghost btn--circle btn--l" />
-          </div> */}
+          <ChatHeader />
           <hr className="separator" />
           {/* <div className="chat__viewer" /> */}
           <hr className="separator" />

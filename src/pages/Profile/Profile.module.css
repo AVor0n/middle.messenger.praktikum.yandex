@@ -18,6 +18,11 @@
   margin-block-start: 40px;
 }
 
+.avatar {
+  inline-size: 120px;
+  block-size: 120px;
+}
+
 .table {
   display: flex;
   flex-direction: column;
