@@ -11,8 +11,14 @@ import {
   stringifyApiError,
 } from '@api';
 
-class ChatService extends EventBus<{ chatListUpdate: (chats: ChatsResponse[]) => void }> {
+class ChatService extends EventBus<{
+  changeActiveChat: (activeChatId: number) => void;
+  chatListUpdate: (chats: ChatsResponse[]) => void;
+}> {
   private chatApi = new ChatsApi();
+
+  @onChangeEvent('changeActiveChat')
+  public accessor activeChatId: number | undefined;
 
   @onChangeEvent('chatListUpdate')
   private accessor _chatList: ChatsResponse[] | undefined;

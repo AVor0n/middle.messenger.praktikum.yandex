@@ -1,11 +1,15 @@
-import { Component } from '@shared/NotReact';
+import { Component, type Props, type State } from '@shared/NotReact';
 import { router } from '@shared/Router';
 import * as styles from './Chat.module.css';
 import { ChatHeader, ChatList, MessageList } from './components';
 import { Button, Separator } from '@uikit';
 import { PAGES } from 'app/constants';
 
-export class Chat extends Component {
+interface ChatState extends State {
+  activeChatId?: number;
+}
+
+export class Chat extends Component<Props, ChatState> {
   constructor() {
     super({}, {});
   }

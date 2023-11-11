@@ -16,10 +16,18 @@ export class ChatList extends Component<Props, ChatListState> {
   }
 
   protected init(): void {
+    chatService.on('changeActiveChat', () => {
+      this.setState(this.state);
+    });
+
     chatService.on('chatListUpdate', chatList => {
       this.setState({ chats: chatList });
     });
   }
+
+  onToggleActiveChat = (id: number) => {
+    chatService.activeChatId = chatService.activeChatId === id ? undefined : id;
+  };
 
   public render() {
     return (
@@ -28,7 +36,7 @@ export class ChatList extends Component<Props, ChatListState> {
 
         {this.state.chats.map(chat => (
           <div key={String(chat.id)}>
-            <ChatPreview {...chat} />
+            <ChatPreview {...chat} active={chat.id === chatService.activeChatId} onClick={this.onToggleActiveChat} />
             <Separator />
           </div>
         ))}

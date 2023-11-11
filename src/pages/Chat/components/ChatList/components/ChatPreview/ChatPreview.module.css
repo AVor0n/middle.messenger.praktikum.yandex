@@ -1,4 +1,4 @@
-.chat-preview {
+.chat {
   display: grid;
   grid-template-areas:
     'avatar username time'
@@ -13,16 +13,16 @@
 
   cursor: pointer;
 
-  &:hover {
+  &:hover:not(.active) {
     background-color: var(--color-smoke);
-  }
-
-  &.selected {
-    background-color: var(--color-select);
   }
 }
 
-.chat-preview__avatar {
+.active {
+  background-color: var(--color-select);
+}
+
+.avatar {
   grid-area: avatar;
 
   align-self: center;
@@ -35,11 +35,11 @@
   background-color: var(--color-smoke);
 }
 
-.chat-preview__username {
+.username {
   grid-area: username;
 }
 
-.chat-preview__message {
+.lastMessage {
   grid-area: message;
 
   display: -webkit-box;
@@ -55,13 +55,13 @@
   -webkit-box-orient: vertical;
 }
 
-.chat-preview__time {
+.time {
   grid-area: time;
 
   color: var(--color-shadow);
 }
 
-.chat-preview__counter {
+.unreadCounter {
   grid-area: counter;
 
   display: flex;
