@@ -13,7 +13,7 @@ export default function accessorPlugin(): Plugin {
         code = code.replace(
           /accessor\s+(?<name>\w+)(?: = (?<value>.+))?;/gu,
           (_match, name, value) =>
-            `#x_accessor_storage = ${value};\nget ${name}() { return this.#x_accessor_storage; }\nset ${name}(value) { this.#x_accessor_storage = value; }`,
+            `#${name}_accessor = ${value};\nget ${name}() { return this.#${name}_accessor; }\nset ${name}(value) { this.#${name}_accessor = value; }`,
         );
       }
       return code;
