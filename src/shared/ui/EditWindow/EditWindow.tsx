@@ -3,7 +3,7 @@ import './EditWindow.css';
 import { Button } from '../Button';
 
 export type EditWindowProps = PropsWithChildren<{
-  saveAvailable: boolean;
+  saveAvailable?: boolean;
   onSave: (e: Event) => Promise<void> | void;
   onClose: (e: Event) => void;
 }>;
@@ -13,9 +13,9 @@ export class EditWindow extends Component<EditWindowProps> {
     super({}, props);
   }
 
-  public render({ onClose, onSave, saveAvailable }: EditWindowProps) {
+  public render({ onClose, onSave, saveAvailable = true }: EditWindowProps) {
     return (
-      <form className="edit-window">
+      <div className="edit-window">
         <div className="edit-window__content">
           <div className="edit-window__fields">{this.props.children}</div>
 
@@ -32,7 +32,7 @@ export class EditWindow extends Component<EditWindowProps> {
             />
           </div>
         </div>
-      </form>
+      </div>
     );
   }
 }
