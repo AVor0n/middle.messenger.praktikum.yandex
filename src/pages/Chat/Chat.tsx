@@ -1,22 +1,13 @@
-import { Component, type Props, type State } from '@shared/NotReact';
-import { Link } from '@shared/NotReactRouter';
-import { ChatPreview } from './components';
-import { chats } from './fake-data';
-import { PAGES } from 'app/constants';
+import { Component } from '@shared/NotReact';
+import { router } from '@shared/Router';
+import { ChatList } from './components';
 import './Chat.css';
+import { Button } from '@uikit';
+import { PAGES } from 'app/constants';
 
-interface ChatState extends State {
-  message: string;
-}
-
-export class Chat extends Component<Props, ChatState> {
+export class Chat extends Component {
   constructor() {
-    super(
-      {
-        message: '',
-      },
-      {},
-    );
+    super({}, {});
   }
 
   public render() {
@@ -24,35 +15,26 @@ export class Chat extends Component<Props, ChatState> {
       <div className="page chat-page">
         <div className="sidebar">
           <nav className="sidebar__tools">
-            <Link href={PAGES.PROFILE} className="btn btn--ghost btn--flex btn--xl">
-              Профиль
-            </Link>
+            <Button text="Профиль" buttonType="ghost" flex size="xl" $click={() => router.navigate(PAGES.PROFILE)} />
             <search>
               <input className="searchfield" type="search" placeholder="Поиск" />
             </search>
           </nav>
           <hr className="separator" />
-          <div className="chatlist">
-            {!chats.length && <p className="empty">Чатов пока нет</p>}
-            {chats.map(chatData => (
-              <div key={chatData.username}>
-                <ChatPreview {...chatData} />
-                <hr className="separator" />
-              </div>
-            ))}
-          </div>
+          <ChatList />
         </div>
 
         <div className="chat">
-          <div className="chat__header">
+          {/* <div className="chat__header">
             <img className="chat__avatar" src="user.svg" />
             <div className="chat__username">Github</div>
             <button className="chat__menu-btn btn btn--ghost btn--circle btn--l" />
-          </div>
+          </div> */}
           <hr className="separator" />
-          <div className="chat__viewer" />
+          {/* <div className="chat__viewer" /> */}
           <hr className="separator" />
-          <form className="chat__editor">
+
+          {/* <form className="chat__editor">
             <button className="chat__attach-btn btn btn--ghost btn--circle btn--l" />
             <input
               className="chat__input"
@@ -67,7 +49,7 @@ export class Chat extends Component<Props, ChatState> {
             <button className="chat__send-btn btn btn--primary btn--circle btn--l" disabled={!this.state.message}>
               🡒
             </button>
-          </form>
+          </form> */}
         </div>
       </div>
     );
