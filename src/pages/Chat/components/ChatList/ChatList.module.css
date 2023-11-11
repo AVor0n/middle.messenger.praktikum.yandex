@@ -1,0 +1,18 @@
+.list {
+  display: flex;
+  flex-direction: column;
+
+  block-size: 100%;
+}
+
+.placeholder {
+  margin-block-start: 30px;
+  margin-inline: auto;
+
+  color: var(--color-shadow);
+}
+
+.createButton {
+  margin: 10px;
+  margin-block-start: auto;
+}

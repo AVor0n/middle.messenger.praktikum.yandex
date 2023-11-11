@@ -11,7 +11,7 @@ import {
   stringifyApiError,
 } from '@api';
 
-class ChatService extends EventBus<{ chatListUpdate: () => void }> {
+class ChatService extends EventBus<{ chatListUpdate: (chats: ChatsResponse[]) => void }> {
   private chatApi = new ChatsApi();
 
   @onChangeEvent('chatListUpdate')
@@ -33,11 +33,18 @@ class ChatService extends EventBus<{ chatListUpdate: () => void }> {
     return this._chatList;
   }
 
-  public getChatsList = (query: ChatsListParams) => this.chatApi.chatsList(query);
+  public getChatsList = async (query: ChatsListParams) => {
+    this._chatList = await this.chatApi.chatsList(query);
+    return this.chatList;
+  };
 
   public getChat = (id: number) => this.chatApi.commonDetail(id);
 
-  public createChat = (data: CreateChatRequest) => this.chatApi.chatsCreate(data);
+  public createChat = async (data: CreateChatRequest) => {
+    await this.chatApi.chatsCreate(data);
+    await this.getChatsList({});
+    return this.chatList;
+  };
 
   public deleteChat = (data: ChatDeleteRequest) => this.chatApi.chatsDelete(data);
 

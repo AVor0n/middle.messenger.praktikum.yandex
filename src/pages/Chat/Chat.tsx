@@ -1,8 +1,8 @@
 import { Component } from '@shared/NotReact';
 import { router } from '@shared/Router';
-import { ChatHeader, ChatList } from './components';
-import './Chat.css';
-import { Button } from '@uikit';
+import * as styles from './Chat.module.css';
+import { ChatHeader, ChatList, MessageList } from './components';
+import { Button, Separator } from '@uikit';
 import { PAGES } from 'app/constants';
 
 export class Chat extends Component {
@@ -12,23 +12,24 @@ export class Chat extends Component {
 
   public render() {
     return (
-      <div className="page chat-page">
-        <div className="sidebar">
-          <nav className="sidebar__tools">
+      <div className={styles.page}>
+        <div className={styles.sidebar}>
+          <nav className={styles.sidebarTools}>
             <Button text="Профиль" buttonType="ghost" flex size="xl" $click={() => router.navigate(PAGES.PROFILE)} />
             <search>
-              <input className="searchfield" type="search" placeholder="Поиск" />
+              <input className={styles.search} type="search" placeholder="Поиск" />
             </search>
           </nav>
-          <hr className="separator" />
+          <Separator />
           <ChatList />
         </div>
 
-        <div className="chat">
+        <div className={styles.chat}>
           <ChatHeader />
-          <hr className="separator" />
-          {/* <div className="chat__viewer" /> */}
-          <hr className="separator" />
+          <Separator />
+
+          <MessageList />
+          <Separator />
 
           {/* <form className="chat__editor">
             <button className="chat__attach-btn btn btn--ghost btn--circle btn--l" />

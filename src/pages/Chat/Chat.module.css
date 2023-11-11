@@ -1,19 +1,26 @@
-.chat-page {
+.page {
   display: flex;
   flex-direction: row;
+
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 100vh;
 }
 
 .sidebar {
+  display: flex;
+  flex-direction: column;
+
+  inline-size: 500px;
   block-size: 100vh;
-  max-inline-size: 300px;
   border-inline-end: 1px solid var(--color-smoke);
+}
 
-  &__tools {
-    display: grid;
-    gap: 10px;
+.sidebarTools {
+  display: grid;
+  gap: 10px;
 
-    padding: 10px;
-  }
+  padding: 10px;
 }
 
 .chat {
@@ -61,7 +68,7 @@
   background-position: center;
 }
 
-.searchfield {
+.search {
   display: block;
 
   inline-size: 100%;
