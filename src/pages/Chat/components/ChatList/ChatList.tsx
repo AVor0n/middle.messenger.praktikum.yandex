@@ -25,8 +25,8 @@ export class ChatList extends Component<Props, ChatListState> {
     });
   }
 
-  onToggleActiveChat = (id: number) => {
-    chatService.activeChatId = chatService.activeChatId === id ? undefined : id;
+  onToggleActiveChat = (chat: ChatsResponse) => {
+    chatService.activeChat = chatService.activeChat?.id === chat.id ? undefined : chat;
   };
 
   public render() {
@@ -36,7 +36,11 @@ export class ChatList extends Component<Props, ChatListState> {
 
         {this.state.chats.map(chat => (
           <div key={String(chat.id)}>
-            <ChatPreview {...chat} active={chat.id === chatService.activeChatId} onClick={this.onToggleActiveChat} />
+            <ChatPreview
+              chatData={chat}
+              active={chat.id === chatService.activeChat?.id}
+              onClick={this.onToggleActiveChat}
+            />
             <Separator />
           </div>
         ))}
