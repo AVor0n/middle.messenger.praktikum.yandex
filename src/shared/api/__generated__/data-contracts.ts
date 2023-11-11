@@ -77,7 +77,7 @@ export interface ChatsResponse {
   /** Chat title */
   title: string;
   /** Chat avatar */
-  avatar: string;
+  avatar: string | null;
   /** Number of unread messages in chat for current user */
   unread_count: number;
   last_message: {
@@ -93,7 +93,7 @@ export interface ChatsResponse {
     time?: string;
     /** Message content */
     content?: string;
-  };
+  } | null;
 }
 
 export interface ChatDeleteRequest {
