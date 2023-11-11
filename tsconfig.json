@@ -24,6 +24,7 @@
       "@uikit": ["shared/ui"],
       "@api": ["shared/api"]
     },
+    "outDir": "dist",
     "useUnknownInCatchVariables": true,
     "strict": true,
     "noImplicitAny": true,

@@ -13,16 +13,15 @@ export function onChangeEvent<Value>(eventName: string) {
   ): ClassAccessorDecoratorResult<This, Value> => {
     let currentValue: Value;
     return {
-      init(value: Value) {
-        currentValue = value;
-        return currentValue;
-      },
       get() {
         return currentValue;
       },
       set(newValue: Value) {
-        setTimeout(() => this.emit(eventName, newValue, currentValue));
+        const oldValue = currentValue;
         currentValue = newValue;
+        setTimeout(() => {
+          this.emit(eventName, newValue, oldValue);
+        });
         return currentValue;
       },
     };

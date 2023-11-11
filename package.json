@@ -11,6 +11,7 @@
     "dev": "vite",
     "start": "npm run build && node ./server.js",
     "build": "tsc && vite build",
+    "build:dev": "tsc && vite build --minify false",
     "get-swagger-spec": "node ./scripts/getSwaggerSpecification.js",
     "get-api-types": "node ./scripts/generateApiFromSwaggerSpec.js",
     "coverage": "vitest --ui --coverage",
