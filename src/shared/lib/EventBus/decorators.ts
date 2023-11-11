@@ -21,7 +21,7 @@ export function onChangeEvent<Value>(eventName: string) {
         return currentValue;
       },
       set(newValue: Value) {
-        this.emit(eventName, newValue, currentValue);
+        setTimeout(() => this.emit(eventName, newValue, currentValue));
         currentValue = newValue;
         return currentValue;
       },
