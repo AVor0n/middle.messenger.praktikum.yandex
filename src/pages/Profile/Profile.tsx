@@ -1,14 +1,12 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { router } from '@shared/Router';
-import { EditPasswordWindow, EditProfileWindow, EditableAvatar } from './components';
+import { EditPasswordWindow, EditProfileWindow } from './components';
 import * as styles from './Profile.module.css';
-import { type UserUpdateRequest } from '@api';
-import { Button } from '@uikit';
+import { Avatar, Button } from '@uikit';
 import { PAGES } from 'app/constants';
 import { authService } from 'services';
 
 interface ProfileState extends State {
-  formData?: UserUpdateRequest;
   editPasswordVisible: boolean;
   editProfileVisible: boolean;
 }
@@ -19,14 +17,14 @@ export class Profile extends Component<Props, ProfileState> {
   }
 
   protected init(): void {
-    if (authService.userInfo) {
-      this.setState({ formData: authService.userInfo });
-    }
-
-    authService.on('updateUserInfo', value => {
-      this.setState({ formData: value });
+    authService.on('updateUserInfo', () => {
+      this.setState(this.state);
     });
   }
+
+  onChangeAvatar = async (file: File) => {
+    await authService.updateAvatar(file);
+  };
 
   openEditPasswordWindow = () => {
     this.state.editPasswordVisible = true;
@@ -44,7 +42,9 @@ export class Profile extends Component<Props, ProfileState> {
   };
 
   public render() {
-    if (!this.state.formData) {
+    const { userInfo } = authService;
+
+    if (!userInfo) {
       return (
         <div className={styles.page}>
           <div>Loading...</div>
@@ -54,17 +54,17 @@ export class Profile extends Component<Props, ProfileState> {
 
     return (
       <div className={styles.page}>
-        <EditableAvatar />
+        <Avatar src={userInfo.avatar} $change={this.onChangeAvatar} />
 
         <div className={styles.table}>
           <div className="table-list">
             {[
-              { title: 'Почта', value: this.state.formData.email },
-              { title: 'Логин', value: this.state.formData.login },
-              { title: 'Имя', value: this.state.formData.first_name },
-              { title: 'Фамилия', value: this.state.formData.second_name },
-              { title: 'Имя в чате', value: this.state.formData.display_name },
-              { title: 'Телефон', value: this.state.formData.phone },
+              { title: 'Почта', value: userInfo.email },
+              { title: 'Логин', value: userInfo.login },
+              { title: 'Имя', value: userInfo.first_name },
+              { title: 'Фамилия', value: userInfo.second_name },
+              { title: 'Имя в чате', value: userInfo.display_name },
+              { title: 'Телефон', value: userInfo.phone },
             ].map(({ title, value }) => (
               <div className="table-list__row" key={title}>
                 <span className="table-list__header">{title}</span>
@@ -99,9 +99,7 @@ export class Profile extends Component<Props, ProfileState> {
         </div>
 
         {this.state.editPasswordVisible && <EditPasswordWindow onClose={this.closeEditWindow} />}
-        {this.state.editProfileVisible && (
-          <EditProfileWindow data={this.state.formData} onClose={this.closeEditWindow} />
-        )}
+        {this.state.editProfileVisible && <EditProfileWindow onClose={this.closeEditWindow} />}
       </div>
     );
   }

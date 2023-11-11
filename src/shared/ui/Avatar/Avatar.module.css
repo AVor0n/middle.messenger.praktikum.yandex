@@ -5,13 +5,10 @@
 
   border-radius: 50%;
 
-  cursor: pointer;
-
   object-fit: cover;
   object-position: center;
 }
 
-.username {
-  font-weight: bold;
-  text-align: center;
+.editable {
+  cursor: pointer;
 }

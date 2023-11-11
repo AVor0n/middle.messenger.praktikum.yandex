@@ -1,3 +1,4 @@
+export * from './Avatar';
 export * from './Button';
-export * from './Textbox';
 export * from './EditWindow';
+export * from './Textbox';

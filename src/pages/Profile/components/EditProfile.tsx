@@ -6,7 +6,6 @@ import { EditWindow, TextBox } from '@uikit';
 import { authService } from 'services';
 
 interface EditProfileWindowProps extends Props {
-  data: UserUpdateRequest;
   onClose: () => void;
 }
 
@@ -19,12 +18,12 @@ export class EditProfileWindow extends Component<EditProfileWindowProps, EditPro
   constructor(props: EditProfileWindowProps) {
     super(
       {
-        email: props.data.email ?? '',
-        login: props.data.login ?? '',
-        display_name: props.data.display_name ?? '',
-        first_name: props.data.first_name ?? '',
-        second_name: props.data.second_name ?? '',
-        phone: props.data.phone ?? '',
+        email: authService.userInfo?.email ?? '',
+        login: authService.userInfo?.login ?? '',
+        display_name: authService.userInfo?.display_name ?? '',
+        first_name: authService.userInfo?.first_name ?? '',
+        second_name: authService.userInfo?.second_name ?? '',
+        phone: authService.userInfo?.phone ?? '',
       },
       props,
     );
