@@ -1,25 +1,23 @@
-import { Component } from '@shared/NotReact';
+import { Component, type Props } from '@shared/NotReact';
 import * as styles from './ChatHeader.module.css';
 import { Avatar } from '@uikit';
-import { authService, chatService } from 'services';
+import { authService } from 'services';
 
-export class ChatHeader extends Component {
-  constructor() {
-    super({}, {});
-  }
+interface ChatHeaderProps extends Props {
+  avatar?: string | null;
+  title?: string;
+}
 
-  protected init(): void {
-    chatService.on('changeActiveChat', () => {
-      this.dispatchComponentUpdate({}, {});
-    });
+export class ChatHeader extends Component<ChatHeaderProps> {
+  constructor(props: ChatHeaderProps) {
+    super({}, props);
   }
 
   public render() {
-    const { activeChat } = chatService;
-    const { userInfo } = authService;
+    const hasActiveChat = this.props.title;
 
-    const avatar = activeChat ? activeChat.avatar : userInfo?.avatar;
-    const title = activeChat ? activeChat.title : userInfo?.display_name;
+    const avatar = hasActiveChat ? this.props.avatar : authService.userInfo?.avatar;
+    const title = hasActiveChat ? this.props.title : authService.userInfo?.display_name;
 
     return (
       <div className={styles.header}>

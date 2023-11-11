@@ -11,8 +11,3 @@
 
   color: var(--color-shadow);
 }
-
-.createButton {
-  margin: 10px;
-  margin-block-start: auto;
-}

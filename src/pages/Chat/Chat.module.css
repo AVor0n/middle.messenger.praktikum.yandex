@@ -68,17 +68,7 @@
   background-position: center;
 }
 
-.search {
-  display: block;
-
-  inline-size: 100%;
-  padding: 10px;
-
-  border: none;
-  border-radius: 5px;
-
-  background-color: var(--color-smoke);
-
-  outline: none;
-  accent-color: var(--color-primary);
+.createButton {
+  margin: 10px;
+  margin-block-start: auto;
 }

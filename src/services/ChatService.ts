@@ -12,13 +12,9 @@ import {
 } from '@api';
 
 class ChatService extends EventBus<{
-  changeActiveChat: (activeChat?: ChatsResponse) => void;
   chatListUpdate: (chats: ChatsResponse[]) => void;
 }> {
   private chatApi = new ChatsApi();
-
-  @onChangeEvent('changeActiveChat')
-  public accessor activeChat: ChatsResponse | undefined;
 
   @onChangeEvent('chatListUpdate')
   private accessor _chatList: ChatsResponse[] | undefined;
