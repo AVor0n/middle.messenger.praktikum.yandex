@@ -50,7 +50,7 @@ export class Chat extends Component<Props, ChatState> {
         </div>
 
         <div className={styles.chat}>
-          <ChatHeader title={this.state.activeChat?.title} avatar={this.state.activeChat?.avatar} />
+          <ChatHeader activeChat={this.state.activeChat} />
           <Separator />
 
           <MessageList />

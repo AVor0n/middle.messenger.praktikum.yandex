@@ -1,8 +1,10 @@
 import { Component, type PropsWithChildren } from '@shared/NotReact';
 import './EditWindow.css';
+import { clsx } from '@shared/utils';
 import { Button } from '../Button';
 
 export type EditWindowProps = PropsWithChildren<{
+  contentCls?: string;
   saveAvailable?: boolean;
   onSave: (e: Event) => Promise<void> | void;
   onClose: (e: Event) => void;
@@ -13,10 +15,10 @@ export class EditWindow extends Component<EditWindowProps> {
     super({}, props);
   }
 
-  public render({ onClose, onSave, saveAvailable = true }: EditWindowProps) {
+  public render({ onClose, onSave, saveAvailable = true, contentCls }: EditWindowProps) {
     return (
       <div className="edit-window">
-        <div className="edit-window__content">
+        <div className={clsx('edit-window__content', contentCls)}>
           <div className="edit-window__fields">{this.props.children}</div>
 
           <div className="edit-window__btns">
