@@ -77,7 +77,7 @@ export class AuthPage extends Component<Props, AuthPageState> {
       { label: 'Фамилия', name: 'second_name' },
       { label: 'Телефон', name: 'phone', type: 'tel' },
       { label: 'Пароль', name: 'password', type: 'password' },
-      { label: 'Пароль (ещё раз)', name: 'password', type: 'password' },
+      { label: 'Пароль (ещё раз)', name: 'repeatPassword', type: 'password' },
     ];
 
     return (
