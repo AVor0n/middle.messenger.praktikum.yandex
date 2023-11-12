@@ -70,5 +70,5 @@
 
 .createButton {
   margin: 10px;
-  margin-block-start: auto;
+  margin-block-start: minmax(10px, auto);
 }
