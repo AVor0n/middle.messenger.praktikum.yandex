@@ -3,7 +3,7 @@ import { UserPreview } from './components';
 import * as styles from './EditChatMembersButton.module.css';
 import { type ChatUserResponse, type UserResponse, stringifyApiError } from '@api';
 import { Button, EditWindow, Search, Separator } from '@uikit';
-import { chatService, userService } from 'services';
+import { authService, chatService, userService } from 'services';
 
 interface EditChatMembersButtonProps extends Props {
   chatId: number;
@@ -47,6 +47,20 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
       });
   };
 
+  onRemoveUserFromChat = (userId: number) => {
+    if (userId === authService.userInfo?.id) {
+      chatService
+        .deleteChat(this.props.chatId)
+        .then(() => {
+          this.closeEditWindow();
+        })
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.log(stringifyApiError(error));
+        });
+    }
+  };
+
   openEditWindow = () => {
     this.state.editWindowVisible = true;
   };
@@ -74,7 +88,12 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
                 {filteredMembers.map(user => (
                   <div key={user.id.toString()}>
                     <UserPreview userData={user}>
-                      <Button text="удалить" size="s" buttonType="ghost" />
+                      <Button
+                        text={user.id === authService.userInfo?.id ? 'удалить чат' : 'исключить'}
+                        size="s"
+                        buttonType="ghost"
+                        $click={() => this.onRemoveUserFromChat(user.id)}
+                      />
                     </UserPreview>
                     <Separator />
                   </div>

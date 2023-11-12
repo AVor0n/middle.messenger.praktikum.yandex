@@ -3,7 +3,6 @@ import {
   ChatsApi,
   type AvatarUpdatePayload,
   type CreateChatRequest,
-  type ChatDeleteRequest,
   type ChatsListParams,
   type UsersRequest,
   type UsersDetailParams,
@@ -48,7 +47,11 @@ class ChatService extends EventBus<{
     return this.chatList;
   };
 
-  public deleteChat = (data: ChatDeleteRequest) => this.chatApi.chatsDelete(data);
+  public deleteChat = async (chatId: number) => {
+    await this.chatApi.chatsDelete({ chatId });
+    await this.getChatsList({});
+    return this.chatList;
+  };
 
   public updateAvatar = (data: AvatarUpdatePayload) => this.chatApi.avatarUpdate(data);
 
