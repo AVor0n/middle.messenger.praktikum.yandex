@@ -1,5 +1,6 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { router } from '@shared/Router';
+import { ToastContainer } from '@shared/ToastService';
 import { PAGES } from './constants';
 import { Auth as AuthPage, Login as LoginPage, Chat as ChatPage, Profile as ProfilePage, ErrorPage } from '@pages';
 import { authService } from 'services';
@@ -33,6 +34,11 @@ export class App extends Component<Props, AppState> {
   }
 
   public render() {
-    return <div>{this.state.content}</div>;
+    return (
+      <div>
+        {this.state.content}
+        <ToastContainer />
+      </div>
+    );
   }
 }

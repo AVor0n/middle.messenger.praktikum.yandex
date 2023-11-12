@@ -1,0 +1,6 @@
+.container {
+  position: fixed;
+  inset-block-end: 20px;
+  inset-inline-end: 20px;
+  z-index: 9999;
+}
