@@ -1,7 +1,8 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { UserPreview } from './components';
 import * as styles from './EditChatMembersButton.module.css';
-import { type ChatUserResponse, type UserResponse, stringifyApiError } from '@api';
+import { type UserPreviewData, chatUserResponseToChatPreviewData, userResponseToChatPreviewData } from './types';
+import { stringifyApiError } from '@api';
 import { Button, EditWindow, Search, Separator } from '@uikit';
 import { authService, chatService, userService } from 'services';
 
@@ -12,21 +13,23 @@ interface EditChatMembersButtonProps extends Props {
 
 interface EditChatMembersButtonState extends State {
   search: string;
-  findUsers: UserResponse[];
-  members: ChatUserResponse[];
+  foundUsers: UserPreviewData[];
+  members: UserPreviewData[];
   editWindowVisible?: boolean;
 }
 
 export class EditChatMembersButton extends Component<EditChatMembersButtonProps, EditChatMembersButtonState> {
   constructor(props: EditChatMembersButtonProps) {
-    super({ search: '', findUsers: [], members: [] }, props);
+    super({ search: '', foundUsers: [], members: [] }, props);
   }
 
   protected init(): void {
     chatService
       .getUsersInChat({ id: this.props.chatId })
       .then(members => {
-        this.state.members = members.sort((a, b) => a.login.localeCompare(b.login));
+        this.state.members = members
+          .map(chatUserResponseToChatPreviewData)
+          .sort((a, b) => a.login.localeCompare(b.login));
       })
       .catch(error => {
         // eslint-disable-next-line no-console
@@ -39,7 +42,9 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
     userService
       .searchUsers({ login: value })
       .then(users => {
-        this.state.findUsers = users;
+        this.state.foundUsers = users
+          .map(userResponseToChatPreviewData)
+          .filter(user => !this.state.members.find(member => member.id === user.id));
       })
       .catch(error => {
         // eslint-disable-next-line no-console
@@ -47,17 +52,39 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
       });
   };
 
-  onRemoveUserFromChat = (userId: number) => {
-    if (userId === authService.userInfo?.id) {
-      chatService
-        .deleteChat(this.props.chatId)
-        .then(() => {
-          this.closeEditWindow();
-        })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.log(stringifyApiError(error));
+  onRemoveUserFromChat = async (userId: number) => {
+    try {
+      if (userId === authService.userInfo?.id) {
+        await chatService.deleteChat(this.props.chatId);
+        this.closeEditWindow();
+      } else {
+        await chatService.deleteUsersFromChat({ chatId: this.props.chatId, users: [userId] });
+        const user = this.state.members.find(member => member.id === userId);
+        if (!user) return;
+        this.setState({
+          members: this.state.members.filter(member => member.id !== userId),
+          foundUsers: [...this.state.foundUsers, user],
         });
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(stringifyApiError(error));
+    }
+  };
+
+  onAddUserToChat = async (userId: number) => {
+    try {
+      await chatService.addUsersToChat({ chatId: this.props.chatId, users: [userId] });
+      const user = this.state.foundUsers.find(foundUser => foundUser.id === userId);
+      if (!user) return;
+      const newState = {
+        members: [...this.state.members, user],
+        foundUsers: this.state.foundUsers.filter(foundUser => foundUser.id !== userId),
+      };
+      this.setState(newState);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(stringifyApiError(error));
     }
   };
 
@@ -73,7 +100,7 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
     const filteredMembers = this.state.members.filter(
       member => !this.state.search || member.login.includes(this.state.search),
     );
-    const foundUsers = this.state.findUsers;
+    const { foundUsers } = this.state;
 
     return (
       <div className={this.props.className}>
@@ -109,7 +136,12 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
                   {foundUsers.map(user => (
                     <div key={user.id.toString()}>
                       <UserPreview userData={user}>
-                        <Button text="добавить" size="s" buttonType="ghost" />
+                        <Button
+                          text="добавить"
+                          size="s"
+                          buttonType="ghost"
+                          $click={() => this.onAddUserToChat(user.id)}
+                        />
                       </UserPreview>
                       <Separator />
                     </div>
