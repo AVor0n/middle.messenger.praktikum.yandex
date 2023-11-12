@@ -34,7 +34,7 @@ export class HttpService {
       headers: {
         ...(this.baseApiParams.headers ?? {}),
         ...(params.headers ?? {}),
-        ...(type !== ContentType.FormData ? { 'Content-Type': type } : {}),
+        ...(type === ContentType.FormData ? {} : { 'Content-Type': type ?? ContentType.Json }),
       },
     };
 
