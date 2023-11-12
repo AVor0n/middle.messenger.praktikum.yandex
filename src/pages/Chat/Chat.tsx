@@ -1,7 +1,7 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { router } from '@shared/Router';
 import * as styles from './Chat.module.css';
-import { ChatHeader, ChatList, CreateChatButton, MessageList } from './components';
+import { ChatHeader, ChatList, CreateChatButton, MessageEditor, MessageList } from './components';
 import { type ChatsResponse } from '@api';
 import { Button, Search, Separator } from '@uikit';
 import { PAGES } from 'app/constants';
@@ -56,22 +56,7 @@ export class Chat extends Component<Props, ChatState> {
           <MessageList />
           <Separator />
 
-          {/* <form className="chat__editor">
-            <button className="chat__attach-btn btn btn--ghost btn--circle btn--l" />
-            <input
-              className="chat__input"
-              type="text"
-              placeholder="Сообщение"
-              name="message"
-              value={this.state.message}
-              $input={e => {
-                this.state.message = (e.target as HTMLInputElement).value;
-              }}
-            />
-            <button className="chat__send-btn btn btn--primary btn--circle btn--l" disabled={!this.state.message}>
-              🡒
-            </button>
-          </form> */}
+          <MessageEditor />
         </div>
       </div>
     );

@@ -38,36 +38,6 @@
   background-position: center;
 }
 
-.chat__editor {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-
-  inline-size: 100%;
-  padding: 10px;
-}
-
-.chat__input {
-  flex-grow: 1;
-
-  padding-block: 10px;
-  padding-inline: 16px;
-
-  border: none;
-  border-radius: 32px;
-
-  background-color: var(--color-smoke);
-
-  outline: none;
-}
-
-.chat__attach-btn {
-  background-image: url('/clip.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 .createButton {
   margin: 10px;
   margin-block-start: minmax(10px, auto);
