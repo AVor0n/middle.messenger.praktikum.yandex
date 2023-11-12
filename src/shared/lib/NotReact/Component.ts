@@ -26,6 +26,8 @@ export abstract class Component<P extends Props = Props, S extends State = State
 
   private _vDom: VElement | undefined;
 
+  private _originalState: S;
+
   /** Ссылка на DOM-узел, который представляет компонент */
   public get ref() {
     return this._ref;
@@ -40,7 +42,8 @@ export abstract class Component<P extends Props = Props, S extends State = State
     if (!newState) {
       return;
     }
-    Object.assign(this.state, newState);
+    Object.assign(this._originalState, newState);
+    this.eventBus.emit('flow:render', this.props);
   }
 
   /** Внутреннее состояние компонента, при изменении происходит автоматический ререндер */
@@ -53,6 +56,7 @@ export abstract class Component<P extends Props = Props, S extends State = State
     this.eventBus = new EventBus();
     this.registerEvents();
 
+    this._originalState = state;
     this.state = this.makeStateProxy(state);
     this.props = props;
 
