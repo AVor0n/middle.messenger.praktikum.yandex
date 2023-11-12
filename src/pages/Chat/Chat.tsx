@@ -28,8 +28,8 @@ export class Chat extends Component<Props, ChatState> {
     this.state.chatList = chatService.chatList.filter(chat => !search || chat.title.includes(search));
   };
 
-  onToggleActiveChat = (chat?: ChatsResponse) => {
-    this.state.activeChat = chat;
+  onToggleActiveChat = (chat: ChatsResponse) => {
+    this.state.activeChat = this.state.activeChat?.id === chat.id ? undefined : chat;
   };
 
   public render() {
