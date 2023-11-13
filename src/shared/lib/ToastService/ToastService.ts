@@ -33,15 +33,24 @@ class ToastService extends EventBus<{
   }
 
   public error(toast: ToastInfo): void {
-    this.createToast('error', toast);
+    this.createToast('error', {
+      title: toast.title ?? 'Ошибка',
+      body: toast.body,
+    });
   }
 
   public ok(toast: ToastInfo): void {
-    this.createToast('ok', toast);
+    this.createToast('ok', {
+      title: toast.title ?? 'Успех',
+      body: toast.body,
+    });
   }
 
   public warning(toast: ToastInfo): void {
-    this.createToast('warning', toast);
+    this.createToast('warning', {
+      title: toast.title ?? 'Предупреждение',
+      body: toast.body,
+    });
   }
 }
 
