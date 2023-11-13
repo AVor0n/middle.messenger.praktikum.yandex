@@ -1,11 +1,13 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { router } from '@shared/Router';
+import { toastService } from '@shared/ToastService';
 import * as styles from './Chat.module.css';
 import { ChatHeader, ChatList, CreateChatButton, MessageEditor, MessageList } from './components';
 import { type ChatsResponse } from '@api';
 import { Button, Search, Separator } from '@uikit';
 import { PAGES } from 'app/constants';
 import { chatService } from 'services';
+import { messageService } from 'services/MessageService';
 
 interface ChatState extends State {
   activeChat?: ChatsResponse;
@@ -18,10 +20,22 @@ export class Chat extends Component<Props, ChatState> {
     super({ chatList: chatService.chatList, search: '' }, {});
   }
 
+  filterChats = () => {
+    this.onFilterChats(this.state.search);
+  };
+
   protected init(): void {
-    chatService.on('chatListUpdate', () => {
-      this.onFilterChats(this.state.search);
-    });
+    chatService.on('chatListUpdate', this.filterChats);
+    messageService.init().catch(() =>
+      toastService.error({
+        body: 'Не удалось инициализировать сокет соединение',
+      }),
+    );
+  }
+
+  protected componentDidUnmount(): void {
+    chatService.off('chatListUpdate', this.filterChats);
+    messageService.dispose();
   }
 
   onFilterChats = (search: string) => {
@@ -33,6 +47,8 @@ export class Chat extends Component<Props, ChatState> {
   };
 
   public render() {
+    const { activeChat } = this.state;
+
     return (
       <div className={styles.page}>
         <div className={styles.sidebar}>
@@ -41,22 +57,18 @@ export class Chat extends Component<Props, ChatState> {
             <Search onChange={this.onFilterChats} />
           </nav>
           <Separator />
-          <ChatList
-            chats={this.state.chatList}
-            activeChat={this.state.activeChat}
-            onClickChat={this.onToggleActiveChat}
-          />
+          <ChatList chats={this.state.chatList} activeChat={activeChat} onClickChat={this.onToggleActiveChat} />
           <CreateChatButton cls={styles.createButton} />
         </div>
 
         <div className={styles.chat}>
-          <ChatHeader activeChat={this.state.activeChat} />
+          <ChatHeader activeChat={activeChat} />
           <Separator />
 
-          <MessageList />
-          <Separator />
-
-          <MessageEditor />
+          {/* TODO: добавить поддержку фрагментов */}
+          {activeChat && <MessageList activeChatId={activeChat.id} />}
+          {activeChat && <Separator />}
+          {activeChat && <MessageEditor activeChatId={activeChat.id} />}
         </div>
       </div>
     );

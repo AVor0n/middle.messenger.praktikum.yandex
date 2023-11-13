@@ -8,6 +8,7 @@ import {
   type UsersDetailParams,
   type ChatsResponse,
   stringifyApiError,
+  type ChatsMessagesTokenResponse,
 } from '@api';
 
 class ChatService extends EventBus<{
@@ -55,13 +56,22 @@ class ChatService extends EventBus<{
 
   public updateAvatar = (data: AvatarUpdatePayload) => this.chatApi.avatarUpdate(data);
 
-  public getCountUnreadMessagesInChat = (id: number) => this.chatApi.getChats(id);
+  public getCountUnreadMessagesInChat = async (id: number) => {
+    const data = await this.chatApi.getChats(id);
+    return data.unread_count;
+  };
 
   public getUsersInChat = (data: UsersDetailParams) => this.chatApi.usersDetail(data);
 
   public addUsersToChat = (data: UsersRequest) => this.chatApi.usersUpdate(data);
 
   public deleteUsersFromChat = (data: UsersRequest) => this.chatApi.usersDelete(data);
+
+  public createToken = async (chatId: number) => {
+    const response = await this.chatApi.tokenCreate(chatId);
+    // кривой тип в swagger спецификации
+    return (response as unknown as ChatsMessagesTokenResponse).token;
+  };
 }
 
 export const chatService = new ChatService();
