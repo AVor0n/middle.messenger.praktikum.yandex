@@ -133,6 +133,11 @@ function patchProp(node: Element, key: string, value: unknown, nextValue: unknow
   if (key === 'className') {
     key = 'class';
   }
+  if (key === 'value' && node instanceof HTMLInputElement) {
+    node.value = String(nextValue);
+    return;
+  }
+
   if (nextValue == null || nextValue === false) {
     node.removeAttribute(key);
   } else {
