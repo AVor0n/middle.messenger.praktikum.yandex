@@ -1,4 +1,5 @@
 import { EventBus, onChangeEvent } from '@shared/EventBus';
+import { toastService } from '@shared/ToastService';
 import {
   ChatsApi,
   type AvatarUpdatePayload,
@@ -25,10 +26,7 @@ class ChatService extends EventBus<{
         .then(chats => {
           this._chatList = chats;
         })
-        .catch(e => {
-          // eslint-disable-next-line no-console
-          console.error(`Ошибка при получении списка чатов: ${stringifyApiError(e)}`);
-        });
+        .catch(e => toastService.error({ body: stringifyApiError(e) }));
       return [];
     }
 

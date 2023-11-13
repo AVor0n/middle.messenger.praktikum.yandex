@@ -20,14 +20,8 @@ class MessageService {
       const token = await chatService.createToken(chat.id);
       const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chat.id}/${token}`);
 
-      socket.addEventListener('open', () => {
-        toastService.ok({ body: `Соединение установлено для чата ${chat.id}` });
-      });
-
       socket.addEventListener('close', event => {
-        if (event.wasClean) {
-          toastService.ok({ body: `Соединение для чата ${chat.id} закрыто чисто` });
-        } else {
+        if (!event.wasClean) {
           toastService.error({ body: `Обрыв соединения для чата ${chat.id}` });
         }
         toastService.error({ title: `Ошибка ${event.code}`, body: event.reason });

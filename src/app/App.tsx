@@ -1,7 +1,8 @@
 import { Component, type Props, type State } from '@shared/NotReact';
 import { router } from '@shared/Router';
-import { ToastContainer } from '@shared/ToastService';
+import { ToastContainer, toastService } from '@shared/ToastService';
 import { PAGES } from './constants';
+import { stringifyApiError } from '@api';
 import { Auth as AuthPage, Login as LoginPage, Chat as ChatPage, Profile as ProfilePage, ErrorPage } from '@pages';
 import { authService } from 'services';
 
@@ -21,7 +22,7 @@ export class App extends Component<Props, AppState> {
   protected init() {
     authService
       .getUserInfo()
-      .catch(() => {})
+      .catch(error => toastService.error({ body: stringifyApiError(error) }))
       .finally(() => {
         router
           .addRoute(PAGES.AUTH, () => this.navigate(<AuthPage />))
