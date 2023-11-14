@@ -17,3 +17,5 @@ export interface FullRequestParams extends Omit<RequestInit, 'body'> {
 }
 
 export type RequestParams = Omit<RequestInit, 'body' | 'method' | 'query' | 'path'>;
+
+export type HTTPMethod = <R = unknown>(options: Omit<FullRequestParams, 'method'>) => Promise<R>;

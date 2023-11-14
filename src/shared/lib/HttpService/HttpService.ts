@@ -1,5 +1,5 @@
 import { ContentType, Method } from './constants';
-import { type FullRequestParams, type RequestParams } from './types';
+import { type HTTPMethod, type FullRequestParams, type RequestParams } from './types';
 import { contentFormatters, toQueryString } from './utils';
 
 export class HttpService {
@@ -75,4 +75,12 @@ export class HttpService {
       xhr.send(requestBody);
     });
   };
+
+  protected get: HTTPMethod = options => this.request({ ...options, method: Method.Get });
+
+  protected put: HTTPMethod = options => this.request({ ...options, method: Method.Put });
+
+  protected post: HTTPMethod = options => this.request({ ...options, method: Method.Post });
+
+  protected delete: HTTPMethod = options => this.request({ ...options, method: Method.Delete });
 }

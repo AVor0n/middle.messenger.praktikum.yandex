@@ -9,8 +9,8 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
-import { type HttpErrorBody, type LeaderboardNewLeaderRequest, type LeaderboardRequest } from './data-contracts';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
+import { type LeaderboardNewLeaderRequest, type LeaderboardRequest } from './data-contracts';
 
 export class LeaderboardApi extends HttpService {
   /**
@@ -26,9 +26,8 @@ export class LeaderboardApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   leaderboardCreate = (leaderboardNewLeaderRequest: LeaderboardNewLeaderRequest, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.post<void>({
       path: `/leaderboard`,
-      method: Method.Post,
       body: leaderboardNewLeaderRequest,
       type: ContentType.Json,
       ...params,
@@ -47,9 +46,8 @@ export class LeaderboardApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   postLeaderboard = (leaderboardRequest: LeaderboardRequest, params: RequestParams = {}) =>
-    this.request<void, void>({
+    this.post<void>({
       path: `/leaderboard/all`,
-      method: Method.Post,
       body: leaderboardRequest,
       type: ContentType.Json,
       ...params,
@@ -70,9 +68,8 @@ export class LeaderboardApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   leaderboardCreate2 = (teamName: string, leaderboardRequest: LeaderboardRequest, params: RequestParams = {}) =>
-    this.request<void, void>({
+    this.post<void>({
       path: `/leaderboard/${teamName}`,
-      method: Method.Post,
       body: leaderboardRequest,
       type: ContentType.Json,
       ...params,

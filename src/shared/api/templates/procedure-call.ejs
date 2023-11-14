@@ -73,9 +73,8 @@ const responseFormatTmpl = responseContentKind[responseBodyInfo.success && respo
 
  */
 <%~ route.routeName.usage %> = (<%~ wrapperArgs %>) =>
-    this.request<<%~ type %>, <%~ errorType %>>({
+    this.<%~ method %><<%~ type %>>({
         path: `<%~ path %>`,
-        method: Method.<%~ _.capitalize(method) %>,
         <%~ queryTmpl ? `query: ${queryTmpl},` : '' %>
         <%~ bodyTmpl ? `body: ${bodyTmpl},` : '' %>
         <%~ bodyContentKindTmpl ? `type: ${bodyContentKindTmpl},` : '' %>

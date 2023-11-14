@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
 import {
   type ArchiveListParams,
   type AvatarUpdatePayload,
@@ -23,7 +23,6 @@ import {
   type ChatsMessagesTokenResponse,
   type ChatsResponse,
   type CreateChatRequest,
-  type HttpErrorBody,
   type UnreadCountResponse,
   type UsersDetailParams,
   type UsersRequest,
@@ -42,9 +41,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   chatsList = (query: ChatsListParams, params: RequestParams = {}) =>
-    this.request<ChatsResponse[], void>({
+    this.get<ChatsResponse[]>({
       path: `/chats`,
-      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
@@ -63,9 +61,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   chatsCreate = (createChatRequest: CreateChatRequest, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.post<void>({
       path: `/chats`,
-      method: Method.Post,
       body: createChatRequest,
       type: ContentType.Json,
       ...params,
@@ -85,9 +82,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   chatsDelete = (deleteChatRequest: ChatDeleteRequest, params: RequestParams = {}) =>
-    this.request<ChatDeleteResponse, void>({
+    this.delete<ChatDeleteResponse>({
       path: `/chats`,
-      method: Method.Delete,
       body: deleteChatRequest,
       type: ContentType.Json,
       format: 'json',
@@ -107,9 +103,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   filesDetail = (id: number, params: RequestParams = {}) =>
-    this.request<ChatMessage[], void>({
+    this.get<ChatMessage[]>({
       path: `/chats/${id}/files`,
-      method: Method.Get,
       format: 'json',
       ...params,
     });
@@ -126,9 +121,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   archiveList = (query: ArchiveListParams, params: RequestParams = {}) =>
-    this.request<ChatsResponse[], void>({
+    this.get<ChatsResponse[]>({
       path: `/chats/archive`,
-      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
@@ -148,9 +142,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   archiveCreate = (archiveChatRequest: ChatArchiveRequest, params: RequestParams = {}) =>
-    this.request<ChatArchiveResponse, void>({
+    this.post<ChatArchiveResponse>({
       path: `/chats/archive`,
-      method: Method.Post,
       body: archiveChatRequest,
       format: 'json',
       ...params,
@@ -170,9 +163,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   unarchiveCreate = (unarchiveChatRequest: ChatArchiveRequest, params: RequestParams = {}) =>
-    this.request<ChatArchiveResponse, void>({
+    this.post<ChatArchiveResponse>({
       path: `/chats/unarchive`,
-      method: Method.Post,
       body: unarchiveChatRequest,
       format: 'json',
       ...params,
@@ -192,9 +184,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   commonDetail = (id: number, params: RequestParams = {}) =>
-    this.request<ChatsResponse[], void>({
+    this.get<ChatsResponse[]>({
       path: `/chats/${id}/common`,
-      method: Method.Get,
       format: 'json',
       ...params,
     });
@@ -212,9 +203,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   usersDetail = ({ id, ...query }: UsersDetailParams, params: RequestParams = {}) =>
-    this.request<ChatUserResponse[], void>({
+    this.get<ChatUserResponse[]>({
       path: `/chats/${id}/users`,
-      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
@@ -232,9 +222,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   getChats = (id: number, params: RequestParams = {}) =>
-    this.request<UnreadCountResponse, void>({
+    this.get<UnreadCountResponse>({
       path: `/chats/new/${id}`,
-      method: Method.Get,
       format: 'json',
       ...params,
     });
@@ -252,9 +241,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   avatarUpdate = (data: AvatarUpdatePayload, params: RequestParams = {}) =>
-    this.request<ChatsResponse, HttpErrorBody | void>({
+    this.put<ChatsResponse>({
       path: `/chats/avatar`,
-      method: Method.Put,
       body: data,
       type: ContentType.FormData,
       format: 'json',
@@ -274,9 +262,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   usersUpdate = (usersRequest: UsersRequest, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.put<void>({
       path: `/chats/users`,
-      method: Method.Put,
       body: usersRequest,
       ...params,
     });
@@ -294,9 +281,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   usersDelete = (usersRequest: UsersRequest, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.delete<void>({
       path: `/chats/users`,
-      method: Method.Delete,
       body: usersRequest,
       ...params,
     });
@@ -313,9 +299,8 @@ export class ChatsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   tokenCreate = (id: number, params: RequestParams = {}) =>
-    this.request<ChatsMessagesTokenResponse[], void>({
+    this.post<ChatsMessagesTokenResponse[]>({
       path: `/chats/token/${id}`,
-      method: Method.Post,
       format: 'json',
       ...params,
     });

@@ -9,11 +9,10 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
 import {
   type ChangePasswordRequest,
   type FindUserRequest,
-  type HttpErrorBody,
   type ProfileAvatarUpdatePayload,
   type UserResponse,
   type UserUpdateRequest,
@@ -33,9 +32,8 @@ export class UserApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   profileUpdate = (userRequest: UserUpdateRequest, params: RequestParams = {}) =>
-    this.request<UserResponse, HttpErrorBody | void>({
+    this.put<UserResponse>({
       path: `/user/profile`,
-      method: Method.Put,
       body: userRequest,
       type: ContentType.Json,
       format: 'json',
@@ -55,9 +53,8 @@ export class UserApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   profileAvatarUpdate = (data: ProfileAvatarUpdatePayload, params: RequestParams = {}) =>
-    this.request<UserResponse, HttpErrorBody | void>({
+    this.put<UserResponse>({
       path: `/user/profile/avatar`,
-      method: Method.Put,
       body: data,
       type: ContentType.FormData,
       format: 'json',
@@ -77,9 +74,8 @@ export class UserApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   passwordUpdate = (changePasswordRequest: ChangePasswordRequest, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.put<void>({
       path: `/user/password`,
-      method: Method.Put,
       body: changePasswordRequest,
       type: ContentType.Json,
       ...params,
@@ -98,9 +94,8 @@ export class UserApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   userDetail = (id: number, params: RequestParams = {}) =>
-    this.request<UserResponse, void | HttpErrorBody>({
+    this.get<UserResponse>({
       path: `/user/${id}`,
-      method: Method.Get,
       format: 'json',
       ...params,
     });
@@ -118,9 +113,8 @@ export class UserApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   searchCreate = (findUserRequest: FindUserRequest, params: RequestParams = {}) =>
-    this.request<UserResponse[], HttpErrorBody | void>({
+    this.post<UserResponse[]>({
       path: `/user/search`,
-      method: Method.Post,
       body: findUserRequest,
       type: ContentType.Json,
       format: 'json',

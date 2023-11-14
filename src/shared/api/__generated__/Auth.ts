@@ -9,14 +9,8 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
-import {
-  type HttpErrorBody,
-  type SignInRequest,
-  type SignUpRequest,
-  type SignUpResponse,
-  type UserResponse,
-} from './data-contracts';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
+import { type SignInRequest, type SignUpRequest, type SignUpResponse, type UserResponse } from './data-contracts';
 
 export class AuthApi extends HttpService {
   /**
@@ -32,9 +26,8 @@ export class AuthApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   signupCreate = (signUpRequest: SignUpRequest, params: RequestParams = {}) =>
-    this.request<SignUpResponse, HttpErrorBody | void>({
+    this.post<SignUpResponse>({
       path: `/auth/signup`,
-      method: Method.Post,
       body: signUpRequest,
       type: ContentType.Json,
       format: 'json',
@@ -54,9 +47,8 @@ export class AuthApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   signinCreate = (signInRequest: SignInRequest, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.post<void>({
       path: `/auth/signin`,
-      method: Method.Post,
       body: signInRequest,
       type: ContentType.Json,
       ...params,
@@ -75,9 +67,8 @@ export class AuthApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   userList = (params: RequestParams = {}) =>
-    this.request<UserResponse, HttpErrorBody | void>({
+    this.get<UserResponse>({
       path: `/auth/user`,
-      method: Method.Get,
       format: 'json',
       ...params,
     });
@@ -93,9 +84,8 @@ export class AuthApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   logoutCreate = (params: RequestParams = {}) =>
-    this.request<void, void>({
+    this.post<void>({
       path: `/auth/logout`,
-      method: Method.Post,
       ...params,
     });
 }

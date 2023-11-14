@@ -9,10 +9,9 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
 import {
   type FavoriteListParams,
-  type HttpErrorBody,
   type StickerPacksResponse,
   type StickersCreate2Payload,
   type StickersCreatePayload,
@@ -34,9 +33,8 @@ export class StickersApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   stickersList = (query: StickersListParams, params: RequestParams = {}) =>
-    this.request<StickerPacksResponse[], void>({
+    this.get<StickerPacksResponse[]>({
       path: `/stickers`,
-      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
@@ -55,9 +53,8 @@ export class StickersApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   stickersCreate = (data: StickersCreatePayload, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.post<void>({
       path: `/stickers`,
-      method: Method.Post,
       body: data,
       type: ContentType.FormData,
       ...params,
@@ -75,9 +72,8 @@ export class StickersApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   stickersDetail = ({ id, ...query }: StickersDetailParams, params: RequestParams = {}) =>
-    this.request<StickersResponse[], void>({
+    this.get<StickersResponse[]>({
       path: `/stickers/${id}/`,
-      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
@@ -98,9 +94,8 @@ export class StickersApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   stickersCreate2 = (id: number, data: StickersCreate2Payload, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.post<void>({
       path: `/stickers/${id}/`,
-      method: Method.Post,
       body: data,
       type: ContentType.FormData,
       ...params,
@@ -118,9 +113,8 @@ export class StickersApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   favoriteList = (query: FavoriteListParams, params: RequestParams = {}) =>
-    this.request<StickerPacksResponse, void>({
+    this.get<StickerPacksResponse>({
       path: `/stickers/favorite`,
-      method: Method.Get,
       query: query,
       format: 'json',
       ...params,
@@ -138,9 +132,8 @@ export class StickersApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   favoriteCreate = (id: number, params: RequestParams = {}) =>
-    this.request<void, void>({
+    this.post<void>({
       path: `/stickers/${id}/favorite`,
-      method: Method.Post,
       ...params,
     });
 
@@ -156,9 +149,8 @@ export class StickersApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   favoriteDelete = (id: number, params: RequestParams = {}) =>
-    this.request<void, void>({
+    this.delete<void>({
       path: `/stickers/${id}/favorite`,
-      method: Method.Delete,
       ...params,
     });
 }

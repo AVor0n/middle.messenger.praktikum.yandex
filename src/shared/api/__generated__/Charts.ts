@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
 import {
   type LiveChartRequest,
   type LiveChartResponse,
@@ -30,9 +30,8 @@ export class ChartsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   staticCreate = (chartSize: StaticChartRequest, params: RequestParams = {}) =>
-    this.request<StaticChartResponse, void>({
+    this.post<StaticChartResponse>({
       path: `/charts/static`,
-      method: Method.Post,
       body: chartSize,
       type: ContentType.Json,
       format: 'json',
@@ -50,9 +49,8 @@ export class ChartsApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   liveCreate = (next: LiveChartRequest, params: RequestParams = {}) =>
-    this.request<LiveChartResponse, void>({
+    this.post<LiveChartResponse>({
       path: `/charts/live`,
-      method: Method.Post,
       body: next,
       type: ContentType.Json,
       format: 'json',

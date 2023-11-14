@@ -9,13 +9,8 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
-import {
-  type HttpErrorBody,
-  type OauthSignInRequest,
-  type ServiceId,
-  type YandexServiceIdListParams,
-} from './data-contracts';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
+import { type OauthSignInRequest, type ServiceId, type YandexServiceIdListParams } from './data-contracts';
 
 export class OauthApi extends HttpService {
   /**
@@ -31,9 +26,8 @@ export class OauthApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   yandexCreate = (OauthSignInRequest: OauthSignInRequest, params: RequestParams = {}) =>
-    this.request<void, HttpErrorBody | void>({
+    this.post<void>({
       path: `/oauth/yandex`,
-      method: Method.Post,
       body: OauthSignInRequest,
       type: ContentType.Json,
       ...params,
@@ -51,9 +45,8 @@ export class OauthApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   yandexServiceIdList = (query: YandexServiceIdListParams, params: RequestParams = {}) =>
-    this.request<ServiceId, HttpErrorBody | void>({
+    this.get<ServiceId>({
       path: `/oauth/yandex/service-id`,
-      method: Method.Get,
       query: query,
       format: 'json',
       ...params,

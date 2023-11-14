@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { ContentType, HttpService, Method, type RequestParams } from '@shared/HttpService';
+import { ContentType, HttpService, type RequestParams } from '@shared/HttpService';
 import { type Resource, type ResourcesCreatePayload } from './data-contracts';
 
 export class ResourcesApi extends HttpService {
@@ -26,9 +26,8 @@ export class ResourcesApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   resourcesCreate = (data: ResourcesCreatePayload, params: RequestParams = {}) =>
-    this.request<Resource, void>({
+    this.post<Resource>({
       path: `/resources`,
-      method: Method.Post,
       body: data,
       type: ContentType.FormData,
       format: 'formData',
@@ -48,9 +47,8 @@ export class ResourcesApi extends HttpService {
    * @response `500` `void` Unexpected error
    */
   resourcesDetail = (path: string, params: RequestParams = {}) =>
-    this.request<void, void>({
+    this.get<void>({
       path: `/resources/${path}`,
-      method: Method.Get,
       ...params,
     });
 }
