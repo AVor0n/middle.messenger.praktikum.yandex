@@ -3,7 +3,7 @@ import { router } from '@shared/Router';
 import { toastService } from '@shared/ToastService';
 import * as styles from './Chat.module.css';
 import { ChatHeader, ChatList, CreateChatButton, MessageEditor, MessageList } from './components';
-import { type ChatsResponse } from '@api';
+import { stringifyApiError, type ChatsResponse } from '@api';
 import { Button, Search, Separator } from '@uikit';
 import { PAGES } from 'app/constants';
 import { chatService } from 'services';
@@ -46,6 +46,20 @@ export class Chat extends Component<Props, ChatState> {
     this.state.activeChat = this.state.activeChat?.id === chat.id ? undefined : chat;
   };
 
+  onChangeAvatar = async (file: File): Promise<void> => {
+    if (this.state.activeChat) {
+      try {
+        const updatedChat = await chatService.updateAvatar({ chatId: this.state.activeChat.id, avatar: file });
+        this.setState({
+          activeChat: updatedChat,
+          chatList: this.state.chatList.map(chat => (chat.id === updatedChat.id ? updatedChat : chat)),
+        });
+      } catch (error) {
+        toastService.error({ body: stringifyApiError(error) });
+      }
+    }
+  };
+
   public render() {
     const { activeChat } = this.state;
 
@@ -62,7 +76,7 @@ export class Chat extends Component<Props, ChatState> {
         </div>
 
         <div className={styles.chat}>
-          <ChatHeader activeChat={activeChat} />
+          <ChatHeader activeChat={activeChat} onChangeAvatar={file => this.onChangeAvatar(file)} />
           <Separator />
 
           {/* TODO: добавить поддержку фрагментов */}
