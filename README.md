@@ -41,7 +41,7 @@
 ## Полезные ссылки
 
 - [макет](<https://www.figma.com/file/frISC71Cb5rSRThFw5DCLb/Chat_external_link-(Copy)?node-id=1%3A502&mode=dev>) взятый за основу
-- [актуальный деплой (Netlify)](https://silly-granita-2e660f.netlify.app//)
+- [актуальный деплой (Netlify)](https://silly-granita-2e660f.netlify.app/)
 
 ## Доступные скрипты
 
