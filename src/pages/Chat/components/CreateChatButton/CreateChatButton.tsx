@@ -32,6 +32,7 @@ export class CreateChatButton extends Component<CreateChatButtonProps, CreateCha
   };
 
   openCreateWindow = () => {
+    this.state.chatTitle = '';
     this.state.createWindowVisible = true;
   };
 
