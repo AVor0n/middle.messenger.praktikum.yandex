@@ -3,6 +3,7 @@ import { clsx } from '@shared/utils';
 import * as styles from './ChatPreview.module.css';
 import { type ChatsResponse } from '@api';
 import { Avatar } from '@uikit';
+import { fileService } from 'services';
 
 interface ChatPreviewProps extends Props {
   chatData: ChatsResponse;
@@ -16,9 +17,10 @@ export class ChatPreview extends Component<ChatPreviewProps> {
   }
 
   public render({ chatData, onClick, active }: ChatPreviewProps) {
+    const avatarSrc = chatData.avatar ? fileService.getLinkToFile(chatData.avatar) : undefined;
     return (
       <div className={clsx(styles.chat, active && styles.active)} $click={() => onClick(chatData)}>
-        <Avatar containerCls={styles.avatar} src={chatData.avatar ?? undefined} />
+        <Avatar containerCls={styles.avatar} src={avatarSrc ?? undefined} />
         <h3 className={styles.username}>{chatData.title}</h3>
         <p className={styles.lastMessage}>{chatData.last_message?.content}</p>
         <span className={styles.time}>{chatData.last_message?.time}</span>

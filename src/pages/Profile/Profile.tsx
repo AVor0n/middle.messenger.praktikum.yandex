@@ -4,7 +4,7 @@ import { EditPasswordWindow, EditProfileWindow } from './components';
 import * as styles from './Profile.module.css';
 import { Avatar, Button } from '@uikit';
 import { PAGES } from 'app/constants';
-import { authService } from 'services';
+import { authService, fileService } from 'services';
 
 interface ProfileState extends State {
   editPasswordVisible: boolean;
@@ -52,9 +52,10 @@ export class Profile extends Component<Props, ProfileState> {
       );
     }
 
+    const avatarSrc = userInfo.avatar ? fileService.getLinkToFile(userInfo.avatar) : undefined;
     return (
       <div className={styles.page}>
-        <Avatar src={userInfo.avatar} $change={this.onChangeAvatar} containerCls={styles.avatar} />
+        <Avatar src={avatarSrc} $change={this.onChangeAvatar} containerCls={styles.avatar} />
 
         <div className={styles.table}>
           <div className="table-list">

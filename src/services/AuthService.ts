@@ -1,6 +1,5 @@
 import { EventBus, onChangeEvent } from '@shared/EventBus';
 import { router } from '@shared/Router';
-import { fileService } from './FileService';
 import {
   AuthApi,
   type SignUpRequest,
@@ -21,11 +20,7 @@ class AuthService extends EventBus<{ updateUserInfo: (userInfo?: UserResponse) =
   private accessor _userInfo: UserResponse | undefined;
 
   public get userInfo() {
-    if (!this._userInfo) return undefined;
-    return {
-      ...this._userInfo,
-      avatar: this._userInfo.avatar ? fileService.getLinkToFile(this._userInfo.avatar) : undefined,
-    };
+    return this._userInfo;
   }
 
   public get isAuthorized() {
