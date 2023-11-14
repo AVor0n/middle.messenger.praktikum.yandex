@@ -2,7 +2,7 @@ import { Component, type Props, type State } from '@shared/NotReact';
 import { toastService } from '@shared/ToastService';
 import { Message } from './components';
 import * as styles from './MessageList.module.css';
-import { messageDtoToMessageProps } from './utils';
+import { messageDtoToMessageProps } from '../utils';
 import { stringifyApiError } from '@api';
 import { authService, chatService } from 'services';
 import { type MessageDto, messageService } from 'services/MessageService';
