@@ -1,4 +1,5 @@
 import { Component, type Props, type State } from '@shared/NotReact';
+import { toastService } from '@shared/ToastService';
 import { UserPreview } from './components';
 import * as styles from './EditChatMembersButton.module.css';
 import { type UserPreviewData, chatUserResponseToChatPreviewData, userResponseToChatPreviewData } from './types';
@@ -23,18 +24,29 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
     super({ search: '', foundUsers: [], members: [] }, props);
   }
 
-  protected init(): void {
+  getChatMembersList = (chatId: number) => {
     chatService
-      .getUsersInChat({ id: this.props.chatId })
+      .getUsersInChat({ id: chatId })
       .then(members => {
         this.state.members = members
           .map(chatUserResponseToChatPreviewData)
           .sort((a, b) => a.login.localeCompare(b.login));
       })
       .catch(error => {
-        // eslint-disable-next-line no-console
-        console.log(stringifyApiError(error));
+        toastService.error({ body: stringifyApiError(error) });
       });
+  };
+
+  protected init() {
+    this.getChatMembersList(this.props.chatId);
+  }
+
+  protected componentWillUpdate(_oldProps: EditChatMembersButtonProps, newProps: EditChatMembersButtonProps) {
+    this.getChatMembersList(newProps.chatId);
+  }
+
+  protected shouldComponentUpdate(_oldProps: EditChatMembersButtonProps, newProps: EditChatMembersButtonProps) {
+    return _oldProps.chatId !== newProps.chatId;
   }
 
   onSearch = (value: string) => {
