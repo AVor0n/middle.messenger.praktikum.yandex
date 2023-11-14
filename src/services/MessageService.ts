@@ -1,8 +1,9 @@
+import { EventBus } from '@shared/EventBus';
 import { toastService } from '@shared/ToastService';
 import { authService } from './AuthService';
 import { chatService } from './ChatService';
 
-interface Message {
+export interface MessageDto {
   chat_id: number;
   time: string;
   type: string;
@@ -10,12 +11,19 @@ interface Message {
   content: string;
 }
 
-class MessageService {
+class MessageService extends EventBus<{
+  init: () => void;
+  getMessage: (message: MessageDto) => void;
+  dispose: () => void;
+}> {
   private sockets: Record<string, WebSocket | undefined> = {};
 
+  private pingIntervalId?: number;
+
   public async init() {
-    const chats = await chatService.getChatsList({});
+    const chats = await chatService.getChatsList();
     const userId = authService.userInfo?.id;
+
     for await (const chat of chats) {
       const token = await chatService.createToken(chat.id);
       const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chat.id}/${token}`);
@@ -24,17 +32,21 @@ class MessageService {
         if (!event.wasClean) {
           toastService.error({ body: `Обрыв соединения для чата ${chat.id}` });
         }
-        toastService.error({ title: `Ошибка ${event.code}`, body: event.reason });
       });
 
+      socket.addEventListener('message', this.handleMessage);
       this.sockets[chat.id] = socket;
     }
+
+    this.pingIntervalId = window.setInterval(this.pingAllSockets, 5000);
+    this.emit('init');
   }
 
   public dispose = () => {
-    Object.values(this.sockets).forEach(socket => {
-      socket?.close();
-    });
+    clearInterval(this.pingIntervalId);
+    Object.values(this.sockets).forEach(socket => socket?.close());
+    this.sockets = {};
+    this.emit('dispose');
   };
 
   private send<T>(chatId: number, payload: T) {
@@ -46,42 +58,50 @@ class MessageService {
     }
   }
 
+  private pingAllSockets = () => {
+    Object.keys(this.sockets).forEach(chatId => this.send(Number(chatId), { type: 'ping' }));
+  };
+
+  private handleMessage = (e: MessageEvent<string>) => {
+    try {
+      const data = JSON.parse(e.data) as { type: 'pong' } | MessageDto;
+      if (data.type === 'message') {
+        this.emit('getMessage', data);
+      }
+    } catch {
+      toastService.error({ body: 'Ошибка при попытке распарсить сообщение от сокета' });
+    }
+  };
+
   public sendMessageToChat = (chatId: number, content: string) => {
     this.send(chatId, { content, type: 'message' });
   };
 
-  public getUnreadMessagesInChat = async (chatId: number): Promise<Message[]> => {
+  public getUnreadMessagesInChat = async (chatId: number, offset: number): Promise<MessageDto[]> => {
     const socket = this.sockets[chatId];
-    const countUnreadMessages = await chatService.getCountUnreadMessagesInChat(chatId);
-    const unreadMessages: Message[] = [];
 
     return new Promise((resolve, reject) => {
-      const requestUnreadMessages = (offset: number) => {
-        this.send(chatId, { content: `${offset}`, type: 'get old' });
-      };
+      function messageListener({ data }: { data: string }) {
+        try {
+          const messages = JSON.parse(data) as MessageDto[];
+          resolve(messages);
+        } catch {
+          reject(new Error('Не удалось распарсить данные от сокета'));
+        } finally {
+          socket?.removeEventListener('message', messageListener);
+          socket?.removeEventListener('error', errorListener);
+        }
+      }
 
       function errorListener() {
-        socket?.removeEventListener('message', unreadMessagesListener);
+        socket?.removeEventListener('message', messageListener);
         socket?.removeEventListener('error', errorListener);
         reject(new Error('Не удалось загрузить непрочитанные сообщения'));
       }
 
-      function unreadMessagesListener({ data }: { data: string }) {
-        const messages = JSON.parse(data) as Message[];
-        unreadMessages.push(...messages);
-        if (unreadMessages.length >= countUnreadMessages) {
-          socket?.removeEventListener('message', unreadMessagesListener);
-          socket?.removeEventListener('error', errorListener);
-          resolve(unreadMessages);
-          return;
-        }
-
-        requestUnreadMessages(unreadMessages.length);
-      }
-
-      socket?.addEventListener('message', unreadMessagesListener);
+      socket?.addEventListener('message', messageListener);
       socket?.addEventListener('error', errorListener);
-      requestUnreadMessages(0);
+      this.send(chatId, { content: `${offset}`, type: 'get old' });
     });
   };
 }

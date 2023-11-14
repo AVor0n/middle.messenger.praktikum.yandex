@@ -2,11 +2,13 @@ import { Component, type Props, type State } from '@shared/NotReact';
 import { toastService } from '@shared/ToastService';
 import { Message } from './components';
 import * as styles from './MessageList.module.css';
+import { messageDtoToMessageProps } from './utils';
 import { stringifyApiError } from '@api';
 import { authService, chatService } from 'services';
-import { messageService } from 'services/MessageService';
+import { type MessageDto, messageService } from 'services/MessageService';
 
 interface MessageListState extends State {
+  isLoading: boolean;
   messages: { time: string; content: string; authorName: string; authorId: number }[];
 }
 
@@ -15,49 +17,90 @@ interface MessageListProps extends Props {
 }
 
 export class MessageList extends Component<MessageListProps, MessageListState> {
+  memberNames: Record<string, string> = {};
+
+  noMoreOldMessages = false;
+
+  needScrollToNewMessages = true;
+
+  scrollHeight = 0;
+
   constructor(props: MessageListProps) {
-    super({ messages: [] }, props);
+    super({ messages: [], isLoading: true }, props);
   }
 
-  datetimeFormatter = (dateString: string) =>
-    new Date(dateString).toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  loadOldMessages = async (chatId: number) => {
+    try {
+      const messages = await messageService.getUnreadMessagesInChat(chatId, this.state.messages.length);
+      const oldMessages = messages.toReversed().map(message => messageDtoToMessageProps(message, this.memberNames));
 
-  getMessages = (chatId: number) => {
-    Promise.all([messageService.getUnreadMessagesInChat(chatId), chatService.getUsersInChat({ id: chatId })])
-      .then(([messages, members]) => {
-        const memberNames = members.reduce((acc: Record<string, string>, member) => {
-          acc[member.id] = member.login;
-          return acc;
-        }, {});
-        this.state.messages = messages.toReversed().map(message => ({
-          authorId: message.user_id,
-          authorName: memberNames[message.user_id],
-          content: message.content,
-          time: this.datetimeFormatter(message.time),
-        }));
-      })
-      .catch(error => {
-        toastService.error({ body: stringifyApiError(error) });
-      });
+      this.setState({ isLoading: false, messages: [...oldMessages, ...this.state.messages] });
+      this.noMoreOldMessages = oldMessages.length === 0;
+    } catch (error) {
+      toastService.error({ body: stringifyApiError(error) });
+    }
   };
 
-  protected init(): void {
-    this.getMessages(this.props.activeChatId);
-  }
+  resetComponentState = () => {
+    this.needScrollToNewMessages = true;
+    this.setState({
+      messages: [],
+      isLoading: true,
+    });
+  };
 
-  protected componentWillUpdate(_oldProps: MessageListProps, newProps: MessageListProps) {
-    this.getMessages(newProps.activeChatId);
-  }
-
-  protected componentDidUpdate() {
+  scrollToNewMessages = () => {
     const lastMessageElement = this.ref?.lastChild;
     if (lastMessageElement instanceof HTMLElement) {
       lastMessageElement.scrollIntoView();
+      this.needScrollToNewMessages = false;
+    }
+  };
+
+  handleScroll = async (e: Event) => {
+    this.scrollHeight = (this.ref as HTMLDivElement).scrollHeight;
+    const { scrollTop } = e.target as HTMLDivElement;
+    if (scrollTop > 0 || this.state.isLoading || this.noMoreOldMessages) return;
+    this.setState({ isLoading: true });
+    await this.loadOldMessages(this.props.activeChatId);
+  };
+
+  handleReceiveMessage = (message: MessageDto) => {
+    this.state.messages = [...this.state.messages, messageDtoToMessageProps(message, this.memberNames)];
+  };
+
+  updateChatMembersNames = async (chatId: number) => {
+    try {
+      const members = await chatService.getUsersInChat({ id: chatId });
+      members.forEach(member => {
+        this.memberNames[member.id] = member.login;
+      });
+    } catch (error) {
+      toastService.error({ body: stringifyApiError(error) });
+    }
+  };
+
+  protected async init() {
+    await this.updateChatMembersNames(this.props.activeChatId);
+    await this.loadOldMessages(this.props.activeChatId);
+    messageService.on('getMessage', this.handleReceiveMessage);
+  }
+
+  protected async componentWillUpdate(_oldProps: MessageListProps, newProps: MessageListProps) {
+    await this.updateChatMembersNames(this.props.activeChatId);
+    await this.loadOldMessages(newProps.activeChatId);
+  }
+
+  protected componentDidUpdate(oldProps: MessageListProps, newProps: MessageListProps): void {
+    const listContainer = this.ref as HTMLDivElement | null;
+    if (listContainer) {
+      listContainer.scrollTop += listContainer.scrollHeight - this.scrollHeight;
+    }
+    if (this.needScrollToNewMessages) {
+      this.scrollToNewMessages();
+    }
+    if (oldProps.activeChatId !== newProps.activeChatId) {
+      this.resetComponentState();
     }
   }
 
@@ -69,7 +112,7 @@ export class MessageList extends Component<MessageListProps, MessageListState> {
     const currentUserId = authService.userInfo?.id;
 
     return (
-      <div className={styles.list}>
+      <div className={styles.list} $scroll={this.handleScroll}>
         {this.state.messages.map(message => (
           <Message {...message} income={message.authorId !== currentUserId} />
         ))}

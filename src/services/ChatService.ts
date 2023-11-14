@@ -33,7 +33,7 @@ class ChatService extends EventBus<{
     return this._chatList;
   }
 
-  public getChatsList = async (query: ChatsListParams) => {
+  public getChatsList = async (query: ChatsListParams = {}) => {
     this._chatList = await this.chatApi.chatsList(query);
     return this.chatList;
   };
