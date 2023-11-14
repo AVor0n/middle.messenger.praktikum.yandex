@@ -76,7 +76,13 @@ export class Chat extends Component<Props, ChatState> {
         </div>
 
         <div className={styles.chat}>
-          <ChatHeader activeChat={activeChat} onChangeAvatar={file => this.onChangeAvatar(file)} />
+          <ChatHeader
+            activeChat={activeChat}
+            onChangeAvatar={file => this.onChangeAvatar(file)}
+            resetActiveChat={() => {
+              this.state.activeChat = undefined;
+            }}
+          />
           <Separator />
 
           {/* TODO: добавить поддержку фрагментов */}

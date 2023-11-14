@@ -1,8 +1,9 @@
 import { Component, type State } from '@shared/NotReact';
+import { toastService } from '@shared/ToastService';
 import * as styles from './CreateChatButton.module.css';
 import { stringifyApiError } from '@api';
 import { Button, EditWindow, TextBox } from '@uikit';
-import { chatService } from 'services';
+import { chatService, messageService } from 'services';
 
 interface CreateChatButtonState extends State {
   chatTitle: string;
@@ -21,12 +22,12 @@ export class CreateChatButton extends Component<CreateChatButtonProps, CreateCha
   createChat = () => {
     chatService
       .createChat({ title: this.state.chatTitle })
-      .then(() => {
+      .then(chatList => {
         this.closeCreateWindow();
+        return Promise.all(chatList.map(chat => messageService.connect(chat.id)));
       })
       .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error(stringifyApiError(error));
+        toastService.error({ body: stringifyApiError(error) });
       });
   };
 

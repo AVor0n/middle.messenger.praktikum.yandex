@@ -8,6 +8,7 @@ import { fileService } from 'services';
 interface ChatHeaderProps extends Props {
   activeChat?: ChatsResponse;
   onChangeAvatar: (file: File) => Promise<void>;
+  resetActiveChat: () => void;
 }
 
 export class ChatHeader extends Component<ChatHeaderProps> {
@@ -28,7 +29,13 @@ export class ChatHeader extends Component<ChatHeaderProps> {
         />
         <div className={styles.username}>{title}</div>
 
-        {activeChat && <EditChatMembersButton className={styles.membersButton} chatId={activeChat.id} />}
+        {activeChat && (
+          <EditChatMembersButton
+            className={styles.membersButton}
+            chatId={activeChat.id}
+            resetActiveChat={this.props.resetActiveChat}
+          />
+        )}
       </div>
     );
   }

@@ -16,26 +16,41 @@ class MessageService extends EventBus<{
   getMessage: (message: MessageDto) => void;
   dispose: () => void;
 }> {
-  private sockets: Record<string, WebSocket | undefined> = {};
+  private sockets = new Map<number, WebSocket>();
 
   private pingIntervalId?: number;
 
+  /** Создает сокет соединение для заданного чата */
+  public connect = async (chatId: number) => {
+    if (this.sockets.has(chatId)) return;
+
+    const userId = authService.userInfo?.id;
+    const token = await chatService.createToken(chatId);
+
+    const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`);
+
+    socket.addEventListener('close', event => {
+      if (!event.wasClean) {
+        toastService.error({ body: `Обрыв соединения для чата ${chatId}` });
+      }
+    });
+
+    socket.addEventListener('message', this.handleMessage);
+    this.sockets.set(chatId, socket);
+  };
+
+  /** Удаляет сокет подключение для заданного чата */
+  public disconnect = (chatId: number) => {
+    this.sockets.get(chatId)?.close();
+    this.sockets.delete(chatId);
+  };
+
+  /** Создает сокет подключения для всех чатов пользователя на текущий момент */
   public async init() {
     const chats = await chatService.getChatsList();
-    const userId = authService.userInfo?.id;
 
     for await (const chat of chats) {
-      const token = await chatService.createToken(chat.id);
-      const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chat.id}/${token}`);
-
-      socket.addEventListener('close', event => {
-        if (!event.wasClean) {
-          toastService.error({ body: `Обрыв соединения для чата ${chat.id}` });
-        }
-      });
-
-      socket.addEventListener('message', this.handleMessage);
-      this.sockets[chat.id] = socket;
+      await this.connect(chat.id);
     }
 
     this.pingIntervalId = window.setInterval(this.pingAllSockets, 5000);
@@ -44,13 +59,13 @@ class MessageService extends EventBus<{
 
   public dispose = () => {
     clearInterval(this.pingIntervalId);
-    Object.values(this.sockets).forEach(socket => socket?.close());
-    this.sockets = {};
+    [...this.sockets.values()].forEach(socket => socket.close());
+    this.sockets.clear();
     this.emit('dispose');
   };
 
   private send<T>(chatId: number, payload: T) {
-    const socket = this.sockets[chatId];
+    const socket = this.sockets.get(chatId);
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify(payload));
     } else {
@@ -59,7 +74,7 @@ class MessageService extends EventBus<{
   }
 
   private pingAllSockets = () => {
-    Object.keys(this.sockets).forEach(chatId => this.send(Number(chatId), { type: 'ping' }));
+    [...this.sockets.keys()].forEach(chatId => this.send(Number(chatId), { type: 'ping' }));
   };
 
   private handleMessage = (e: MessageEvent<string>) => {
@@ -78,7 +93,7 @@ class MessageService extends EventBus<{
   };
 
   public getUnreadMessagesInChat = async (chatId: number, offset: number): Promise<MessageDto[]> => {
-    const socket = this.sockets[chatId];
+    const socket = this.sockets.get(chatId);
 
     return new Promise((resolve, reject) => {
       function messageListener({ data }: { data: string }) {

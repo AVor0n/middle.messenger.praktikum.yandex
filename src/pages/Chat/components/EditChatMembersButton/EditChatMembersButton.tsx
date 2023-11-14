@@ -5,11 +5,12 @@ import * as styles from './EditChatMembersButton.module.css';
 import { type UserPreviewData, chatUserResponseToChatPreviewData, userResponseToChatPreviewData } from './types';
 import { stringifyApiError } from '@api';
 import { Button, EditWindow, Search, Separator } from '@uikit';
-import { authService, chatService, userService } from 'services';
+import { authService, chatService, messageService, userService } from 'services';
 
 interface EditChatMembersButtonProps extends Props {
   chatId: number;
   className?: string;
+  resetActiveChat: () => void;
 }
 
 interface EditChatMembersButtonState extends State {
@@ -59,16 +60,17 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
           .filter(user => !this.state.members.find(member => member.id === user.id));
       })
       .catch(error => {
-        // eslint-disable-next-line no-console
-        console.log(stringifyApiError(error));
+        toastService.error({ body: stringifyApiError(error) });
       });
   };
 
   onRemoveUserFromChat = async (userId: number) => {
     try {
       if (userId === authService.userInfo?.id) {
+        messageService.disconnect(this.props.chatId);
         await chatService.deleteChat(this.props.chatId);
         this.closeEditWindow();
+        this.props.resetActiveChat();
       } else {
         await chatService.deleteUsersFromChat({ chatId: this.props.chatId, users: [userId] });
         const user = this.state.members.find(member => member.id === userId);
@@ -79,8 +81,7 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
         });
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(stringifyApiError(error));
+      toastService.error({ body: stringifyApiError(error) });
     }
   };
 
@@ -95,8 +96,7 @@ export class EditChatMembersButton extends Component<EditChatMembersButtonProps,
       };
       this.setState(newState);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(stringifyApiError(error));
+      toastService.error({ body: stringifyApiError(error) });
     }
   };
 
