@@ -33,6 +33,7 @@ export class LoginPage extends Component<Props, LoginPageState> {
     this.state.isLoading = true;
     try {
       await authService.login(this.state.formData);
+      router.navigate(PAGES.CHAT);
     } catch (error) {
       this.setState({ error: stringifyApiError(error) });
     }

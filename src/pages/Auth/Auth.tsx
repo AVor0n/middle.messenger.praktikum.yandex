@@ -63,6 +63,7 @@ export class AuthPage extends Component<Props, AuthPageState> {
     this.state.isLoading = true;
     try {
       await authService.auth(this.state.formState);
+      router.navigate(PAGES.CHAT);
     } catch (error) {
       this.setState({ error: stringifyApiError(error) });
     }

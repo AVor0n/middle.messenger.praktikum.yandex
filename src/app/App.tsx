@@ -13,7 +13,7 @@ interface AppState extends State {
 export class App extends Component<Props, AppState> {
   private navigate(component: JSX.Element, options?: { needAuth?: boolean }) {
     if (options?.needAuth && !authService.isAuthorized) {
-      this.navigate(<LoginPage />);
+      router.navigate(PAGES.LOGIN);
     } else {
       this.state.content = component;
     }
@@ -25,8 +25,12 @@ export class App extends Component<Props, AppState> {
       .catch(error => toastService.error({ body: stringifyApiError(error) }))
       .finally(() => {
         router
-          .addRoute(PAGES.AUTH, () => this.navigate(<AuthPage />))
-          .addRoute(PAGES.LOGIN, () => this.navigate(<ChatPage />, { needAuth: true }))
+          .addRoute(PAGES.AUTH, () =>
+            authService.isAuthorized ? router.navigate(PAGES.CHAT) : this.navigate(<AuthPage />),
+          )
+          .addRoute(PAGES.LOGIN, () =>
+            authService.isAuthorized ? router.navigate(PAGES.CHAT) : this.navigate(<LoginPage />),
+          )
           .addRoute(PAGES.CHAT, () => this.navigate(<ChatPage />, { needAuth: true }))
           .addRoute(PAGES.PROFILE, () => this.navigate(<ProfilePage />, { needAuth: true }))
           .setNotFound(() => this.navigate(<ErrorPage code={404} />))
