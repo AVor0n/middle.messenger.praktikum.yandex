@@ -1,4 +1,5 @@
 import type { ComponentConstructor } from './Component';
+import type { Props, VNode } from './types';
 
 type ReplaceOnPrefix<T> = {
   [K in keyof T as K extends `on${infer Event}` ? `$${Event}` : K]: T[K];

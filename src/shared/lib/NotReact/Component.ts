@@ -6,17 +6,17 @@ export type ComponentConstructor<T extends unknown[] = unknown[]> = new (...args
 
 export abstract class Component<P extends Props = Props, S extends State = State> {
   private eventBus: EventBus<{
-    //создание state, props
+    // создание state, props
     init: () => void;
     // вычисление vdom
     'flow:render': (props: P) => Promise<void>;
-    //завершение монтирования vdom в dom
+    // завершение монтирования vdom в dom
     'flow:component-did-mount': (node: DOMNode) => void;
     // получение новых пропсов
     'flow:component-will-update': (oldProps: P, newProps: P) => void;
-    //завершение обновления dom
+    // завершение обновления dom
     'flow:component-did-update': (oldProps: P, newProps: P) => void;
-    //завершение удаления компонента из dom
+    // завершение удаления компонента из dom
     'flow:component-did-unmount': () => void;
   }>;
 
@@ -25,6 +25,8 @@ export abstract class Component<P extends Props = Props, S extends State = State
   private _ref: DOMNode | null = null;
 
   private _vDom: VElement | undefined;
+
+  private _originalState: S;
 
   /** Ссылка на DOM-узел, который представляет компонент */
   public get ref() {
@@ -40,7 +42,8 @@ export abstract class Component<P extends Props = Props, S extends State = State
     if (!newState) {
       return;
     }
-    Object.assign(this.state, newState);
+    Object.assign(this._originalState, newState);
+    this.eventBus.emit('flow:render', this.props);
   }
 
   /** Внутреннее состояние компонента, при изменении происходит автоматический ререндер */
@@ -53,6 +56,7 @@ export abstract class Component<P extends Props = Props, S extends State = State
     this.eventBus = new EventBus();
     this.registerEvents();
 
+    this._originalState = state;
     this.state = this.makeStateProxy(state);
     this.props = props;
 

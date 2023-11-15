@@ -1,0 +1,34 @@
+.container {
+  display: grid;
+  grid-template-areas:
+    'avatar name  actions'
+    'avatar login actions';
+  grid-template-columns: min-content 1fr auto;
+  gap: 10px 20px;
+}
+
+.avatar {
+  grid-area: avatar;
+
+  inline-size: 50px;
+  block-size: 50px;
+}
+
+.name {
+  grid-area: name;
+
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.login {
+  grid-area: login;
+}
+
+.id {
+  color: var(--color-shadow);
+}
+
+.actions {
+  grid-area: actions;
+}

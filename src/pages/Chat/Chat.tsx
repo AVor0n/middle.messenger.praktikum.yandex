@@ -1,72 +1,94 @@
-import { ChatPreview } from './components';
-import { chats } from './fake-data';
-import { Component } from '@shared';
-import type { Props, State } from '@shared';
-import './Chat.css';
+import { Component, type Props, type State } from '@shared/NotReact';
+import { router } from '@shared/Router';
+import { toastService } from '@shared/ToastService';
+import * as styles from './Chat.module.css';
+import { ChatHeader, ChatList, CreateChatButton, MessageEditor, MessageList } from './components';
+import { stringifyApiError, type ChatsResponse } from '@api';
+import { Button, Search, Separator } from '@uikit';
+import { PAGES } from 'app/constants';
+import { chatService } from 'services';
+import { messageService } from 'services/MessageService';
 
 interface ChatState extends State {
-  message: string;
+  activeChat?: ChatsResponse;
+  chatList: ChatsResponse[];
+  search: string;
 }
 
 export class Chat extends Component<Props, ChatState> {
   constructor() {
-    super(
-      {
-        message: '',
-      },
-      {},
+    super({ chatList: chatService.chatList, search: '' }, {});
+  }
+
+  filterChats = () => {
+    this.onFilterChats(this.state.search);
+  };
+
+  protected init(): void {
+    chatService.on('chatListUpdate', this.filterChats);
+    messageService.init().catch(() =>
+      toastService.error({
+        body: 'Не удалось инициализировать сокет соединение',
+      }),
     );
   }
 
+  protected componentDidUnmount(): void {
+    chatService.off('chatListUpdate', this.filterChats);
+    messageService.dispose();
+  }
+
+  onFilterChats = (search: string) => {
+    this.state.chatList = chatService.chatList.filter(chat => !search || chat.title.includes(search));
+  };
+
+  onToggleActiveChat = (chat: ChatsResponse) => {
+    this.state.activeChat = this.state.activeChat?.id === chat.id ? undefined : chat;
+  };
+
+  onChangeAvatar = async (file: File): Promise<void> => {
+    if (this.state.activeChat) {
+      try {
+        const updatedChat = await chatService.updateAvatar({ chatId: this.state.activeChat.id, avatar: file });
+        this.setState({
+          activeChat: updatedChat,
+          chatList: this.state.chatList.map(chat => (chat.id === updatedChat.id ? updatedChat : chat)),
+        });
+      } catch (error) {
+        toastService.error({ body: stringifyApiError(error) });
+      }
+    }
+  };
+
   public render() {
+    const { activeChat } = this.state;
+
     return (
-      <div className="page chat-page">
-        <div className="sidebar">
-          <nav className="sidebar__tools">
-            <a className="btn btn--ghost btn--flex btn--xl" href="#/profile">
-              Профиль
-            </a>
-            <search>
-              <input className="searchfield" type="search" placeholder="Поиск" />
-            </search>
+      <div className={styles.page}>
+        <div className={styles.sidebar}>
+          <nav className={styles.sidebarTools}>
+            <Button text="Профиль" buttonType="ghost" flex size="xl" $click={() => router.navigate(PAGES.PROFILE)} />
+            <Search onChange={this.onFilterChats} />
           </nav>
-          <hr className="separator" />
-          <div className="chatlist">
-            {!chats.length && <p className="empty">Чатов пока нет</p>}
-            {chats.map(chatData => (
-              <div key={chatData.username}>
-                <ChatPreview {...chatData} />
-                <hr className="separator" />
-              </div>
-            ))}
-          </div>
+          <Separator />
+          <ChatList chats={this.state.chatList} activeChat={activeChat} onClickChat={this.onToggleActiveChat} />
+          <CreateChatButton cls={styles.createButton} />
         </div>
 
-        <div className="chat">
-          <div className="chat__header">
-            <img className="chat__avatar" src="user.svg" />
-            <div className="chat__username">Github</div>
-            <button className="chat__menu-btn btn btn--ghost btn--circle btn--l" />
-          </div>
-          <hr className="separator" />
-          <div className="chat__viewer" />
-          <hr className="separator" />
-          <form className="chat__editor">
-            <button className="chat__attach-btn btn btn--ghost btn--circle btn--l" />
-            <input
-              className="chat__input"
-              type="text"
-              placeholder="Сообщение"
-              name="message"
-              value={this.state.message}
-              $input={e => {
-                this.state.message = (e.target as HTMLInputElement).value;
-              }}
-            />
-            <button className="chat__send-btn btn btn--primary btn--circle btn--l" disabled={!this.state.message}>
-              🡒
-            </button>
-          </form>
+        <div className={styles.chat}>
+          <ChatHeader
+            activeChat={activeChat}
+            onChangeAvatar={file => this.onChangeAvatar(file)}
+            resetActiveChat={() => {
+              this.state.activeChat = undefined;
+            }}
+          />
+          <Separator />
+
+          {/* TODO: добавить поддержку фрагментов */}
+          {activeChat && <MessageList activeChatId={activeChat.id} />}
+          {activeChat && <Separator />}
+          {activeChat && <MessageEditor activeChatId={activeChat.id} />}
         </div>
       </div>
     );

@@ -1,27 +1,27 @@
-import { Component, validate, type Props, type State, required, login, password, removeProxy } from '@shared';
-import { TextBox } from '@uikit';
-import './Login.css';
+import { Component, type Props, type State } from '@shared/NotReact';
+import { router } from '@shared/Router';
+import { login, password, required, validate } from '@shared/Validator';
+import * as styles from './Login.module.css';
+import { stringifyApiError, type SignInRequest } from '@api';
+import { Button, TextBox } from '@uikit';
+import { PAGES } from 'app/constants';
+import { authService } from 'services';
 
-interface LoginState extends State {
-  login: string;
-  password: string;
+interface LoginPageState extends State {
+  formData: SignInRequest;
+  isLoading?: boolean;
+  error?: string;
 }
 
-export class Login extends Component<Props, LoginState> {
+export class LoginPage extends Component<Props, LoginPageState> {
   constructor() {
-    super(
-      {
-        login: '',
-        password: '',
-      },
-      {},
-    );
+    super({ formData: { login: '', password: '' } }, {});
   }
 
   get validateForm() {
     const validateResult = {
-      login: validate(this.state.login, required, login),
-      password: validate(this.state.password, required, password),
+      login: validate(this.state.formData.login, required, login),
+      password: validate(this.state.formData.password, required, password),
     };
     return {
       ...validateResult,
@@ -29,29 +29,31 @@ export class Login extends Component<Props, LoginState> {
     };
   }
 
-  private onEnterClick = (e: Event) => {
-    e.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log(removeProxy(this.state));
-    Object.assign(document.createElement('a'), { href: '#/chat' }).click();
+  private onEnterClick = async () => {
+    this.state.isLoading = true;
+    try {
+      await authService.login(this.state.formData);
+      router.navigate(PAGES.CHAT);
+    } catch (error) {
+      this.setState({ error: stringifyApiError(error) });
+    }
+    this.state.isLoading = false;
   };
 
   public render() {
     return (
-      <div className="page login-page">
-        <form className="login-form">
-          <h2 className="login-form__title">Вход</h2>
+      <div className={styles.page}>
+        <form className={styles.form}>
+          <h2 className={styles.title}>Вход</h2>
 
-          <div className="login-form__fields">
+          <div className={styles.fields}>
             <TextBox
               label="Логин"
               type="text"
               name="login"
-              value={this.state.login}
+              value={this.state.formData.login}
               autocomplete="username"
-              onChange={value => {
-                this.state.login = value;
-              }}
+              onChange={value => this.setState({ formData: { ...this.state.formData, login: value }, error: '' })}
               error={this.validateForm.login.error}
             />
             <TextBox
@@ -59,27 +61,32 @@ export class Login extends Component<Props, LoginState> {
               type="password"
               name="password"
               autocomplete="current-password"
-              value={this.state.password}
-              onChange={value => {
-                this.state.password = value;
-              }}
+              value={this.state.formData.password}
+              onChange={value => this.setState({ formData: { ...this.state.formData, password: value }, error: '' })}
               error={this.validateForm.password.error}
             />
           </div>
 
-          <div className="login-form__btns">
-            <button
-              type="button"
-              className="btn btn--primary btn--flex btn--xl"
+          <div className={styles.buttons}>
+            <Button
+              text="Войти"
+              size="xl"
+              type="submit"
+              $click={this.onEnterClick}
               disabled={!this.validateForm.isValid}
-              $click={e => this.onEnterClick(e)}
-            >
-              Войти
-            </button>
-            <a className="btn btn--ghost btn--flex btn--xl" href="#/auth">
-              Нет аккаунта?
-            </a>
+              showLoader={this.state.isLoading}
+            />
+            <Button
+              text="Нет аккаунта?"
+              size="xl"
+              buttonType="ghost"
+              $click={(e: MouseEvent) => {
+                e.preventDefault();
+                router.navigate(PAGES.AUTH);
+              }}
+            />
           </div>
+          <div className={styles.errorCause}>{this.state.error}</div>
         </form>
       </div>
     );

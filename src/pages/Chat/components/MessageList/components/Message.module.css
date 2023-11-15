@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  min-inline-size: 200px;
+  padding: 8px;
+
+  border-radius: 12px;
+}
+
+.income {
+  margin-inline-end: auto;
+
+  background-color: var(--color-smoke);
+}
+
+.outcome {
+  margin-inline-start: auto;
+
+  background-color: var(--color-select);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.author {
+  font-weight: bold;
+}
+
+.time {
+  color: var(--color-shadow);
+}

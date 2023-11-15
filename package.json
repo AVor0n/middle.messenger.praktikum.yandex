@@ -8,16 +8,19 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc && vite build",
-    "coverage": "vitest --ui --coverage",
     "dev": "vite",
+    "start": "npm run build && node ./server.js",
+    "build": "tsc && vite build",
+    "build:dev": "tsc && vite build --minify false",
+    "get-swagger-spec": "node ./scripts/getSwaggerSpecification.js",
+    "get-api-types": "node ./scripts/generateApiFromSwaggerSpec.js",
+    "coverage": "vitest --ui --coverage",
+    "test": "vitest",
     "format": "prettier --check . --ignore-unknown",
     "format:fix": "prettier --write . --ignore-unknown",
-    "lint": "tsc --noEmit && eslint . --ext=.ts && stylelint ./src/**/*.css",
-    "lint:fix": "eslint . --ext=.ts --fix && stylelint ./src/**/*.css --fix",
-    "prepare": "husky install",
-    "start": "npm run build && node ./server.js",
-    "test": "vitest"
+    "lint": "tsc --noEmit && eslint . --ext=.ts,.tsx --quiet && stylelint ./src/**/*.css --quiet",
+    "lint:fix": "eslint . --ext=.ts,.tsx --fix && stylelint ./src/**/*.css --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
@@ -57,9 +60,10 @@
     "stylelint-order": "^6.0.3",
     "stylelint-semantic-groups": "^1.2.0",
     "stylelint-use-logical-spec": "^5.0.0",
+    "swagger-typescript-api": "^13.0.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",
-    "vite-tsconfig-paths": "^4.2.0",
+    "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.34.3"
   }
 }

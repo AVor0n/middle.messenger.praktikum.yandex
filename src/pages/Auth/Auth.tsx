@@ -1,42 +1,43 @@
+import { Component, type Props, type State } from '@shared/NotReact';
+import { router } from '@shared/Router';
 import {
-  Component,
-  validate,
   email,
-  required,
-  login,
-  phone,
-  password,
-  onlyLetters,
   firstUpperLetter,
-  type State,
-  type Props,
+  login,
+  onlyLetters,
+  password,
+  phone,
   repeatPassword,
-  removeProxy,
-} from '@shared';
-import { TextBox } from '@uikit';
-import './Auth.css';
+  required,
+  validate,
+} from '@shared/Validator';
+import * as styles from './Auth.module.css';
+import { type SignUpRequest, stringifyApiError } from '@api';
+import { Button, TextBox } from '@uikit';
+import { PAGES } from 'app/constants';
+import { authService } from 'services';
 
-interface AuthState extends State {
-  email: string;
-  login: string;
-  firstName: string;
-  secondName: string;
-  phone: string;
-  password: string;
-  repeatPassword: string;
+interface AuthPageState extends State {
+  formState: SignUpRequest & {
+    repeatPassword: string;
+  };
+  isLoading?: boolean;
+  error?: string;
 }
 
-export class Auth extends Component<Props, AuthState> {
+export class AuthPage extends Component<Props, AuthPageState> {
   constructor() {
     super(
       {
-        email: '',
-        login: '',
-        firstName: '',
-        secondName: '',
-        phone: '',
-        password: '',
-        repeatPassword: '',
+        formState: {
+          email: '',
+          login: '',
+          first_name: '',
+          second_name: '',
+          phone: '',
+          password: '',
+          repeatPassword: '',
+        },
       },
       {},
     );
@@ -44,13 +45,13 @@ export class Auth extends Component<Props, AuthState> {
 
   get validateForm() {
     const validateResult = {
-      email: validate(this.state.email, required, email),
-      login: validate(this.state.login, required, login),
-      firstName: validate(this.state.firstName, required, onlyLetters, firstUpperLetter),
-      secondName: validate(this.state.secondName, required, onlyLetters, firstUpperLetter),
-      phone: validate(this.state.phone, required, phone),
-      password: validate(this.state.password, required, password),
-      repeatPassword: validate(this.state.repeatPassword, repeatPassword(this.state.password)),
+      email: validate(this.state.formState.email, required, email),
+      login: validate(this.state.formState.login, required, login),
+      first_name: validate(this.state.formState.first_name, required, onlyLetters, firstUpperLetter),
+      second_name: validate(this.state.formState.second_name, required, onlyLetters, firstUpperLetter),
+      phone: validate(this.state.formState.phone, required, phone),
+      password: validate(this.state.formState.password, required, password),
+      repeatPassword: validate(this.state.formState.repeatPassword, repeatPassword(this.state.formState.password)),
     };
     return {
       ...validateResult,
@@ -58,102 +59,69 @@ export class Auth extends Component<Props, AuthState> {
     };
   }
 
-  private onEnterClick = (e: Event) => {
-    e.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log(removeProxy(this.state));
-    Object.assign(document.createElement('a'), { href: '#/chat' }).click();
+  private onEnterClick = async () => {
+    this.state.isLoading = true;
+    try {
+      await authService.auth(this.state.formState);
+      router.navigate(PAGES.CHAT);
+    } catch (error) {
+      this.setState({ error: stringifyApiError(error) });
+    }
+    this.state.isLoading = false;
   };
 
   public render() {
+    const fields: { label: string; name: keyof AuthPageState['formState']; type?: HTMLInputElement['type'] }[] = [
+      { label: 'Почта', name: 'email', type: 'email' },
+      { label: 'Логин', name: 'login' },
+      { label: 'Имя', name: 'first_name' },
+      { label: 'Фамилия', name: 'second_name' },
+      { label: 'Телефон', name: 'phone', type: 'tel' },
+      { label: 'Пароль', name: 'password', type: 'password' },
+      { label: 'Пароль (ещё раз)', name: 'repeatPassword', type: 'password' },
+    ];
+
     return (
-      <div className="page auth-page">
-        <form className="auth-form" onsubmit="false">
-          <h2 className="auth-form__title">Регистрация</h2>
+      <div className={styles.page}>
+        <form className={styles.form}>
+          <h2 className={styles.title}>Регистрация</h2>
 
-          <div className="auth-form__fields">
-            <TextBox
-              label="Почта"
-              type="email"
-              name="email"
-              autocomplete="email"
-              onChange={value => {
-                this.state.email = value;
-              }}
-              error={this.validateForm.email.error}
-            />
-            <TextBox
-              label="Логин"
-              type="text"
-              name="login"
-              onChange={value => {
-                this.state.login = value;
-              }}
-              error={this.validateForm.login.error}
-            />
-            <TextBox
-              label="Имя"
-              type="text"
-              name="first_name"
-              autocomplete="name"
-              onChange={value => {
-                this.state.firstName = value;
-              }}
-              error={this.validateForm.firstName.error}
-            />
-            <TextBox
-              label="Фамилия"
-              type="text"
-              name="second_name"
-              autocomplete="family-name"
-              onChange={value => {
-                this.state.secondName = value;
-              }}
-              error={this.validateForm.secondName.error}
-            />
-            <TextBox
-              label="Телефон"
-              type="tel"
-              name="phone"
-              autocomplete="tel"
-              onChange={value => {
-                this.state.phone = value;
-              }}
-              error={this.validateForm.phone.error}
-            />
-            <TextBox
-              label="Пароль"
-              type="password"
-              name="password"
-              autocomplete="new-password"
-              onChange={value => {
-                this.state.password = value;
-              }}
-              error={this.validateForm.password.error}
-            />
-            <TextBox
-              label="Пароль (ещё раз)"
-              type="password"
-              autocomplete="new-password"
-              onChange={value => {
-                this.state.repeatPassword = value;
-              }}
-              error={this.validateForm.repeatPassword.error}
-            />
+          <div className={styles.fields}>
+            {fields.map(field => (
+              <TextBox
+                key={field.name}
+                label={field.label}
+                type={field.type ?? 'text'}
+                name={field.name}
+                value={this.state.formState[field.name]}
+                onChange={value => {
+                  this.setState({ formState: { ...this.state.formState, [field.name]: value }, error: '' });
+                }}
+                error={this.validateForm[field.name].error}
+              />
+            ))}
           </div>
 
-          <div className="auth-form__btns">
-            <button
-              className="btn btn--primary btn--flex btn--xl"
-              $click={e => this.onEnterClick(e)}
+          <div className={styles.buttons}>
+            <Button
+              text="Зарегистрироваться"
+              size="xl"
+              type="submit"
+              $click={this.onEnterClick}
               disabled={!this.validateForm.isValid}
-            >
-              Зарегистрироваться
-            </button>
-            <a className="btn btn--ghost btn--flex btn--xl" href="#/login">
-              Войти
-            </a>
+              showLoader={this.state.isLoading}
+            />
+            <Button
+              text="Уже есть аккаунт?"
+              size="xl"
+              buttonType="ghost"
+              $click={(e: MouseEvent) => {
+                e.preventDefault();
+                router.navigate(PAGES.LOGIN);
+              }}
+            />
           </div>
+          <div className={styles.errorCause}>{this.state.error}</div>
         </form>
       </div>
     );

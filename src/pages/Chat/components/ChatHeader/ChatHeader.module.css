@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  inline-size: 100%;
+  padding: 10px;
+}
+
+.avatar {
+  inline-size: 36px;
+  block-size: 36px;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.membersButton {
+  margin-inline-start: auto;
+}

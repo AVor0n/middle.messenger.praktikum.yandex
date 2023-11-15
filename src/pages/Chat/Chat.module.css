@@ -1,0 +1,45 @@
+.page {
+  display: flex;
+  flex-direction: row;
+
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 100vh;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+
+  inline-size: 500px;
+  block-size: 100vh;
+  border-inline-end: 1px solid var(--color-smoke);
+}
+
+.sidebarTools {
+  display: grid;
+  gap: 10px;
+
+  padding: 10px;
+}
+
+.chat {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+
+  inline-size: 100%;
+  block-size: 100vh;
+}
+
+.chat__menu-btn {
+  margin-inline-start: auto;
+
+  background-image: url('/menu.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.createButton {
+  margin: 10px;
+  margin-block-start: minmax(10px, auto);
+}

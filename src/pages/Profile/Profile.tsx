@@ -1,130 +1,106 @@
+import { Component, type Props, type State } from '@shared/NotReact';
+import { router } from '@shared/Router';
 import { EditPasswordWindow, EditProfileWindow } from './components';
-import { userInfo } from './fake-data';
-import { Component, type State, type Props } from '@shared';
-import './Profile.css';
+import * as styles from './Profile.module.css';
+import { Avatar, Button } from '@uikit';
+import { PAGES } from 'app/constants';
+import { authService, fileService } from 'services';
 
 interface ProfileState extends State {
-  imageSrc: string;
-  name: string;
-  login: string;
-  username: string;
-  email: string;
-  lastname: string;
-  phone: string;
   editPasswordVisible: boolean;
   editProfileVisible: boolean;
 }
 
 export class Profile extends Component<Props, ProfileState> {
   constructor(props: Props) {
-    super(
-      {
-        ...userInfo,
-        editPasswordVisible: false,
-        editProfileVisible: false,
-      },
-      props,
-    );
+    super({ editPasswordVisible: false, editProfileVisible: false }, props);
   }
 
+  protected init(): void {
+    authService.on('updateUserInfo', () => {
+      this.setState(this.state);
+    });
+  }
+
+  onChangeAvatar = async (file: File) => {
+    await authService.updateAvatar(file);
+  };
+
+  openEditPasswordWindow = () => {
+    this.state.editPasswordVisible = true;
+  };
+
+  openEditProfileWindow = () => {
+    this.state.editProfileVisible = true;
+  };
+
+  closeEditWindow = () => {
+    this.setState({
+      editPasswordVisible: false,
+      editProfileVisible: false,
+    });
+  };
+
   public render() {
+    const { userInfo } = authService;
+
+    if (!userInfo) {
+      return (
+        <div className={styles.page}>
+          <div>Loading...</div>
+        </div>
+      );
+    }
+
+    const avatarSrc = userInfo.avatar ? fileService.getLinkToFile(userInfo.avatar) : undefined;
     return (
-      <div className="page profile-page">
-        <figure>
-          <img className="profile__image" src={this.state.imageSrc} alt={this.state.name} />
-          <figcaption className="profile__username">{this.state.username}</figcaption>
-        </figure>
+      <div className={styles.page}>
+        <Avatar src={avatarSrc} $change={this.onChangeAvatar} containerCls={styles.avatar} />
 
-        <div className="profile-data">
+        <div className={styles.table}>
           <div className="table-list">
-            <div className="table-list__row">
-              <span className="table-list__header">Почта</span>
-              <span className="table-list__value">{this.state.email}</span>
-            </div>
-            <div className="table-list__row">
-              <span className="table-list__header">Логин</span>
-              <span className="table-list__value">{this.state.login}</span>
-            </div>
-            <div className="table-list__row">
-              <span className="table-list__header">Имя</span>
-              <span className="table-list__value">{this.state.name}</span>
-            </div>
-            <div className="table-list__row">
-              <span className="table-list__header">Фамилия</span>
-              <span className="table-list__value">{this.state.lastname}</span>
-            </div>
-            <div className="table-list__row">
-              <span className="table-list__header">Имя в чате</span>
-              <span className="table-list__value">{this.state.username}</span>
-            </div>
-            <div className="table-list__row">
-              <span className="table-list__header">Телефон</span>
-              <span className="table-list__value">{this.state.email}</span>
-            </div>
+            {[
+              { title: 'Почта', value: userInfo.email },
+              { title: 'Логин', value: userInfo.login },
+              { title: 'Имя', value: userInfo.first_name },
+              { title: 'Фамилия', value: userInfo.second_name },
+              { title: 'Имя в чате', value: userInfo.display_name },
+              { title: 'Телефон', value: userInfo.phone },
+            ].map(({ title, value }) => (
+              <div className="table-list__row" key={title}>
+                <span className="table-list__header">{title}</span>
+                <span className="table-list__value">{value}</span>
+              </div>
+            ))}
           </div>
 
-          <div className="profile-data__btns">
-            <button
-              className="btn btn--ghost btn--wide btn--xl"
+          <div className={styles.editBtns}>
+            <Button
+              flex
+              size="xl"
               id="editDataBtn"
-              $click={() => {
-                this.state.editProfileVisible = true;
-              }}
-            >
-              Редактировать данные
-            </button>
-            <button
-              className="btn btn--ghost btn--wide btn--xl"
-              id="editPasswordBtn"
-              $click={() => {
-                this.state.editPasswordVisible = true;
-              }}
-            >
-              Сменить пароль
-            </button>
+              text="Редактировать данные"
+              buttonType="ghost"
+              $click={this.openEditProfileWindow}
+            />
+            <Button
+              flex
+              size="xl"
+              id="editDataBtn"
+              text="Сменить пароль"
+              buttonType="ghost"
+              $click={this.openEditPasswordWindow}
+            />
           </div>
         </div>
 
-        <div className="profile__navigation">
-          <a className="btn btn--ghost btn--wide btn--xl" href="#/chat">
-            Назад
-          </a>
-          <a className="btn btn--ghost btn--wide btn--xl btn--danger" href="#/login">
-            Выйти
-          </a>
+        <div className={styles.navigation}>
+          <Button text="Назад" size="xl" flex buttonType="ghost" $click={() => router.navigate(PAGES.CHAT)} />
+          <Button text="Выйти" size="xl" buttonType="ghost" flex $click={authService.logout} className={styles.exit} />
         </div>
-        {this.state.editPasswordVisible && (
-          <EditPasswordWindow
-            onClose={() => {
-              this.state.editPasswordVisible = false;
-            }}
-          />
-        )}
-        {this.state.editProfileVisible && (
-          <EditProfileWindow
-            data={{
-              email: this.state.email,
-              login: this.state.login,
-              display_name: this.state.username,
-              first_name: this.state.name,
-              second_name: this.state.lastname,
-              phone: this.state.phone,
-            }}
-            onSave={data =>
-              this.setState({
-                username: data.display_name,
-                name: data.first_name,
-                lastname: data.second_name,
-                login: data.login,
-                email: data.email,
-                phone: data.phone,
-              })
-            }
-            onClose={() => {
-              this.state.editProfileVisible = false;
-            }}
-          />
-        )}
+
+        {this.state.editPasswordVisible && <EditPasswordWindow onClose={this.closeEditWindow} />}
+        {this.state.editProfileVisible && <EditProfileWindow onClose={this.closeEditWindow} />}
       </div>
     );
   }

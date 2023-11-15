@@ -1,6 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import { Component, mount } from '..';
-import type { Props } from '..';
+
+import { Component } from '../Component';
+import { type Props } from '../types';
+import { mount } from '../vDom';
 
 interface FieldProps extends Props {
   label: string;
@@ -18,15 +20,7 @@ describe('Методы жизненного цикла', () => {
   const unmountFn = vitest.fn();
   const willUpdateFn = vitest.fn();
   const didUpdateFn = vitest.fn();
-  class App extends Component {
-    constructor() {
-      super({}, {});
-    }
 
-    public render() {
-      return <Test />;
-    }
-  }
   class Test extends Component {
     constructor() {
       super({}, {});
@@ -54,6 +48,16 @@ describe('Методы жизненного цикла', () => {
 
     public render() {
       return <div>test</div>;
+    }
+  }
+
+  class App extends Component {
+    constructor() {
+      super({}, {});
+    }
+
+    public render() {
+      return <Test />;
     }
   }
 

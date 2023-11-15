@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { createDOMNode, patchNode } from '..';
 import { Component } from '../Component';
+import { createDOMNode, patchNode } from '../vDom';
 import type { PropsWithChildren } from '../types';
 
 describe('Создание VDom', () => {
@@ -80,7 +79,7 @@ describe('Создание DOM из vDOM', () => {
     expect(
       await createDOMNode({
         tagName: 'div',
-        props: null,
+        props: {},
         children: [],
       }),
     ).toMatchInlineSnapshot('<div />');
@@ -100,7 +99,7 @@ describe('Создание DOM из vDOM', () => {
     expect(
       await createDOMNode({
         tagName: Test,
-        props: null,
+        props: {},
         children: ['test'],
       }),
     ).toMatchInlineSnapshot(`

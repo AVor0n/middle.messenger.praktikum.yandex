@@ -1,16 +1,14 @@
-import { Component } from '@shared';
-import type { Props, State } from '@shared';
+import { Component, type Props, type State } from '@shared/NotReact';
 import './Textbox.css';
 
 interface TextBoxState extends State {
   visited: boolean;
 }
 
-export interface TextBoxProps extends Props, Partial<Omit<HTMLInputElement, 'children'>> {
+export interface TextBoxProps extends Props, Partial<Omit<JSX.IntrinsicElements['input'], 'children'>> {
   label: string;
   error?: string;
   onChange?: (value: string) => void;
-  onBlur?: () => void;
 }
 
 export class TextBox extends Component<TextBoxProps, TextBoxState> {
@@ -23,7 +21,7 @@ export class TextBox extends Component<TextBoxProps, TextBoxState> {
     );
   }
 
-  public render({ type, label, error, name, value, onChange, onBlur, ...props }: TextBoxProps) {
+  public render({ type, label, error, name, value, onChange, ...props }: TextBoxProps) {
     return (
       <div className="textbox">
         <label>
@@ -34,9 +32,9 @@ export class TextBox extends Component<TextBoxProps, TextBoxState> {
             value={value}
             name={name}
             $input={e => onChange?.((e.target as HTMLInputElement).value)}
-            $blur={() => {
+            $blur={(e: FocusEvent) => {
               this.state.visited = true;
-              onBlur?.();
+              props.$blur?.call(window, e);
             }}
             {...props}
           />

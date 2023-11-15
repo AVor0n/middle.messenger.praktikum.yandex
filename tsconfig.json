@@ -20,9 +20,12 @@
       "@features": ["features"],
       "@widgets": ["widgets"],
       "@pages": ["pages"],
-      "@shared": ["shared/lib"],
-      "@uikit": ["shared/ui"]
+      "@shared/*": ["shared/lib/*"],
+      "@uikit": ["shared/ui"],
+      "@api": ["shared/api"]
     },
+    "outDir": "dist",
+    "useUnknownInCatchVariables": true,
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,

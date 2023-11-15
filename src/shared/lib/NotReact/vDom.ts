@@ -1,5 +1,3 @@
-/* eslint-disable new-cap */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import type { ComponentConstructor } from './Component';
 import type { DOMNode, Props, State, VElement, VNode } from './types';
 
@@ -29,6 +27,7 @@ export async function createDOMNode(vNode: VNode): Promise<DOMNode> {
   }
 
   if (typeof vNode.tagName === 'function') {
+    // eslint-disable-next-line new-cap
     const component = new vNode.tagName({ ...vNode.props, children: vNode.children });
     await component.isReady;
     if (!component.vDom) {
@@ -134,6 +133,11 @@ function patchProp(node: Element, key: string, value: unknown, nextValue: unknow
   if (key === 'className') {
     key = 'class';
   }
+  if (key === 'value' && node instanceof HTMLInputElement) {
+    node.value = String(nextValue);
+    return;
+  }
+
   if (nextValue == null || nextValue === false) {
     node.removeAttribute(key);
   } else {

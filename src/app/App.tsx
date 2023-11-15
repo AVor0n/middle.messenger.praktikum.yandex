@@ -1,58 +1,48 @@
+import { Component, type Props, type State } from '@shared/NotReact';
+import { router } from '@shared/Router';
+import { ToastContainer, toastService } from '@shared/ToastService';
+import { PAGES } from './constants';
+import { stringifyApiError } from '@api';
 import { Auth as AuthPage, Login as LoginPage, Chat as ChatPage, Profile as ProfilePage, ErrorPage } from '@pages';
-import { Component, Router } from '@shared';
-import type { Props, State } from '@shared';
-
-const enum Pages {
-  Login = 'login',
-  Auth = 'auth',
-  Chat = 'chat',
-  Profile = 'profile',
-  NotFound = 'notFound',
-  Error = 'serverError',
-}
+import { authService } from 'services';
 
 interface AppState extends State {
-  page: Pages;
+  content?: JSX.Element;
 }
 
 export class App extends Component<Props, AppState> {
-  router = new Router();
-
-  private navigate(page: Pages) {
-    this.state.page = page;
-  }
-
-  constructor() {
-    super(
-      {
-        page: window.location.hash as Pages,
-      },
-      {},
-    );
+  private navigate(component: JSX.Element, options?: { needAuth?: boolean }) {
+    if (options?.needAuth && !authService.isAuthorized) {
+      router.navigate(PAGES.LOGIN);
+    } else {
+      this.state.content = component;
+    }
   }
 
   protected init() {
-    this.router
-      .add('', () => this.navigate(Pages.Login))
-      .add('login', () => this.navigate(Pages.Login))
-      .add('auth', () => this.navigate(Pages.Auth))
-      .add('chat', () => this.navigate(Pages.Chat))
-      .add('profile', () => this.navigate(Pages.Profile))
-      .add('error404', () => this.navigate(Pages.NotFound))
-      .add('error500', () => this.navigate(Pages.Error));
-
-    this.router.go(this.state.page);
+    authService
+      .getUserInfo()
+      .catch(error => toastService.error({ body: stringifyApiError(error) }))
+      .finally(() => {
+        router
+          .addRoute(PAGES.AUTH, () =>
+            authService.isAuthorized ? router.navigate(PAGES.CHAT) : this.navigate(<AuthPage />),
+          )
+          .addRoute(PAGES.LOGIN, () =>
+            authService.isAuthorized ? router.navigate(PAGES.CHAT) : this.navigate(<LoginPage />),
+          )
+          .addRoute(PAGES.CHAT, () => this.navigate(<ChatPage />, { needAuth: true }))
+          .addRoute(PAGES.PROFILE, () => this.navigate(<ProfilePage />, { needAuth: true }))
+          .setNotFound(() => this.navigate(<ErrorPage code={404} />))
+          .resolve();
+      });
   }
 
   public render() {
     return (
       <div>
-        {this.state.page === Pages.Auth && <AuthPage />}
-        {this.state.page === Pages.Login && <LoginPage />}
-        {this.state.page === Pages.Chat && <ChatPage />}
-        {this.state.page === Pages.Profile && <ProfilePage />}
-        {this.state.page === Pages.NotFound && <ErrorPage code={404} />}
-        {this.state.page === Pages.Error && <ErrorPage code={500} />}
+        {this.state.content}
+        <ToastContainer />
       </div>
     );
   }

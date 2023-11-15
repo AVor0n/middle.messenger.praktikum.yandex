@@ -1,5 +1,7 @@
+import { Component, type Props } from '@shared/NotReact';
+import { Link } from '@shared/NotReactRouter';
 import { errorCodeToText } from './constants';
-import { Component, type Props } from '@shared';
+import { PAGES } from 'app/constants';
 import './Error.css';
 
 interface ErrorPageProps extends Props {
@@ -16,9 +18,9 @@ export class ErrorPage extends Component<ErrorPageProps> {
       <div className="page error-page">
         <div className="error__code">{code}</div>
         <div className="error__text">{errorCodeToText[code]}</div>
-        <a className="btn btn--ghost btn--flex btn--xl" href="#/chat">
+        <Link className="btn btn--ghost btn--flex btn--xl" href={PAGES.CHAT}>
           Назад к чатам
-        </a>
+        </Link>
       </div>
     );
   }

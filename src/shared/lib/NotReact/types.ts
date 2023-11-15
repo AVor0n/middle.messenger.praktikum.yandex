@@ -1,8 +1,8 @@
-import type { Component } from '.';
+import type { Component } from './Component';
 
 export type Props = Record<string, unknown>;
 export type PropsWithChildren<T extends Props> = T & {
-  children?: VElement[] | VElement;
+  children?: VElement[];
 };
 export type State = Record<string, unknown>;
 
