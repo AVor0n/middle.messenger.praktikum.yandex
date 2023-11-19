@@ -79,6 +79,12 @@
       "rules": {
         "import/no-extraneous-dependencies": "off" // .ts в корне - node-файлы, которые могут иметь свои зависимости
       }
+    },
+    {
+      "files": ["./**/*.test.ts"],
+      "rules": {
+        "import/extensions": ["error", "always"] // без указания расширения ts-node не может зарезолвить файлы
+      }
     }
   ]
 }

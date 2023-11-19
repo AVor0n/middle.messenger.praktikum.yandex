@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import typescriptPaths from 'vite-tsconfig-paths';
 import accessorPlugin from './accessorPlugin';
@@ -10,13 +9,5 @@ export default defineConfig({
   },
   esbuild: {
     jsxInject: `import { createVNode } from '@shared/NotReact';`,
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    coverage: {
-      reporter: ['html'],
-      reportsDirectory: 'coverage',
-    },
   },
 });

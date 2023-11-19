@@ -1,8 +1,9 @@
-import { generateId } from '..';
+import { expect } from 'chai';
+import { generateId } from '../generateId.ts';
 
-test('generateId', () => {
+it('generateId', () => {
   const length = 10_000;
   const ids = Array.from({ length }, () => generateId());
   const uniqueIds = new Set(ids);
-  expect(ids.length).toBe(uniqueIds.size);
+  expect(ids.length === uniqueIds.size);
 });
