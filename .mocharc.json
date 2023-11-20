@@ -1,6 +1,7 @@
 {
-  "extension": ["ts"],
-  "require": "ts-node/register",
+  "extension": ["ts", "tsx"],
+  "require": ["ts-node/register", "./.mocha.setup.ts"],
   "loader": "ts-node/esm",
-  "spec": "src/**/*.test.ts"
+  "spec": ["src/**/*.test.ts", "src/**/*.test.tsx"],
+  "experimental-specifier-resolution": "node"
 }
