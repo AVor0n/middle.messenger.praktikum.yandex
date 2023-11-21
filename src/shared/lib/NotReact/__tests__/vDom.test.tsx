@@ -1,11 +1,14 @@
-/* eslint-disable max-classes-per-file */
 import { expect } from 'chai';
 import Sinon from 'sinon';
 import { Component } from '../Component.ts';
 import { createDOMNode, patchNode, createVNode, mount } from '../vDom.ts';
-import type { PropsWithChildren } from '../types';
+import type { PropsWithChildren } from '../types.ts';
 
 describe('Создание VDom', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
   it('простой тег', () => {
     expect(<div />).to.deep.equal({
       tagName: 'div',
