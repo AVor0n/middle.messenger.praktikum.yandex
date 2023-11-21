@@ -1,7 +1,11 @@
 class Router {
-  private routes: Record<string, (() => void) | undefined> = {};
+  private _routes = new Map<string, (() => void) | undefined>();
 
   private notFoundCallback?: () => void;
+
+  public get routes() {
+    return Object.fromEntries(this._routes);
+  }
 
   constructor() {
     this.listen();
@@ -12,7 +16,7 @@ class Router {
   }
 
   public addRoute(path: string, cb: () => void) {
-    this.routes[path] = cb;
+    this._routes.set(path, cb);
     return this;
   }
 
@@ -29,13 +33,17 @@ class Router {
 
   public resolve() {
     const path = window.location.pathname;
-    const targetRoute = this.routes[path];
+    const targetRoute = this._routes.get(path);
     if (targetRoute) {
       targetRoute();
     } else {
       this.notFoundCallback?.();
     }
   }
+
+  public flush = () => {
+    this._routes.clear();
+  };
 }
 
 export const router = new Router();
