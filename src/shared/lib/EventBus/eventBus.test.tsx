@@ -63,6 +63,16 @@ describe('EventBus', () => {
     expect(handler.notCalled).to.be.true;
   });
 
+  it('Одноразовая подписка', () => {
+    const handler = sinon.stub();
+    const eventBus = new EventBus<{ testEvent: () => void }>();
+    eventBus.once('testEvent', handler);
+
+    eventBus.emit('testEvent');
+    eventBus.emit('testEvent');
+    expect(handler.callCount).to.be.equal(1);
+  });
+
   it('Функция подписки возвращает функцию отписки', () => {
     const handler = sinon.stub();
     const eventBus = new EventBus<{ testEvent: () => void }>();
