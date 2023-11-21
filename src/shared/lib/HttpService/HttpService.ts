@@ -1,9 +1,9 @@
-import { ContentType, Method } from './constants';
+import { ContentType, Method, baseUrl } from './constants';
 import { type HTTPMethod, type FullRequestParams, type RequestParams } from './types';
 import { contentFormatters, toQueryString } from './utils';
 
 export class HttpService {
-  readonly baseUrl = 'https://ya-praktikum.tech/api/v2';
+  readonly baseUrl = baseUrl;
 
   protected baseApiParams: RequestParams = {
     credentials: 'include',
