@@ -38,6 +38,16 @@
 - Подключен WebSocket для обмена сообщениями в реальном времени
 - Выполнен [деплой на Netlify](https://silly-granita-2e660f.netlify.app/)
 
+### Sprint 4
+
+- Удален vitest, добавлены mocha, chai, sinon
+- Переписаны тесты и добавлены новые для
+  - модуля отправки запросов
+  - компонента, виртуального DOM
+  - роутера
+- Выполнен yarn audit, исправлены предупреждения
+- Запуск тестов добавлен в pre-commit
+
 ## Полезные ссылки
 
 - [макет](<https://www.figma.com/file/frISC71Cb5rSRThFw5DCLb/Chat_external_link-(Copy)?node-id=1%3A502&mode=dev>) взятый за основу
