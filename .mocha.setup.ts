@@ -10,6 +10,7 @@ global.window = window;
 global.document = window.document;
 global.DocumentFragment = window.DocumentFragment;
 global.MouseEvent = window.MouseEvent;
+global.XMLHttpRequest = window.XMLHttpRequest;
 
 // удаление предупреждений о том, что jsdom не реализовал navigation
 // https://github.com/jsdom/jsdom/issues/2112
