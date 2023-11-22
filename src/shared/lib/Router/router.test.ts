@@ -4,7 +4,6 @@ import { router } from './router.ts';
 
 describe('Router', () => {
   beforeEach(() => {
-    window.location.href = '/';
     router.flush();
   });
 
