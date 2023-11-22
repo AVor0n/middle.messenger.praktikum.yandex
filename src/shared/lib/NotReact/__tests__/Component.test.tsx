@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { TestComponent } from './TestComponent.tsx';
 import { sleep } from '../../utils/common.ts';
+import { Component } from '../Component.ts';
+import { type DOMNode, type Props } from '../types.ts';
 import { mount, createVNode, patchNode } from '../vDom.ts';
 
 describe('Component', () => {
@@ -43,5 +45,57 @@ describe('Component', () => {
     expect(log).to.be.deep.equal(['unmount']);
   });
 
-  // describe.todo('Ререндер при изменениях');
+  it('При изменении state происходит ререндер', async () => {
+    const updateDelay = 10;
+    class ComponentWithState extends Component<Props, { content: string }> {
+      constructor() {
+        super({ content: 'init content' }, {});
+      }
+
+      protected componentDidMount(_node: DOMNode): void {
+        setTimeout(() => {
+          this.state.content = 'new content';
+        }, updateDelay);
+      }
+
+      render() {
+        return <div>{this.state.content}</div>;
+      }
+    }
+
+    await mount(<ComponentWithState />, document.body);
+    expect(document.body.innerHTML).to.be.equal('<div>init content</div>');
+
+    await sleep(updateDelay);
+    expect(document.body.innerHTML).to.be.equal('<div>new content</div>');
+  });
+
+  it('shouldComponentUpdate позволяет игнорировать ререндер', async () => {
+    class MemoComponent extends Component<{ content: string }> {
+      constructor(props: { content: string }) {
+        super({}, props);
+      }
+
+      protected shouldComponentUpdate(_oldProps: { content: string }, newProps: { content: string }): boolean {
+        return newProps.content === 'good content';
+      }
+
+      render() {
+        return <div>{this.props.content}</div>;
+      }
+    }
+
+    const initRender = <MemoComponent content="init content" />;
+    const notWillRender = <MemoComponent content="bad content" />;
+    const willRerender = <MemoComponent content="good content" />;
+
+    await mount(initRender, document.body);
+    expect(document.body.innerHTML).to.be.equal('<div>init content</div>');
+
+    await patchNode(document.body.firstElementChild!, initRender, notWillRender);
+    expect(document.body.innerHTML).to.be.equal('<div>init content</div>');
+
+    await patchNode(document.body.firstElementChild!, notWillRender, willRerender);
+    expect(document.body.innerHTML).to.be.equal('<div>good content</div>');
+  });
 });

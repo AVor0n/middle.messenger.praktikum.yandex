@@ -1,9 +1,13 @@
 /* eslint-disable import/extensions */
 import { Component } from '../Component.ts';
-import { type Props } from '../types.ts';
+import { type State, type Props } from '../types.ts';
 import { createVNode } from '../vDom.ts';
 
-interface FieldProps extends Props {
+interface TestComponentState extends State {
+  content: string;
+}
+
+interface TestComponentProps extends Props {
   onInit?: () => void;
   onMount?: () => void;
   onUnmount?: () => void;
@@ -12,9 +16,9 @@ interface FieldProps extends Props {
   onRender?: () => void;
 }
 
-export class TestComponent extends Component<FieldProps> {
-  constructor(props: FieldProps) {
-    super({}, props);
+export class TestComponent extends Component<TestComponentProps, TestComponentState> {
+  constructor(props: TestComponentProps) {
+    super({ content: 'test' }, props);
   }
 
   protected init(): void {
@@ -25,11 +29,11 @@ export class TestComponent extends Component<FieldProps> {
     this.props.onMount?.();
   }
 
-  protected componentWillUpdate(_oldProps: FieldProps, _newProps: FieldProps): void {
+  protected componentWillUpdate(_oldProps: TestComponentProps, _newProps: TestComponentProps): void {
     this.props.onWillUpdate?.();
   }
 
-  protected componentDidUpdate(_oldProps: FieldProps, _newProps: FieldProps): void {
+  protected componentDidUpdate(_oldProps: TestComponentProps, _newProps: TestComponentProps): void {
     this.props.onDidUpdate?.();
   }
 
@@ -39,6 +43,6 @@ export class TestComponent extends Component<FieldProps> {
 
   public render() {
     this.props.onRender?.();
-    return <div>test</div>;
+    return <div>{this.state.content}</div>;
   }
 }
