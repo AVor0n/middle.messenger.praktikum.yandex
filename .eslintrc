@@ -79,6 +79,16 @@
       "rules": {
         "import/no-extraneous-dependencies": "off" // .ts в корне - node-файлы, которые могут иметь свои зависимости
       }
+    },
+    {
+      "files": ["./**/*.test.ts", "./**/*.test.tsx"],
+      "rules": {
+        "import/extensions": ["error", "always"], // без указания расширения ts-node не может зарезолвить файлы
+        "import/no-extraneous-dependencies": "off", // тесты могут иметь свои зависимости
+        "@typescript-eslint/no-unused-expressions": "off", // у sinon такое api, что без этого никак
+        "max-classes-per-file": "off", // нужно для создания моков
+        "@typescript-eslint/no-non-null-assertion": "warn"
+      }
     }
   ]
 }

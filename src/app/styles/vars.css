@@ -1,11 +1,20 @@
 :root {
   --color-primary: #3369f3;
-  --color-black: #1e1e1e;
+  --color-primary-10: #0e4ae5;
+  --color-primary-20: #0b3bb5;
+
   --color-white: #ffffff;
+  --color-white-10: #e6e6e6;
+  --color-white-20: #cccccc;
+
+  --color-smoke: #efefef;
+  --color-smoke-10: #d5d5d5;
+  --color-smoke-20: #bcbcbc;
+
   --color-shadow: #999999;
   --color-select: #e4edfd;
-  --color-smoke: #efefef;
   --color-error: #ff2f2f;
+  --color-black: #1e1e1e;
 
   --font-sm: 10px;
   --font-md: 13px;
