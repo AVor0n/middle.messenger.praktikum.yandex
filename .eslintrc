@@ -82,7 +82,10 @@
     },
     {
       "files": ["./**/*.test.ts", "./**/*.test.tsx"],
+      "extends": ["plugin:mocha/recommended", "plugin:chai-expect/recommended"],
+      "plugins": ["mocha", "chai-expect"],
       "rules": {
+        "mocha/no-mocha-arrows": "off", // привык к стрелочным функциям, доступ к контексту mocha не нужен (пока)
         "import/extensions": ["error", "always"], // без указания расширения ts-node не может зарезолвить файлы
         "import/no-extraneous-dependencies": "off", // тесты могут иметь свои зависимости
         "@typescript-eslint/no-unused-expressions": "off", // у sinon такое api, что без этого никак

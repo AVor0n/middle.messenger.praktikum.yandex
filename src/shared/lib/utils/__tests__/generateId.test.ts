@@ -6,6 +6,6 @@ describe('generateId', () => {
     const length = 10_000;
     const ids = Array.from({ length }, () => generateId());
     const uniqueIds = new Set(ids);
-    expect(ids.length === uniqueIds.size).to.be.true;
+    expect(ids.length).to.equal(uniqueIds.size);
   });
 });
