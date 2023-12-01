@@ -4,6 +4,28 @@
 
 Один из учебных проектов курса [Мидл фронтенд разработчик](https://practicum.yandex.ru/middle-frontend/)
 
+## Полезные ссылки
+
+- [макет](<https://www.figma.com/file/frISC71Cb5rSRThFw5DCLb/Chat_external_link-(Copy)?node-id=1%3A502&mode=dev>) взятый за основу
+- [актуальный деплой (Netlify)](https://silly-granita-2e660f.netlify.app/)
+
+## Доступные скрипты
+
+- `yarn install` — установка зависимостей
+- `yarn build` — сборка с минификацией файлов
+- `yarn build:dev` — сборка без минификации файлов
+- `yarn dev` — запуск vite dev-сервера для разработки
+- `yarn start` — запуск express сервера для просмотра результата
+- `yarn get-api-types` - генерация api-интерфейсов из swagger спецификации, если файла нет, он скачается автоматически
+- `yarn get-swagger-spec` - скачивание swagger-спецификации
+- `yarn lint` — линтинг и проверка типов
+- `yarn lint:fix` — автоправка ошибок линтера
+- `yarn format` — проверка форматирования кода
+- `yarn format:fix` — автоправка форматирования
+- `yarn test` — запуск тестов
+
+## Хронология
+
 ### Sprint 1
 
 - Выполнена настройка проекта
@@ -47,23 +69,3 @@
   - роутера
 - Выполнен yarn audit, исправлены предупреждения
 - Запуск тестов добавлен в pre-commit
-
-## Полезные ссылки
-
-- [макет](<https://www.figma.com/file/frISC71Cb5rSRThFw5DCLb/Chat_external_link-(Copy)?node-id=1%3A502&mode=dev>) взятый за основу
-- [актуальный деплой (Netlify)](https://silly-granita-2e660f.netlify.app/)
-
-## Доступные скрипты
-
-- `yarn install` — установка зависимостей,
-- `yarn start` — запуск express сервера для просмотра результата,
-- `yarn dev` — запуск vite dev-сервера для разработки,
-- `yarn get-api-types` - генерация api-интерфейсов из swagger спецификации, если файла нет, он скачается автоматически
-- `yarn get-swagger-spec` - скачивание swagger-спецификации
-- `yarn build` — сборка стабильной версии.
-- `yarn lint` — линтинг и проверка типов.
-- `yarn lint:fix` — автоправка ошибок линтера.
-- `yarn format` — проверка форматирования кода.
-- `yarn format:fix` — автоправка форматирования.
-- `yarn test` — запуск тестов.
-- `yarn coverage` — открытие UI для тестов, отчет о покрытии.
